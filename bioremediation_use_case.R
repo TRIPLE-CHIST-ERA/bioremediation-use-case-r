@@ -60,6 +60,33 @@ ORDER BY ?avg_ld50
 
 pollutants <- sparql_query(endpoint = endpoint_wikidata, query = query_wikidata)
 
+# Add single quotes around a string.
+single_quote <- function(x) {
+  paste0("'", x, "'")
+}
+curly_bracket_quote <- function(x) {
+  paste0("{ ", x, " }")
+}
+
+cas_values_clause <- function(t) {
+  paste(
+    "VALUES",
+    "?cas",
+    t |>
+      dplyr::pull("cas_number") |>
+      single_quote() |>
+      paste(collapse = " ") |>
+      curly_bracket_quote()
+  )
+}
+
+# 1 17804-35-2
+# 2 17804-35-2
+# 3 309-00-2
+# 4 86-88-4
+# 5 1912-24-9   <- in list
+# 6 7773-06-0
+# 7 61-82-5     <- in list
 
 # query_solid_pod <- "
 # PREFIX sio: <http://semanticscience.org/resource/>
@@ -94,19 +121,7 @@ WHERE
 {
     {
         # Pollutant CAS numbers retrieved from wikidata.
-        VALUES ?cas { 
-            '75-35-4' '71-55-6' '79-00-5' '630-20-6' '79-34-5' '106-93-4'
-            '107-06-2' '542-75-6' '10061-01-5' '13952-84-6' '91-59-8'
-            '553-00-4' '612-52-2' '120-23-0' '121-14-2' '93-76-5' '10519-33-2'
-            '92-67-1' '2113-61-3' '92-93-3' '101-77-9' '81-15-2' '30560-19-1'
-            '34256-82-1' '50594-66-6' '15972-60-8' '116-06-3' '834-12-8'
-            '33089-61-1' '61-82-5' '84-65-1' '1332-21-4' '77536-66-4'
-            '77536-67-5' '12172-73-5' '12001-28-4' '77536-68-6' '3337-71-1'
-            '2302-17-2' '1912-24-9' '2642-71-9' '86-50-0' '41083-11-8'
-            '71626-11-4' '82560-54-1' '17606-31-4' '71-43-2' '92-87-5'
-            '36341-27-2' '85-68-7' '1820573-27-0' '65731-84-2' '82657-04-3'
-            '485-31-4'
-        }
+        VALUES_CLAUSE
 
         # * sio:SIO_000011     ->  'is attribute of'
         # * sio:SIO_000300     ->  'has value'
@@ -155,7 +170,14 @@ WHERE
 ORDER BY DESC(?score)
 "
 
-similar_pollutants <- sparql_query(endpoint = endpoint_idsm, query = query_idsm)
+
+
+
+
+similar_pollutants <- sparql_query(
+  endpoint = endpoint_idsm,
+  query = sub("VALUES_CLAUSE", cas_values_clause(pollutants), query_idsm)
+)
 
 
 
@@ -217,7 +239,7 @@ rhea_reactions <- sparql_query(endpoint = endpoint_rhea, query = query_rhea)
 #          protein name: Hemoglobin subunit beta.
 
 
-#endpoint_uniprot <- "https://sparql.uniprot.org/sparql"
+# endpoint_uniprot <- "https://sparql.uniprot.org/sparql"
 query_uniprot <- "
 PREFIX rh: <http://rdf.rhea-db.org/>
 PREFIX up: <http://purl.uniprot.org/core/>
