@@ -1,0 +1,21 @@
+PREFIX p: <http://www.wikidata.org/prop/>
+PREFIX pq: <http://www.wikidata.org/prop/qualifier/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX wd: <http://www.wikidata.org/entity/>
+
+SELECT DISTINCT
+    ?cas_number
+WHERE
+{
+    # Note: 'wdt:P2240' and 'ld50' is the toxicity level (median lethal
+    # dose), not many data points have this info (only 9 results in total).
+    ?compound  wdt:P31                      wd:Q113145171 ;
+               wdt:P232                     ?ec_number    ;
+               wdt:P231                     ?cas_number   ;
+               wdt:P2240                    ?ld50         ;
+               wdt:P366                     ?use_type     ;
+               p:P2240                      ?ref          .
+    ?use_type  wdt:P279*                    wd:Q131656    .
+    ?ref       pq:P636                      wd:Q285166    ;
+               (pq:P689|pq:P2352)/wdt:P279  wd:Q184224    .
+}
