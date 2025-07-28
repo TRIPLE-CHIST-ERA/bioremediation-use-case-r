@@ -1,100 +1,25 @@
 # Load SPARQL functions.
 source("../VoIDR.git/R/SPARQL.R")
+source("utils.R")
+
+# Set endpoints and SPARQL queries.
+endpoint_wikidata <- "https://query.wikidata.org/sparql"
+endpoint_idsm <- "https://idsm.elixir-czech.cz/sparql/endpoint/idsm"
+endpoint_rhea <- "https://sparql.rhea-db.org/sparql"
+endpoint_uniprot <- "https://sparql.uniprot.org/sparql"
+endpoint_oma <- "https://sparql.omabrowser.org/sparql"
+
+query_file_wikidata <- "query_wikidata.rq"
+query_file_idsm <- "query_idsm.rq"
+query_file_rhea <- "query_rhea.rq"
+query_file_uniprot <- "query_uniprot.rq"
+query_file_oma <- "query_oma.rq"
 
 # Step 1: retrieve pollutants from wikidata. Each pollutant is uniquely
 # identified by its CAS registry number (Chemical Abstracts Service).
-#
-#   ?compound  wdt:P31   (is instance)        wd:Q113145171 (chemical substance)
-#              wdt:P232  (ec number)           ?ec_number
-#              wdt:P231  (cas registry number) ?cas_number
-#              wdt:P2240 (median lethal dose)  ?ld50
-#              wdt:P366  (has use)             ?use_type
-
-endpoint_wikidata <- "https://query.wikidata.org/sparql"
-query_wikidata <- "
-PREFIX p: <http://www.wikidata.org/prop/>
-PREFIX pq: <http://www.wikidata.org/prop/qualifier/>
-PREFIX wdt: <http://www.wikidata.org/prop/direct/>
-PREFIX wd: <http://www.wikidata.org/entity/>
-
-SELECT distinct
-    ?use_type
-    ?use_typeLabel
-    ?compound
-    ?compoundLabel
-    ?ec_number
-    ?cas_number
-    (AVG(?ld50) AS ?avg_ld50)
-WHERE
-{
-    # Note: 'wdt:P2240' and 'ld50' is the toxicity level (median lethal
-    # dose), not many data points have this info (only 9 results in total).
-    ?compound  wdt:P31                     wd:Q113145171 ;
-               wdt:P232                    ?ec_number    ;
-               wdt:P231                    ?cas_number   ;
-               wdt:P2240                   ?ld50         ;
-               wdt:P366                    ?use_type     ;
-               p:P2240                     ?ref          .
-    ?use_type  wdt:P279*                   wd:Q131656    .
-    ?ref       pq:P636                     wd:Q285166    ;
-               (pq:P689|pq:P2352)/wdt:P279 wd:Q184224    .
-
-    # Helps get the label in your language, if not, then default for all
-    # languages, then en language
-    SERVICE wikibase:label {
-        bd:serviceParam wikibase:language '[AUTO_LANGUAGE],mul,en'.
-    }
-}
-
-GROUP BY
-    ?use_type
-    ?use_typeLabel
-    ?compound
-    ?compoundLabel
-    ?ec_number 
-    ?cas_number
-
-# Rank by toxicity.
-ORDER BY ?avg_ld50
-"
-
+query_wikidata <- load_query_from_file(query_file_wikidata)
 pollutants <- sparql_query(endpoint = endpoint_wikidata, query = query_wikidata)
 
-# Add single quotes around a string.
-single_quote <- function(x) {
-  paste0("'", x, "'")
-}
-curly_bracket_quote <- function(x) {
-  paste0("{ ", x, " }")
-}
-
-cas_values_clause <- function(t) {
-  paste(
-    "VALUES",
-    "?cas",
-    t |>
-      dplyr::pull("cas_number") |>
-      single_quote() |>
-      paste(collapse = " ") |>
-      curly_bracket_quote()
-  )
-}
-
-# 1 17804-35-2
-# 2 17804-35-2
-# 3 309-00-2
-# 4 86-88-4
-# 5 1912-24-9   <- in list
-# 6 7773-06-0
-# 7 61-82-5     <- in list
-
-# query_solid_pod <- "
-# PREFIX sio: <http://semanticscience.org/resource/>
-
-# SELECT ?cas WHERE {
-#     ?s sio:SIO_000300 ?cas
-# }
-# "
 
 
 # Step 2. Query IDSM endpoint to find chemical substances that are similar to
@@ -103,129 +28,88 @@ cas_values_clause <- function(t) {
 # that are assigned by the Chemical Abstracts Service (CAS).
 # The input CAS numbers used for this query were returned by the search from
 # step 1.
-
-endpoint_idsm <- "https://idsm.elixir-czech.cz/sparql/endpoint/idsm"
-query_idsm <- "
-PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-PREFIX sio: <http://semanticscience.org/resource/>
-PREFIX vocab: <http://rdf.ncbi.nlm.nih.gov/pubchem/vocabulary#>
-PREFIX sachem: <http://bioinfo.uochb.cas.cz/rdf/v1.0/sachem#>
-PREFIX endpoint: <https://idsm.elixir-czech.cz/sparql/endpoint/>
-
-SELECT
-    ?cas
-    ?compound
-    ?similar_compound
-    ?score
-WHERE
-{
-    {
-        # Pollutant CAS numbers retrieved from wikidata.
-        VALUES_CLAUSE
-
-        # * sio:SIO_000011     ->  'is attribute of'
-        # * sio:SIO_000300     ->  'has value'
-        # * sio:CHEMINF_000446 ->  'CAS registry number'
-        ?synonym  sio:SIO_000300  ?cas               ;
-                  a               sio:CHEMINF_000446 ;
-                  sio:SIO_000011  ?compound          .
-        ?compound a               vocab:Compound     .
-
-        # SIO_011120  ->  'molecular structure file'
-        ?attribute  a               sio:SIO_011120 ;  
-                    sio:SIO_000011  ?compound      ;
-                    sio:SIO_000300  ?molfile       .
-
-        SERVICE endpoint:chebi {
-            # ?x sachem:similaritySearch  ?y  .
-            #
-            # ?x sachem:compound          ?similar_compound                 ;
-            #   sachem:score             ?score                            .
-            # ?y sachem:query             ?molfile                          ;
-            #   sachem:cutoff            '0.7'^^xsd:double                 ;
-            #   sachem:similarityRadius  '3'^^xsd:integer                  ;
-            #   sachem:aromaticityMode   sachem:aromaticityDetectIfMissing ;
-            #   sachem:tautomerMode      sachem:inchiTautomers             .
-
-            [
-                sachem:compound ?similar_compound ;
-                sachem:score    ?score
-            ] sachem:similaritySearch [
-                sachem:query             ?molfile                          ;
-                sachem:cutoff            '0.7'^^xsd:double                 ;
-                sachem:similarityRadius  '3'^^xsd:integer                  ;
-                sachem:aromaticityMode   sachem:aromaticityDetectIfMissing ;
-                sachem:tautomerMode      sachem:inchiTautomers
-            ] .
-        }
-    }
-
-    UNION
-    {
-        SERVICE endpoint:chebi {
-          ?similar_compound sachem:substructureSearch [ sachem:query '[As]' ] .
-        }
-    }
-}
-ORDER BY DESC(?score)
-"
-
-
-
-
-
+query_idsm <- load_query_from_file(query_file_idsm)
 similar_pollutants <- sparql_query(
   endpoint = endpoint_idsm,
-  query = sub("VALUES_CLAUSE", cas_values_clause(pollutants), query_idsm)
+  query = query_idsm,
+  use_post = TRUE
 )
+
+# V2: Add a VALUES clause to set the "?cas" values retrieved at step 1.
+cas_values <- pollutants |>
+  dplyr::pull("cas_number") |>
+  single_quote() |>
+  as_values_clause("cas_number")
+
+similar_pollutants_v2 <- sparql_query(
+  endpoint = endpoint_idsm,
+  query = replace_values_clause("cas_number", cas_values, query_idsm),
+  use_post = TRUE
+)
+identical(similar_pollutants, similar_pollutants_v2)
+
+# V3: Add a subquery that retrieves "?cas_number" values using a SERVICE clause
+#     that runs the subquery on a different endpoint.
+sub_query_wikidata <- load_query_from_file("query_wikidata_as_subquery.rq")
+similar_pollutants_v3 <- sparql_query(
+  endpoint = endpoint_idsm,
+  query = replace_values_clause(
+    var_name = "cas_number",
+    replacement = as_service_clause(sub_query_wikidata, endpoint_wikidata),
+    query = merge_query_prefixes(query_idsm, sub_query_wikidata)
+  ),
+  use_post = TRUE
+)
+identical(similar_pollutants, similar_pollutants_v3)
 
 
 
 # Step 3. Query the RHEA endpoint using the similar compound names returned
 # by the query of step 2.
 # The chemical compounds are identified by their ChEBI number.
-#
-# Chemical Entities of Biological Interest (ChEBI) is a freely available
-# dictionary of molecular entities focused on ‘small’ chemical compounds.
-# The term ‘molecular entity’ refers to any constitutionally or isotopically
-# distinct atom, molecule, ion, ion pair, radical, radical ion, complex,
-# conformer, etc., identifiable as a separately distinguishable entity.
-# The molecular entities in question are either products of nature or
-# synthetic products used to intervene in the processes of living organisms.
-
-endpoint_rhea <- "https://sparql.rhea-db.org/sparql"
-query_rhea <- "
-PREFIX CHEBI: <http://purl.obolibrary.org/obo/CHEBI_>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX rh: <http://rdf.rhea-db.org/>
-
-SELECT DISTINCT
-    ?chebi
-    ?rhea
-    ?equation
-    ?uniprot
-WHERE
-{
-    # ChEBI values retrieved from IDSM endpoint.
-    # Example: <http://purl.obolibrary.org/obo/CHEBI_15930>, which can be
-    # abbreviated CHEBI:15930
-    VALUES ?chebi { CHEBI:15930 }
-    
-    # The ChEBI can be used either as a small molecule, the reactive part of
-    # a macromolecule, or as a polymer.
-    ?compound  ( rh:chebi | 
-                (rh:reactivePart/rh:chebi) |
-                (rh:underlyingChebi/rh:chebi) )  ?chebi .
-
-    ?rhea  rdfs:subClassOf                  rh:Reaction ;
-           rh:equation                      ?equation   ;
-           rh:side/rh:contains/rh:compound  ?compound   .
-  
-    
-}
-"
-
+query_rhea <- load_query_from_file(query_file_rhea)
 rhea_reactions <- sparql_query(endpoint = endpoint_rhea, query = query_rhea)
+
+# V2: Add a VALUES clause to set the "?chebi" values retrieved at step 2.
+chebi_values <- similar_pollutants_v2 |>
+  dplyr::pull("similar_compound_chebi") |>
+  stringr::str_replace("http://purl.obolibrary.org/obo/CHEBI_", "CHEBI:") |>
+  as_values_clause("similar_compound_chebi")
+
+rhea_reactions_v2 <- sparql_query(
+  endpoint = endpoint_rhea,
+  query = replace_values_clause(
+    "similar_compound_chebi",
+    chebi_values,
+    query_rhea
+  ),
+  use_post = TRUE
+)
+identical(rhea_reactions, rhea_reactions_v2)
+
+# V3: Add a subquery that retrieves "similar_compound_chebi" values using a
+# SERVICE clause that runs the subquery on a different endpoint.
+#
+# Note: since the query is large, we need to pass it via a POST request rather
+# than a GET (this is done by passing the "use_post = TRUE" argument).
+# This is because with a GET request, only a limited size of text/data can be
+# passed in the header of the https request, whereas in a POST request the
+# data (sparql request) is not passed in the header of the request.
+sub_query_idsm <- load_query_from_file("query_idsm_as_subquery.rq")
+rhea_reactions_v3 <- sparql_query(
+  endpoint = endpoint_rhea,
+  query = replace_values_clause(
+    var_name = "similar_compound_chebi",
+    replacement = as_service_clause(sub_query_idsm, endpoint_idsm),
+    query = merge_query_prefixes(query_rhea, sub_query_idsm)
+  ),
+  use_post = TRUE
+)
+# Output is identical, but values are not returned in the same order.
+identical(
+  rhea_reactions |> arrange(similar_compound_chebi, rhea),
+  rhea_reactions_v3 |> arrange(similar_compound_chebi, rhea)
+)
 
 
 
@@ -237,95 +121,51 @@ rhea_reactions <- sparql_query(endpoint = endpoint_rhea, query = query_rhea)
 # <PROTEIN>_<SPECIES>
 # Example: HBB_HUMAN for human hemoglobin. HBB => abbreviation of the
 #          protein name: Hemoglobin subunit beta.
+query_uniprot <- load_query_from_file(query_file_uniprot)
+uniprot_ids <- sparql_query(
+  endpoint = endpoint_rhea,
+  query = query_uniprot,
+  use_post = TRUE
+)
 
-
-# endpoint_uniprot <- "https://sparql.uniprot.org/sparql"
-query_uniprot <- "
-PREFIX rh: <http://rdf.rhea-db.org/>
-PREFIX up: <http://purl.uniprot.org/core/>
-
-SELECT
-    ?uniprot
-    ?mnemo
-    ?rhea
-    ?accession
-    ?equation
-WHERE
-{
-    SERVICE <https://sparql.uniprot.org/sparql> {
-        GRAPH <http://sparql.uniprot.org/uniprot> {
-            
-            # Values that were retrieved from the Rhea endpoint.
-            # Example: <http://rdf.rhea-db.org/11312
-            VALUES ?rhea { rh:11312 rh:11313 }
-
-            ?uniprot  up:reviewed  true    ;
-                      up:mnemonic  ?mnemo  ;
-                      up:organism  ?taxid  ;
-                      up:annotation/
-                      up:catalyticActivity/
-                      up:catalyzedReaction   ?rhea  .
-        }
-    }
-
-    ?rhea  rh:accession  ?accession  ;
-           rh:equation   ?equation   .
-}
-"
-
-uniprot_ids <- sparql_query(endpoint = endpoint_rhea, query = query_uniprot)
+# V2: Add a VALUES clause to set the "?rhea" values retrieved at step 3.
+rhea_values <- rhea_reactions_v2 |>
+  dplyr::pull("rhea") |>
+  unique() |>
+  sort() |>
+  stringr::str_replace("http://rdf.rhea-db.org/", "rh:") |>
+  as_values_clause("rhea")
+uniprot_ids_v2 <- sparql_query(
+  endpoint = endpoint_rhea,
+  query = replace_values_clause("rhea", rhea_values, query_uniprot),
+  use_post = TRUE
+)
+identical(uniprot_ids, uniprot_ids_v2)
 
 
 
 # Step 5. Using the OMA database, retrieve all organisms (taxon names)
+# PROBLEM: it seems that the OMA endpoint does not support POST requests. As
+#          a result, we can only submit a query with a limited size, which is
+#          why all comments are stripped from the query (remove_comments=TRUE)
+#          to save characters.
+query_oma <- load_query_from_file(query_file_oma, remove_comments = TRUE)
+oma_taxons <- sparql_query(
+  endpoint = endpoint_oma,
+  query = query_oma,
+  use_post = FALSE
+)
 
-endpoint_oma <- "https://sparql.omabrowser.org/sparql"
-query_oma <- "
-#PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-#PREFIX owl: <http://www.w3.org/2002/07/owl#>
-#PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-#PREFIX dc: <http://purl.org/dc/elements/1.1/>
-#PREFIX dct: <http://purl.org/dc/terms/>
-#PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
-#PREFIX ensembl: <http://rdf.ebi.ac.uk/resource/ensembl/>
-#PREFIX oma: <http://omabrowser.org/ontology/oma#>
-#PREFIX sio: <http://semanticscience.org/resource/>
-#PREFIX taxon: <http://purl.uniprot.org/taxonomy/>
-#PREFIX void: <http://rdfs.org/ns/void#>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX obo: <http://purl.obolibrary.org/obo/>
-PREFIX orth: <http://purl.org/net/orth#>
-PREFIX up: <http://purl.uniprot.org/core/>
-PREFIX lscr: <http://purl.org/lscr#>
-
-SELECT
-    ?ortholog_protein
-    ?oma_link
-    ?taxon_sci_name
-WHERE
-{
-    # Uniprot reference retrieved in the previous step.
-    VALUES ( ?uniprot_link ) { ( <http://purl.uniprot.org/uniprot/P72156> ) }
-     
-
-    # Retrieve the protein for which we want to search orthologs.
-    ?protein  lscr:xrefUniprot  ?uniprot_link  .
-
-    # The three that contains Orthologs. The leafs are proteins.
-    # This graph pattern defines the relationship protein1 is orthologs
-    # to protein2
-    ?cluster  a                          orth:OrthologsCluster ;
-              orth:hasHomologousMember   ?node1                ,
-                                         ?node2                .
-    ?node1    orth:hasHomologousMember*  ?protein              .
-    ?node2    orth:hasHomologousMember*  ?ortholog_protein     .
-
-    # OMA link to the second protein.
-    ?ortholog_protein  rdfs:seeAlso       ?oma_link       ;
-                       orth:organism/
-                       obo:RO_0002162/
-                       up:scientificName  ?taxon_sci_name .
-
-    FILTER(?node1 != ?node2)
-}
-"
+# V2: Add a VALUES clause to set the "?uniprot" values retrieved at step 4.
+uniprot_values <- uniprot_ids_v2 |>
+  dplyr::pull("uniprot") |>
+  unique() |>
+  sort() |>
+  stringr::str_replace("http://purl.uniprot.org/uniprot/", "upk:") |>
+  as_values_clause("uniprot")
+oma_taxons_v2 <- sparql_query(
+  endpoint = endpoint_oma,
+  query = replace_values_clause("uniprot", uniprot_values, query_oma),
+  use_post = FALSE
+)
+identical(oma_taxons, oma_taxons_v2)
