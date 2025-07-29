@@ -1,0 +1,52 @@
+# Use-case step 3b
+#
+# Note: this is a legacy query, as queries for steps 3a and 3b have now been
+# merged into a single query to the UniProt endpoint.
+#
+# Retrieve proteins/enzymes that are associated to the metabolic
+# chemical reactions that were retrieved from the Rhea database at step 3a.
+# 
+# The proteins/enzymes are queries from the UniProt database via a SERVICE
+# clause.
+# 
+# Endpoint: https://sparql.rhea-db.org/sparql
+
+PREFIX rh: <http://rdf.rhea-db.org/>
+PREFIX up: <http://purl.uniprot.org/core/>
+
+SELECT
+    ?uniprot
+    ?mnemo
+    ?rhea
+    ?accession
+    ?equation
+WHERE
+{
+    # Retrieve proteins/enzymes from UniProt.
+    SERVICE <https://sparql.uniprot.org/sparql> {
+        GRAPH <http://sparql.uniprot.org/uniprot> {
+
+            # Values that were retrieved from the Rhea endpoint.
+            # Example: <http://rdf.rhea-db.org/11312
+            VALUES ?rhea {
+                rh:11312 rh:11348 rh:11684 rh:15969 rh:18449
+                rh:18701 rh:22016 rh:27349 rh:29771 rh:43848
+                rh:54036 rh:59484 rh:68560 rh:69428 rh:69432
+                rh:69460 rh:69464 rh:71827 rh:81347 rh:82323
+                rh:82363 rh:82439 rh:82443
+            }
+
+            ?uniprot  up:reviewed  true    ;
+                      up:mnemonic  ?mnemo  ;
+                      up:organism  ?taxid  ;
+                      up:annotation/
+                      up:catalyticActivity/
+                      up:catalyzedReaction   ?rhea  .
+        }
+    }
+
+    ?rhea  rh:accession  ?accession  ;
+           rh:equation   ?equation   .
+}
+
+

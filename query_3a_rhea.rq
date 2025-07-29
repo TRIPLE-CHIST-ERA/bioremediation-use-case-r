@@ -1,6 +1,10 @@
-# Query the RHEA endpoint using the similar compound names returned
-# by the query of step 2.
-# The chemical compounds are identified by their ChEBI number.
+# Use-case step 3a
+#
+# Note: this is a legacy query, as queries for steps 3a and 3b have now been
+# merged into a single query to the UniProt endpoint.
+#
+# Query the RHEA endpoint using the similar compound names returned by the
+# query of step 2. The chemical compounds are identified by their ChEBI number.
 #
 # Chemical Entities of Biological Interest (ChEBI) is a freely available
 # dictionary of molecular entities focused on ‘small’ chemical compounds.
@@ -9,6 +13,8 @@
 # conformer, etc., identifiable as a separately distinguishable entity.
 # The molecular entities in question are either products of nature or
 # synthetic products used to intervene in the processes of living organisms.
+# 
+# Endpoint: https://sparql.rhea-db.org/sparql
 
 PREFIX CHEBI: <http://purl.obolibrary.org/obo/CHEBI_>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>

@@ -7,8 +7,6 @@ SELECT DISTINCT
     ?cas_number
 WHERE
 {
-    # Note: 'wdt:P2240' and 'ld50' is the toxicity level (median lethal
-    # dose), not many data points have this info (only 9 results in total).
     ?compound  wdt:P31                      wd:Q113145171 ;
                wdt:P232                     ?ec_number    ;
                wdt:P231                     ?cas_number   ;

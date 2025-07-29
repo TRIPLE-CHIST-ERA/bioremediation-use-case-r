@@ -1,4 +1,20 @@
 # Chist-ERA TRIPLE demonstrator use-case.
+#
+# Script that runs a series of SPARQL queries to identify organisms with
+# potential bioremediation for a set of chemical pollutants.
+#
+# Each step of the use-case is run in 3 different ways:
+# * Version 1: a "hard-coded" SPARQL query.
+# * Version 2: a SPARQL query built by passing values from the previous step
+#   of the use-case.
+# * Version 3: running all steps up to the query as a single federated query
+#   that uses subqueries in SERVICE clauses.
+#
+# Note: large SPARQL queries must be passed to the endpoint via a POST request
+# rather than a GET (this is done by passing the "use_post = TRUE" argument).
+# This is because with a GET request, only a limited size of text/data can be
+# passed in the header of the HTTPS request, whereas in a POST request the
+# data (sparql request) is not passed in the header of the request.
 
 # Load SPARQL functions.
 source("../VoIDR.git/R/SPARQL.R")
@@ -7,15 +23,16 @@ source("utils.R")
 # Set endpoints and paths to SPARQL queries.
 endpoint_wikidata <- "https://query.wikidata.org/sparql"
 endpoint_idsm <- "https://idsm.elixir-czech.cz/sparql/endpoint/idsm"
-endpoint_rhea <- "https://sparql.rhea-db.org/sparql"
 endpoint_uniprot <- "https://sparql.uniprot.org/sparql"
 endpoint_oma <- "https://sparql.omabrowser.org/sparql"
 
-query_file_wikidata <- "query_wikidata.rq"
-query_file_idsm <- "query_idsm.rq"
-query_file_rhea <- "query_rhea.rq"
-query_file_uniprot <- "query_uniprot.rq"
-query_file_oma <- "query_oma.rq"
+query_file_wikidata <- "query_1_wikidata.rq"
+query_file_idsm <- "query_2_idsm.rq"
+query_file_uniprot <- "query_3_uniprot.rq"
+query_file_oma <- "query_4_oma.rq"
+subquery_file_wikidata <- "subquery_1_wikidata.rq"
+subquery_file_idsm <- "subquery_2_idsm.rq"
+subquery_file_uniprot <- "subquery_3_uniprot.rq"
 
 
 # ------------------------------------------------------------------------------
@@ -25,23 +42,26 @@ query_wikidata <- load_query_from_file(query_file_wikidata)
 pollutants <- sparql_query(endpoint = endpoint_wikidata, query = query_wikidata)
 
 
+
 # ------------------------------------------------------------------------------
 # Step 2. Query IDSM endpoint to find chemical substances that are similar to
 # the chemicals identified via wikidata (step 1).
 # The search is made using the CAS numbers: unique IDs for chemical substances,
 # that are assigned by the Chemical Abstracts Service (CAS).
-# The input CAS numbers used for this query were returned by the search from
-# step 1.
 query_idsm <- load_query_from_file(query_file_idsm)
+
+# Version 1: use the hard-coded SPARQL query for this step of the use-case.
 similar_pollutants <- sparql_query(
   endpoint = endpoint_idsm,
   query = query_idsm,
   use_post = TRUE
 )
 
-# V2: Add a VALUES clause to set the "?cas" values retrieved at step 1.
+# Version 2: pass values from the previous step to the SPARQL query.
 cas_values <- pollutants |>
   dplyr::pull("cas_number") |>
+  sort() |>
+  unique() |>
   single_quote() |>
   as_values_clause("cas_number")
 
@@ -50,21 +70,24 @@ similar_pollutants_v2 <- sparql_query(
   query = replace_values_clause("cas_number", cas_values, query_idsm),
   use_post = TRUE
 )
+# Verify that result is the same as the original query.
 identical(similar_pollutants, similar_pollutants_v2)
 
-# V3: Add a subquery that retrieves "?cas_number" values using a SERVICE clause
-#     that runs the subquery on a different endpoint.
-sub_query_wikidata <- load_query_from_file("query_wikidata_as_subquery.rq")
+# Version 3: run all steps up to this point as a single federated query that
+# uses subqueries in SERVICE clauses.
+subquery_wikidata <- load_query_from_file(subquery_file_wikidata)
 similar_pollutants_v3 <- sparql_query(
   endpoint = endpoint_idsm,
   query = replace_values_clause(
     var_name = "cas_number",
-    replacement = as_service_clause(sub_query_wikidata, endpoint_wikidata),
-    query = merge_query_prefixes(query_idsm, sub_query_wikidata)
+    replacement = as_service_clause(subquery_wikidata, endpoint_wikidata),
+    query = merge_query_prefixes(query_idsm, subquery_wikidata)
   ),
   use_post = TRUE
 )
+# Verify that result is the same as the original query.
 identical(similar_pollutants, similar_pollutants_v3)
+
 
 
 # ------------------------------------------------------------------------------
@@ -78,13 +101,15 @@ identical(similar_pollutants, similar_pollutants_v3)
 #  2. Retrieve the UniProt identifiers of proteins/enzymes that are part of
 #     metabolic reactions in which the identified chemicals take part.
 query_uniprot <- load_query_from_file(query_file_uniprot)
+
+# Version 1: use the hard-coded SPARQL query for this step of the use-case.
 uniprot_ids <- sparql_query(
   endpoint = endpoint_uniprot,
   query = query_uniprot,
   use_post = TRUE
 )
 
-# V2: Add a VALUES clause to set the "?chebi" values retrieved at step 2.
+# Version 2: pass values from the previous step to the SPARQL query.
 chebi_values <- similar_pollutants_v2 |>
   dplyr::pull("similar_compound_chebi") |>
   sort() |>
@@ -95,25 +120,16 @@ chebi_values <- similar_pollutants_v2 |>
 uniprot_ids_v2 <- sparql_query(
   endpoint = endpoint_uniprot,
   query = replace_values_clause(
-    "similar_compound_chebi",
-    chebi_values,
-    query_uniprot
+    "similar_compound_chebi", chebi_values, query_uniprot
   ),
   use_post = TRUE
 )
+# Verify that result is the same as the original query.
 identical(uniprot_ids, uniprot_ids_v2)
 
-
-# V3: Add a subquery that retrieves "?similar_compound_chebi" values using a
-# nested SERVICE clauses that run all previous steps of the use-case pipeline
-# up to this point.
-#
-# Note: since the query is large, we need to pass it via a POST request rather
-# than a GET (this is done by passing the "use_post = TRUE" argument).
-# This is because with a GET request, only a limited size of text/data can be
-# passed in the header of the https request, whereas in a POST request the
-# data (sparql request) is not passed in the header of the request.
-sub_query_idsm <- load_query_from_file("query_idsm_as_subquery.rq")
+# Version 3: run all steps up to this point as a single federated query that
+# uses subqueries in SERVICE clauses.
+sub_query_idsm <- load_query_from_file(subquery_file_idsm)
 uniprot_ids_v3 <- sparql_query(
   endpoint = endpoint_uniprot,
   query = replace_values_clause(
@@ -123,7 +139,9 @@ uniprot_ids_v3 <- sparql_query(
   ),
   use_post = TRUE
 )
+# Verify that result is the same as the original query.
 identical(uniprot_ids, uniprot_ids_v3)
+
 
 
 # ------------------------------------------------------------------------------
@@ -133,36 +151,40 @@ identical(uniprot_ids, uniprot_ids_v3)
 #          why all comments are stripped from the query (remove_comments=TRUE)
 #          to save characters.
 query_oma <- load_query_from_file(query_file_oma, remove_comments = TRUE)
+
+# Version 1: use the hard-coded SPARQL query for this step of the use-case.
 oma_taxons <- sparql_query(
   endpoint = endpoint_oma,
   query = query_oma,
   use_post = FALSE
 )
 
-# V2: Add a VALUES clause to set the "?uniprot" values retrieved at step 4.
+# Version 2: pass values from the previous step to the SPARQL query.
 uniprot_values <- uniprot_ids_v2 |>
   dplyr::pull("uniprot") |>
   unique() |>
   sort() |>
   stringr::str_replace("http://purl.uniprot.org/uniprot/", "upk:") |>
   as_values_clause("uniprot")
+
 oma_taxons_v2 <- sparql_query(
   endpoint = endpoint_oma,
   query = replace_values_clause("uniprot", uniprot_values, query_oma),
   use_post = FALSE
 )
+# Verify that result is the same as the original query.
 identical(oma_taxons, oma_taxons_v2)
 
-# V3: Add a subquery that retrieves "?uniprot" values using nested SERVICE
-# clauses that run all previous steps of the use-case pipeline up to this
-# point.
+# Version 3: run all steps up to this point as a single federated query that
+# uses subqueries in SERVICE clauses.
+#
 # WARNING: this does currently NOT work for a couple of reasons:
 #  1. The query is too large, and can't be passed via a GET request. POST
 #     requests do not seem to work on the Oma endpoint.
 #  2. The request itself does not seem to work when pasted in the endpoint's
 #     web interface. The reason why is not fully clear, but maybe it's due to
 #     the too many levels of nested SERVICE clauses.
-sub_query_uniprot <- load_query_from_file("query_uniprot_as_subquery.rq")
+sub_query_uniprot <- load_query_from_file(subquery_file_uniprot)
 oma_taxons_v3 <- sparql_query(
   endpoint = endpoint_oma,
   query = replace_values_clause(
@@ -172,4 +194,5 @@ oma_taxons_v3 <- sparql_query(
   ),
   use_post = FALSE
 )
+# Verify that result is the same as the original query.
 identical(oma_taxons, oma_taxons_v3)
