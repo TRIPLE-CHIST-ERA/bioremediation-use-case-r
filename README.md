@@ -1,12 +1,30 @@
-# Chist-ERA TRIPLE demonstrator use-case
+# CHIST-ERA TRIPLE demonstrator use-case in R language
 
-Repository to store scripts and SPARQL queries for the Chist-ERA TRIPLE project
-use case.
+Use-case demonstrating the federation of open data across SPARQL endpoints,
+as part of the CHIST-ERA triple project.
+
+This is the version of the use-case written in R language. An version
+[written in Python](https://github.com/TRIPLE-CHIST-ERA/bioremediation)
+is also available.
+
+The use case consists of series of SPARQL queries that identify organisms with
+possible bioremediation potential for a given pollutant. The queries are
+targeting the following 5 SPARQL endpoints:
+
+* [Wikidata](https://query.wikidata.org/sparql)
+* [IDSM](https://idsm.elixir-czech.cz/sparql/endpoint/idsm)
+* [Uniprot](https://sparql.uniprot.org/sparql)
+* [Rhea](https://sparql.rhea-db.org/sparql)
+* [OMA](https://sparql.omabrowser.org/sparql)
+
+</br>
+
+## Use-case description
 
 The objective of this use-case is to provide a demonstration showing how data
 from different SPARQL endpoints can be combined to retrieve complex
-information: in this specific case, identifying organisms with bioremediation
-potential for a given pollutant.
+information: in this specific case, identifying organisms with possible
+bioremediation potential for a given pollutant.
 
 The steps involved in this demonstrator pipeline are the following:
 
