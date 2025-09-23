@@ -11,6 +11,7 @@ PREFIX obo: <http://purl.obolibrary.org/obo/>
 PREFIX orth: <http://purl.org/net/orth#>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX taxon: <http://purl.uniprot.org/taxonomy/>
 PREFIX up: <http://purl.uniprot.org/core/>
 PREFIX upk: <http://purl.uniprot.org/uniprot/>
 
@@ -18,6 +19,8 @@ SELECT
     ?ortholog_protein
     ?oma_link
     ?taxon_sci_name
+    ?taxon
+    ?mnemonic
 WHERE
 {
     # Uniprot reference retrieved in the previous step.
@@ -47,8 +50,9 @@ WHERE
     # OMA link to the second protein.
     ?ortholog_protein rdfs:seeAlso      ?oma_link       ;
                       orth:organism/
-                      obo:RO_0002162/
-                      up:scientificName ?taxon_sci_name .
+                      obo:RO_0002162    ?taxon          .
+    ?taxon            up:scientificName ?taxon_sci_name .
+    ?taxon <http://purl.uniprot.org/core/mnemonic> ?mnemonic  .
 
     FILTER(?node1 != ?node2)
 }

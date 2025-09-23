@@ -17,7 +17,7 @@
 # data (sparql request) is not passed in the header of the request.
 
 # Load SPARQL functions.
-source("../VoIDR.git/R/SPARQL.R")
+source("../sparqlr.git/sparql.R")
 source("utils.R")
 
 # Set endpoints and paths to SPARQL queries.

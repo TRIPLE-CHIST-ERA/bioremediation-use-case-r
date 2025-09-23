@@ -1,0 +1,25 @@
+# Use-case step 5
+# 
+# Retrieve the "mnemonic" codes of all bacterial taxa in Uniprot.
+# Note: this retrieves ~5'000 entries, which is obviously a lot less than the
+# number of bacterial taxa in uniprot (> 500'000). The reason for this is
+# probably because uniprot only has mnemonic values for bacterial taxa with
+# a full genome associated.
+#
+# Endpoint: https://sparql.uniprot.org/sparql
+
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX taxon: <http://purl.uniprot.org/taxonomy/>
+PREFIX up: <http://purl.uniprot.org/core/>
+
+SELECT
+    ?taxon
+    ?mnemonic
+    ?scientificName
+WHERE
+{
+    ?taxon  a                  up:Taxon         ;
+            rdfs:subClassOf    taxon:2          ;   # Bacteria
+            up:scientificName  ?scientificName  ;
+            up:mnemonic        ?mnemonic        .
+}

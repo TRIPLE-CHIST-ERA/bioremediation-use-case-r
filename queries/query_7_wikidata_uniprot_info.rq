@@ -1,0 +1,19 @@
+# Use-case network graph info retrieval.
+# 
+# Endpoint: https://query.wikidata.org/sparql
+
+SELECT
+    ?protein_wiki_id
+    ?protein_wiki_idLabel
+WHERE
+{
+    # Uniprot values from the pipeline.
+    VALUES ?uniprot_id {
+        "P72156"
+    }
+
+    ?protein wdt:P352 ?uniprot_id .
+    SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }   
+}
+
+

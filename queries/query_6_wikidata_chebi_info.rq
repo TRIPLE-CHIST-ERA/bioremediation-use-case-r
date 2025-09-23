@@ -1,0 +1,27 @@
+# Use-case network graph info retrieval.
+# 
+# Endpoint: https://query.wikidata.org/sparql
+
+SELECT
+    ?compound_wiki_id
+    ?compound_wiki_idLabel
+    ?cas
+    (CONCAT("CHEBI:", STR(?chebi_id)) AS ?chebi)
+    ?image_link
+WHERE {
+    # CHEBI values from the pipeline.
+    VALUES ?chebi_id {
+        "15930" "83790" "83789" "83791" "38067" "82227"
+        "9330" "81950"
+        "82256"
+        "82059" "3015" "82083"
+        "82100" "2564"
+        "40036"
+    }
+
+    ?compound_wiki_id  wdt:P683  ?chebi_id        ;
+                       wdt:P231  ?cas         ;
+                       wdt:P117  ?image_link  .
+
+    SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+}

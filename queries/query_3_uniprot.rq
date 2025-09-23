@@ -21,6 +21,7 @@ PREFIX CHEBI: <http://purl.obolibrary.org/obo/CHEBI_>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX rh: <http://rdf.rhea-db.org/>
 PREFIX up: <http://purl.uniprot.org/core/>
+PREFIX upk: <http://purl.uniprot.org/uniprot/>
 
 SELECT
     ?uniprot

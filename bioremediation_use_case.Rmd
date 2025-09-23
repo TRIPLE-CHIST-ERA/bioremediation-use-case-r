@@ -1,0 +1,517 @@
+---
+title: "CHIST-ERA TRIPLE demonstrator use-case in R language"
+output: 
+  html_document:
+---
+
+<br>
+<br>
+
+## Bioremediation use-case description
+
+--------------------------------------------------------------------------------
+
+The following is a use-case demonstrating the federation of data across
+SPARQL endpoints and Solid Pods.
+
+The objective of this use-case is to provide a demonstrator showing how data
+from different SPARQL endpoints can be combined to retrieve complex
+information: in this specific case, identifying organisms with possible
+bioremediation potential for the pollutant
+[*atrazine*](https://en.wikipedia.org/wiki/Atrazine).
+
+The queries in this use-case are targeting the following 5 SPARQL endpoints:
+
+* A [Solid Pod](https://solidproject.org/) with public data
+* [IDSM](https://idsm.elixir-czech.cz/sparql/endpoint/idsm)
+* [Uniprot](https://sparql.uniprot.org/sparql)
+* [Rhea](https://sparql.rhea-db.org/sparql)
+* [OMA](https://sparql.omabrowser.org/sparql)
+
+The steps involved in this demonstrator pipeline are the following:
+
+1. **Query data from a [Solid Pod](https://solidproject.org)**
+   to retrieve the [CAS registry number](https://www.cas.org/about/cas-content)
+   of *atrazine*, the pollutant for which bioremediation is sought in this
+   demonstrator use-case.
+
+2. **Identify chemical compounds that are similar** to *atrazine*. This is
+   done to widen the search for organisms with potential for bioremediation:
+   if an organism can metabolize a closely resembling chemical compound, then
+   it is possible that it can also metabolize the original pollutant.
+
+   The search is done via the
+   [IDSM sparql endpoint](https://idsm.elixir-czech.cz/sparql/endpoint/idsm),
+   which is here queried on the basis of the pollutant's CAS numbers retrieved
+   at step 1.
+
+   Each retrieved "similar" chemical compound  is identified by its
+   **[ChEBI identifier](https://www.ebi.ac.uk/chebi/aboutChebiForward.do)**.
+
+3. **Retrieve metabolic chemical reactions** that involve *atrazine*, or one
+   of its similar chemical compounds.
+
+   This is done using the [Rhea service](https://www.rhea-db.org), a
+   database of chemical and transport reactions of biological interest.
+
+4. **Retrieve proteins/enzymes** that are involved in the metabolic reactions
+   returned by the Rhea endpoint (step 3). This is done using the
+   [UniProt service](https://www.uniprot.org), the largest available
+   protein database.
+
+5. **Identify the biological organisms** with potential for bioremediation.
+   This is done by querying the
+   [Oma (Orthologous matrix)](https://omabrowser.org/oma/home) service.
+
+<br>
+<br>
+
+## Use-case code and results
+
+--------------------------------------------------------------------------------
+
+### Environment setup
+
+```{r load-env}
+library(rlang)
+
+# Load our own SPARQL library and helper functions.
+source("../sparqlr.git/sparql.R")
+source("utils.R")
+
+# Set endpoints and paths to SPARQL queries used throughout the use-case.
+endpoint_wikidata <- "https://query.wikidata.org/sparql"
+endpoint_idsm <- "https://idsm.elixir-czech.cz/sparql/endpoint/idsm"
+endpoint_rhea <- "https://sparql.rhea-db.org/sparql"
+endpoint_uniprot <- "https://sparql.uniprot.org/sparql"
+endpoint_oma <- "https://sparql.omabrowser.org/sparql"
+
+query_file_wikidata <- "queries/query_1_wikidata.rq"
+query_file_idsm <- "queries/query_2_idsm.rq"
+query_file_uniprot <- "queries/query_3_uniprot.rq"
+query_file_oma <- "queries/query_4_oma.rq"
+subquery_file_wikidata <- "queries/subquery_1_wikidata.rq"
+subquery_file_idsm <- "queries/subquery_2_idsm.rq"
+subquery_file_uniprot <- "queries/subquery_3_uniprot.rq"
+
+pollutant_name <- "atrazine"
+```
+
+<br>
+
+### Step 1: retrieve the CAS number of `r pollutant_name` from a Solid Pod
+
+The first step of the use-case demonstrates the retrieval of data from a
+[Solid Pod](https://solidproject.org).
+
+Specifically, the following table with a list of pollutants and their
+[CAS registry number (Chemical Abstracts Service)](https://www.cas.org/about/cas-content)
+is retrieved.
+
+```{r step-1-get-pollutants, message=FALSE, echo=TRUE}
+
+# Retrieve data from a Solid Pod.
+pollutant_table_source <- paste0(
+  "https://triple.ilabt.imec.be/bioremediation-use-case/",
+  "input/pollutants_table.ttl"
+)
+pollutants <- read.table(pollutant_table_source, sep = "\t", header = TRUE)
+pollutant_cas_number <- pollutants[
+  pollutants$compoundLabel == pollutant_name, "cas_number"
+]
+```
+
+```{r step-1-print-table, message=FALSE, echo=FALSE}
+knitr::kable(
+  pollutants[, c("compoundLabel", "cas_number", "avg_ld50")],
+  col.names = c("Pollutant", "CAS Number", "Average LD50"),
+  caption = "List of pollutants retrieved from the Solid Pod and
+             their CAS number"
+)
+```
+
+From the above pollutant list, the use-case will from here-on focus on the
+pollutant **`r pollutant_name`**, which is identified by the CAS number
+**`r pollutant_cas_number`**.
+
+<br>
+
+*Note:* the data in the table downloaded from the Solid Pod was originally
+retrieved via the following commands:
+
+```r
+query_wikidata <- load_query_from_file(query_file_wikidata)
+pollutants <- sparql_query(
+  endpoint = endpoint_wikidata, query = query_wikidata
+)
+readr::write_tsv(pollutants, "pollutants_table.ttl")
+```
+
+<br>
+
+### Step 2: identify chemical substances similar to `r pollutant_name`
+
+In this second step of the use-case, chemical substances with structural
+similarity to `r pollutant_name` are retrieved by running a SPARQL query on
+the [IDSM endpoint](`r endpoint_idsm`).
+
+The query is made using the
+[CAS number](https://www.cas.org/about/cas-content), a unique ID for chemical
+substances, assigned by the Chemical Abstracts Service (CAS). It returns
+a list of similar chemical compounds, that are identified by their
+[ChEBI identifier](https://www.ebi.ac.uk/chebi/aboutChebiForward.do).
+Chemical Entities of Biological Interest (ChEBI) is a freely available
+dictionary of molecular entities focused on "small" chemical compounds.
+
+```{r step-2-run-query, echo=TRUE, message=FALSE}
+query_idsm <- load_query_from_file(query_file_idsm)
+
+similar_pollutants <- sparql_query(
+  endpoint = endpoint_idsm,
+  query = replace_values_clause(
+    "cas_number",
+    as_values_clause(single_quote(pollutant_cas_number), "cas_number"),
+    query_idsm
+  ),
+  use_post = TRUE
+)
+```
+
+Here are some of the chemical compounds similar to `r pollutant_name`
+returned by the query:
+
+```{r step-2-print-table, echo=FALSE}
+
+prefixes_idsm <- tibble::tribble(
+  ~short, ~long,
+  "obo",  "http://purl.obolibrary.org/obo/",
+)
+
+knitr::kable(
+  similar_pollutants |>
+    modify_iri_style(prefixes_idsm, iri_style = "mdlink") |>
+    dplyr::filter(!is.na(similar_pollutants$score)) |>
+    dplyr::select("similar_compound_chebi", "score") |>
+    dplyr::arrange("score") |>
+    dplyr::slice_head(n = 5),
+  col.names = c("Chemical compound (CHEBI numbers)", "Similarity score"),
+  caption = paste0(
+    "List of chemical substances with structural similarity to ",
+    pollutant_name
+  ),
+  align = "l"
+)
+```
+
+<br>
+
+### Step 3: identify enzymes involved in metabolic pathways of `r pollutant_name` degradation
+
+In order to identify micro-organisms that are potential candidates for the
+bioremediation of `r pollutant_name`, a federated SPARQL query is run on
+the [Rhea](`r endpoint_rhea`) and [UniProt](`r endpoint_uniprot`) endpoints to
+retrieve the enzymes/proteins that are involved in the degradation of
+`r pollutant_name` or similar chemical compounds (as identified in step 2).
+
+Specifically, this federated query is consists in of the following two steps:
+
+1. A sub-query to the Rhea endpoint (via a `SERVICE` clause) is used to
+   retrieve metabolic reactions involving `r pollutant_name` or similar
+   chemical compounds that are similar to it.
+2. A query to the UniProt endpoints then retrieves the UniProt identifiers of
+   proteins/enzymes that are part of the metabolic reactions identified from
+   the Rhea endpoint.
+
+```{r step-3-run-query, echo=TRUE, message=FALSE}
+query_uniprot <- load_query_from_file(query_file_uniprot)
+
+chebi_values <- similar_pollutants |>
+  dplyr::pull("similar_compound_chebi") |>
+  sort() |>
+  unique() |>
+  stringr::str_replace(
+    "<http://purl.obolibrary.org/obo/CHEBI_(.*)>",
+    "CHEBI:\\1"
+  )
+
+uniprot_ids <- sparql_query(
+  endpoint = endpoint_uniprot,
+  query = replace_values_clause(
+    "similar_compound_chebi",
+    as_values_clause(chebi_values, "similar_compound_chebi"),
+    query_uniprot
+  ),
+  use_post = TRUE
+)
+```
+
+<br>
+
+Here are some of the enzymes retrieved by the query:
+
+```{r step-3-print-table, echo=FALSE}
+prefixes_uniprot <- load_prefixes_from_file(query_file_uniprot)
+knitr::kable(
+  uniprot_ids |>
+    modify_iri_style(prefixes_uniprot, iri_style = "mdlink") |>
+    dplyr::arrange("uniprot") |>
+    dplyr::select("uniprot", "rhea_id", "equation_rhea") |>
+    dplyr::slice_head(n = 5),
+  col.names = c("Uniprot ID", "Rhea ID", "Rhea equation"),
+  caption = paste0(
+    "Examples of enzymes involved in the metabolic reaction involving ",
+    pollutant_name, " or a structurally similar compound."
+  )
+)
+```
+
+<br>
+
+### Step 4: identify organisms with bioremediation potential
+
+In this last step of this illustrative bioremediation use-case, the
+[OMA database](`r endpoint_oma`) is queried to retrieve all organisms that
+produce some of the enzymes/proteins identified to potentially take part in
+the metabolic degradation of `r pollutant_name`.
+
+```{r step-4-run-query, echo=TRUE, message=FALSE}
+
+# Query organisms with potential for bioremediation from the OMA database.
+query_oma <- load_query_from_file(query_file_oma, remove_comments = TRUE)
+
+uniprot_values <- uniprot_ids |>
+  dplyr::pull("uniprot") |>
+  unique() |>
+  sort() |>
+  stringr::str_replace("<http://purl.uniprot.org/uniprot/(.*)>", "upk:\\1")
+
+oma_taxa <- sparql_query(
+  endpoint = endpoint_oma,
+  query = replace_values_clause(
+    "uniprot",
+    as_values_clause(uniprot_values, "uniprot"),
+    query_oma
+  ),
+  use_post = FALSE
+)
+
+# Filter the OMA results to keep only bacterial taxa.
+# This is done by querying uniprot for the "mnemonic" codes of all bacterial
+# taxa present in Uniprot, then filtering the query results from OMA to keep
+# only those with a bacterial mnemonic code.
+query_file_uniprot_mnemonic <- "queries/query_5_uniprot.rq"
+query_uniprot_mnemonic <- load_query_from_file(
+  query_file_uniprot_mnemonic,
+  remove_comments = TRUE
+)
+bacterial_taxon <- sparql_query(
+  endpoint = endpoint_uniprot,
+  query = query_uniprot_mnemonic,
+  use_post = TRUE
+)
+taxa_counts <- oma_taxa |>
+  dplyr::semi_join(bacterial_taxon, by = "mnemonic") |>
+  dplyr::count(mnemonic, taxon_sci_name, name = "enzyme_count") |>
+  dplyr::arrange(desc(enzyme_count)) |>
+  dplyr::select("taxon_sci_name", "mnemonic", "enzyme_count")
+```
+
+<br>
+
+This query identifies **`r nrow(taxa_counts)`** bacterial species with
+potential for bioremediation of **`r pollutant_name`**.
+
+Here are the 10 that have the highest number of mappings to enzymes
+potentially involved in the metabolic degradation of `r pollutant_name` (i.e.
+something that could be interpreted as having higher likelihood of providing
+potential for bioremediation for `r pollutant_name`).
+
+```{r step-4-print-table, echo=FALSE}
+
+knitr::kable(
+  head(taxa_counts, 10),
+  caption = paste("Taxa with bioremediation potential for", pollutant_name),
+  col.names = c("Taxon name", "Uniprot mnemonic", "Enzyme count"),
+)
+```
+
+<br>
+<br>
+
+## Summary network graph
+
+Visual representation of the SPARQL queries ran for the first 3 steps of
+the bioremediation use case.
+
+The following graph is built using SPARQL `CONSTRUCT` queries representing the
+first 3 steps of the bioremediation use-case. The graph visually illustrates
+the connection between the queries made across 3 different SPARQL endpoints.
+
+* <span style="color:#FF0000">Nodes shown in red</span> are data retrieved from
+  wikidata. These correspond to the pollutant retrieved from wikidata, which
+  are the starting point of the use-case.
+* <span style="color:#d4f363">Nodes shown in light green</span> are data
+  retrieved from the IDSM SPARQL endpoint: the correspond to nodes that allow
+  the linking of a chemical compound as defined by its CAS number, to the
+  CHEBI number of the chemical compound and those of chemical compounds similar
+  to the original compound.
+* <span style="color:#7ad3f7">Nodes shown in blue</span> are data retrieved
+  from the Uniprot and Rhea SPARQL endpoints. They illustrate the link between
+  chemicals compounds as defined by their CHEBI numbers, and protein/enzymes
+  that participate in a reaction involving those chemicals.
+
+As can be seen in the figure below, only the cluster for `r pollutant_name`
+is linked across the 3 SPARQL endpoints. Other clusters do not have any
+link with a protein/enzyme in the Uniprot database.
+
+<br>
+
+*Note:* performing a "mouse-over" on the nodes in the figure below will show
+more detailed information about the node, when available.
+
+<br>
+
+```{r build-network, echo=FALSE, message=FALSE, warning=FALSE, out.width="100%", out.height="600px"}
+
+# Run SPARQL CONSTRUCT queries for the first 3 steps of the workflow.
+query_wikidata_file <- "queries/construct_1_wikidata.rq"
+query_idsm_file <- "queries/construct_2_idsm.rq"
+query_uniprot_file <- "queries/construct_3_uniprot.rq"
+
+prefixes_wikidata <- load_prefixes_from_file(query_wikidata_file)
+prefixes_idsm <- load_prefixes_from_file(query_idsm_file)
+prefixes_uniprot <- load_prefixes_from_file(query_uniprot_file)
+prefixes_all <- dplyr::bind_rows(
+  prefixes_wikidata,
+  prefixes_idsm,
+  prefixes_uniprot,
+  tibble::tribble(
+    ~short, ~long,
+    "cmp",  "http://rdf.ncbi.nlm.nih.gov/pubchem/compound/",
+    "CHEBI", "http://purl.obolibrary.org/obo/CHEBI_",
+    "cas", "https://identifiers.org/cas:",
+    "up", "http://purl.uniprot.org/uniprot/",
+    "upt", "http://purl.uniprot.org/taxonomy/"
+  )
+) |>
+  dplyr::distinct()
+query_wikidata <- load_query_from_file(query_wikidata_file)
+query_idsm <- load_query_from_file(query_idsm_file)
+query_uniprot <- load_query_from_file(query_uniprot_file)
+
+constr_1 <- sparql_construct(
+  endpoint = endpoint_wikidata,
+  query = query_wikidata,
+  prefixes = prefixes_all,
+  iri_style = "short"
+)
+constr_2 <- sparql_construct(
+  endpoint = endpoint_idsm,
+  query = query_idsm,
+  prefixes = prefixes_all,
+  iri_style = "short"
+)
+constr_3 <- sparql_construct(
+  endpoint = endpoint_uniprot,
+  query = query_uniprot,
+  prefixes = prefixes_all,
+  iri_style = "short",
+  use_post = TRUE,
+)
+
+# Load data for chemical compounds and proteins from wikidata.
+query_file_wikidata_chebi <- "queries/query_6_wikidata_chebi_info.rq"
+query_wikidata_chebi <- load_query_from_file(query_file_wikidata_chebi)
+wikidata_chebi_info <- sparql_query(
+  endpoint = endpoint_wikidata,
+  query = query_wikidata_chebi,
+  prefixes = prefixes_all,
+  iri_style = "short",
+)
+query_file_wikidata_uniprot <- "queries/query_7_wikidata_uniprot_info.rq"
+query_wikidata_uniprot <- load_query_from_file(query_file_wikidata_uniprot)
+wikidata_uniprot_info <- sparql_query(
+  endpoint = endpoint_wikidata,
+  query = query_wikidata_uniprot,
+  prefixes = prefixes_all,
+  iri_style = "short",
+)
+
+node_info <- function(id) {
+  compound_info <- wikidata_chebi_info |>
+    dplyr::filter(.data$compound_wiki_id == id | .data$chebi == id) |>
+    dplyr::slice(1)
+
+  if (nrow(compound_info) == 1) {
+    paste0(
+      "<b>Name:</b> ", compound_info$compound_wiki_idLabel, "<br>",
+      "<b>Wiki Id:</b> ", compound_info$compound_wiki_id, "<br>",
+      "<b>CAS:</b> ", compound_info$cas, "<br>",
+      "<b>CHEBI:</b> ", compound_info$chebi, "<br>",
+      "<img src='", strip_angled_brackets(compound_info$image_link), # nolint object_usage_linter
+      "' width='200' height='200'>"
+    )
+  } else {
+    paste0(id, "<br>No data for this compound on wikidata")
+  }
+}
+
+edges <- dplyr::bind_rows(
+  constr_1$edges |> dplyr::mutate(label = edge, color = "red", arrows = "to"),
+  constr_2$edges |> dplyr::mutate(label = edge, color = "green", arrows = "to"),
+  constr_3$edges |> dplyr::mutate(label = edge, color = "blue", arrows = "to")
+) |>
+  dplyr::distinct() |>
+  dplyr::mutate(font.color = color)
+
+nodes <- dplyr::bind_rows(
+  constr_1$nodes |>
+    dplyr::filter(
+      dplyr::if_all(dplyr::everything(), ~ !is.na(.)) | startsWith(id, "cas:")
+    ) |>
+    dplyr::mutate(
+      color = "#FF0000",
+      title = purrr::map_chr(id, node_info),
+      group = "Wikidata"
+    ),
+  constr_2$nodes |>
+    dplyr::mutate(
+      color = "#d4f363",
+      title = purrr::map_chr(id, node_info),
+      group = "IDSM"
+    ),
+  constr_3$nodes |>
+    dplyr::mutate(color = "#7ad3f7", title = id, group = "Uniprot")
+) |>
+  dplyr::group_by(id) |>
+  dplyr::reframe(
+    color = subtractive_color_mix(color),
+    # keep only first value of all columns.
+    dplyr::across(dplyr::everything(), ~ dplyr::first(.x)),
+    .groups = "drop"
+  )
+
+visNetwork::visNetwork(nodes = nodes, edges = edges) |>
+  visNetwork::visPhysics(stabilization = FALSE) |>
+  visNetwork::visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE) |>
+  visNetwork::visGroups(groupname = "Wikidata", color = "#FF0000") |>
+  visNetwork::visGroups(groupname = "IDSM", color = "#d4f363") |>
+  visNetwork::visGroups(groupname = "Uniprot", color = "#7ad3f7") |>
+  visNetwork::visLegend(
+    useGroups = TRUE, position = "left", main = "Node Types"
+  )
+```
+
+```{r, echo=FALSE}
+knitr::kable(
+  prefixes_all |>
+    dplyr::filter(
+      short %in% c("cas", "cmp", "wd", "up", "upt", "rh", "CHEBI")
+    ) |>
+    dplyr::arrange(short),
+  caption = paste("List of prefixes used in the above graph."),
+  col.names = c("Prefix", "Expanded prefix"),
+)
+```
+
+<br>

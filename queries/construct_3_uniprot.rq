@@ -21,82 +21,70 @@ PREFIX CHEBI: <http://purl.obolibrary.org/obo/CHEBI_>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX rh: <http://rdf.rhea-db.org/>
 PREFIX up: <http://purl.uniprot.org/core/>
+PREFIX upk: <http://purl.uniprot.org/uniprot/>
 PREFIX ex: <http://example.org/>
 
 CONSTRUCT
 {
     ?compound  ex:hasCompoundInCHEBI  ?similar_compound_chebi  .
 
-    ?rhea  #rdfs:subClassOf            rh:Reaction     ;
-           rh:equation                ?equation_rhea  ;
-           rh:accession               ?accession_rhea ;
-           ex:RheaSideContains        ?compound       .
+    ?rhea_id  #rdfs:subClassOf            rh:Reaction     ;
+           rh:equation                ?equation_rhea   ;
+           rh:accession               ?accession_rhea  ;
+           ex:RheaSideContains        ?compound        .
 
-    ?uniprot    up:reviewed          true   ;
-                up:mnemonic          ?mnemo ;
-                up:organism          ?taxid ;
-                ex:activityCatalyzedReaction ?rhea .
-    ex:activityCatalyzedReaction     rdfs:label   "a shortcut for up:annotation/up:catalyticActivity/up:catalyzedReaction" .
+    ?uniprot    up:reviewed                  true    ;
+                up:mnemonic                  ?mnemo  ;
+                up:organism                  ?taxid  ;
+                ex:activityCatalyzedReaction ?rhea_id   .
+    #ex:activityCatalyzedReaction  rdfs:label  "a shortcut for up:annotation/up:catalyticActivity/up:catalyzedReaction" .
 }
 WHERE
 {
     {
-        SELECT
-            ?compound
-            ?similar_compound_chebi
-            ?uniprot
-            ?mnemo
-            ?rhea
-            ?accession_rhea
-            ?equation_rhea
-        WHERE
-        {
+        # Query the RHEA endpoint using the similar compound names returned by the
+        # query of step 2. Chemical compounds are identified by their ChEBI number.
+        SERVICE <https://sparql.rhea-db.org/sparql> {
 
-            # Query the RHEA endpoint using the similar compound names returned by the
-            # query of step 2. Chemical compounds are identified by their ChEBI number.
-            SERVICE <https://sparql.rhea-db.org/sparql> {
+            SELECT DISTINCT
+                (?rhea as ?rhea_id)
+                ?accession_rhea
+                ?equation_rhea
+                ?compound
+                ?similar_compound_chebi
+            WHERE
+            {
+                # ChEBI values retrieved from IDSM endpoint.
+                # Example: <http://purl.obolibrary.org/obo/CHEBI_15930>, which can
+                # be abbreviated CHEBI:15930
+                VALUES ?similar_compound_chebi {
+                    CHEBI:15930 CHEBI:83790 CHEBI:83789 CHEBI:83791 CHEBI:38067 CHEBI:82227
+                    CHEBI:9330 CHEBI:81950
+                    CHEBI:82256
+                    CHEBI:82059 CHEBI:3015 CHEBI:82083
+                    CHEBI:82100 CHEBI:2564
+                    CHEBI:40036
+                }
 
-                SELECT DISTINCT
-                    ?rhea
-                    ?accession_rhea
-                    ?equation_rhea
-                    ?compound
-                    ?similar_compound_chebi
-                WHERE
-                {
-                    # ChEBI values retrieved from IDSM endpoint.
-                    # Example: <http://purl.obolibrary.org/obo/CHEBI_15930>, which can
-                    # be abbreviated CHEBI:15930
-                    VALUES ?similar_compound_chebi {
-                        CHEBI:15930 CHEBI:38067 CHEBI:82227 CHEBI:83790
-                        CHEBI:83789 CHEBI:83791
-                    }
-
-                    # The ChEBI can be used either as a small molecule, the reactive
-                    # part of a macromolecule, or as a polymer.
-                    ?compound ( rh:chebi |
+                # The ChEBI can be used either as a small molecule, the reactive
+                # part of a macromolecule, or as a polymer.
+                ?compound ( rh:chebi |
                             (rh:reactivePart/rh:chebi) |
                             (rh:underlyingChebi/rh:chebi) ) ?similar_compound_chebi .
 
-                    ?rhea rdfs:subClassOf                 rh:Reaction     ;
-                        rh:equation                     ?equation_rhea  ;
-                        rh:accession                    ?accession_rhea ;
-                        rh:side/rh:contains/rh:compound ?compound       .
-                }
-            }
-            # Somehow, this BIND is necessary for the query to run.
-            BIND (?rhea AS ?rhea_id)
-
-            GRAPH <http://sparql.uniprot.org/uniprot> {
-                ?uniprot up:reviewed          true   ;
-                        up:mnemonic          ?mnemo ;
-                        up:organism          ?taxid ;
-                        up:annotation/
-                        up:catalyticActivity/
-                        up:catalyzedReaction ?rhea_id .
+                ?rhea  rdfs:subClassOf                  rh:Reaction      ;
+                        rh:equation                      ?equation_rhea   ;
+                        rh:accession                     ?accession_rhea  ;
+                        rh:side/rh:contains/rh:compound  ?compound        .
             }
         }
-
-
+        OPTIONAL {
+            ?uniprot  up:reviewed           true      ;
+                        up:mnemonic           ?mnemo    ;
+                        up:organism           ?taxid    ;
+                        up:annotation/
+                        up:catalyticActivity/
+                        up:catalyzedReaction  ?rhea_id  .
+        }
     }
 }
