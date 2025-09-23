@@ -7,6 +7,20 @@ load_query_from_file <- function(path, remove_comments = FALSE) {
   paste(query, collapse = "\n")
 }
 
+# Extract the list of PREFIXes from a SPARQL query file, and return it as
+# a tibble object.
+load_prefixes_from_file <- function(path) {
+  prefix_regexp <- "^\\s*PREFIX\\s*"
+  grep(prefix_regexp, readLines(path), value = TRUE) |>
+    stringr::str_trim() |>
+    stringr::str_remove(prefix_regexp) |>
+    stringr::str_split_fixed("\\s+", 2) |>
+    tibble::as_tibble(.name_repair = "minimal") |>
+    rlang::set_names(c("short", "long")) |>
+    dplyr::mutate(long = stringr::str_remove_all(long, "^<|>$")) |>
+    dplyr::mutate(short = stringr::str_remove_all(short, ":"))
+}
+
 # Add single quotes around a string.
 single_quote <- function(x) {
   paste0("'", x, "'")
@@ -112,4 +126,23 @@ replace_values_clause <- function(var_name, replacement, query) {
     replacement,
     query
   )
+}
+
+
+subtractive_color_mix <- function(hex_colors) {
+  if (length(hex_colors) == 0) {
+    return("#D3D3D3")
+  }
+  if (length(hex_colors) == 1) {
+    return(hex_colors[1])
+  }
+
+  # Convert hex to RGB matrix (0–255)
+  rgb_matrix <- col2rgb(hex_colors)
+
+  # Subtractive mixing: take the minimum (i.e. most absorbed) of each channel
+  mixed_rgb <- apply(rgb_matrix, 1, min)
+
+  # Convert back to hex
+  rgb(mixed_rgb[1], mixed_rgb[2], mixed_rgb[3], maxColorValue = 255)
 }
