@@ -3,9 +3,13 @@
 Use-case demonstrating the federation of open data across SPARQL endpoints,
 as part of the CHIST-ERA triple project.
 
-This is the version of the use-case written in R language. An version
-[written in Python](https://github.com/TRIPLE-CHIST-ERA/bioremediation)
-is also available.
+This use-case demonstrator is written in R language, and is available as both
+a plain R script, and an Rmarkdown script:
+
+* [Plain R script](bioremediation_use_case.R)
+* [Rmarkdown script](bioremediation_use_case.Rmd)
+* [Rendered HTML version](https://triple-chist-era.github.io/bioremediation-use-case-r/bioremediation_use_case.html)
+  of the Rmarkdown script.
 
 The use case consists of series of SPARQL queries that identify organisms with
 possible bioremediation potential for a given pollutant. The queries are
@@ -16,6 +20,9 @@ targeting the following 5 SPARQL endpoints:
 * [Uniprot](https://sparql.uniprot.org/sparql)
 * [Rhea](https://sparql.rhea-db.org/sparql)
 * [OMA](https://sparql.omabrowser.org/sparql)
+
+A version [written in Python](https://github.com/TRIPLE-CHIST-ERA/bioremediation)
+is also available.
 
 </br>
 
