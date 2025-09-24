@@ -26,13 +26,13 @@ endpoint_idsm <- "https://idsm.elixir-czech.cz/sparql/endpoint/idsm"
 endpoint_uniprot <- "https://sparql.uniprot.org/sparql"
 endpoint_oma <- "https://sparql.omabrowser.org/sparql"
 
-query_file_wikidata <- "query_1_wikidata.rq"
-query_file_idsm <- "query_2_idsm.rq"
-query_file_uniprot <- "query_3_uniprot.rq"
-query_file_oma <- "query_4_oma.rq"
-subquery_file_wikidata <- "subquery_1_wikidata.rq"
-subquery_file_idsm <- "subquery_2_idsm.rq"
-subquery_file_uniprot <- "subquery_3_uniprot.rq"
+query_file_wikidata <- "queries/query_1_wikidata.rq"
+query_file_idsm <- "queries/query_2_idsm.rq"
+query_file_uniprot <- "queries/query_3_uniprot.rq"
+query_file_oma <- "queries/query_4_oma.rq"
+subquery_file_wikidata <- "queries/subquery_1_wikidata.rq"
+subquery_file_idsm <- "queries/subquery_2_idsm.rq"
+subquery_file_uniprot <- "queries/subquery_3_uniprot.rq"
 
 
 # ------------------------------------------------------------------------------
