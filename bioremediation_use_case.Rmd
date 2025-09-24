@@ -66,16 +66,19 @@ The steps involved in this demonstrator pipeline are the following:
 <br>
 <br>
 
-## Use-case results
+## Use-case code and results
 
 --------------------------------------------------------------------------------
 
-```{r load-env, include=FALSE}
+### Environment setup
+
+```{r load-env}
+
 # Load our own SPARQL library and helper functions.
 source("../sparqlr.git/sparql.R")
 source("utils.R")
 
-# Set endpoints and paths to SPARQL queries.
+# Set endpoints and paths to SPARQL queries used throughout the use-case.
 endpoint_wikidata <- "https://query.wikidata.org/sparql"
 endpoint_idsm <- "https://idsm.elixir-czech.cz/sparql/endpoint/idsm"
 endpoint_rhea <- "https://sparql.rhea-db.org/sparql"
@@ -91,11 +94,9 @@ subquery_file_idsm <- "queries/subquery_2_idsm.rq"
 subquery_file_uniprot <- "queries/subquery_3_uniprot.rq"
 
 pollutant_name <- "atrazine"
-pollutant_table_source <- paste0(
-  "https://triple.ilabt.imec.be/bioremediation-use-case/",
-  "input/pollutants_table.ttl"
-)
 ```
+
+<br>
 
 ### Step 1: retrieve the CAS number of `r pollutant_name` from a Solid Pod
 
@@ -106,23 +107,20 @@ Specifically, the following table with a list of pollutants and their
 [CAS registry number (Chemical Abstracts Service)](https://www.cas.org/about/cas-content)
 is retrieved.
 
-```{r step-1-get-pollutants, message=FALSE, echo=FALSE}
+```{r step-1-get-pollutants, message=FALSE, echo=TRUE}
 
 # Retrieve data from a Solid Pod.
-# Note: the data in the table downloaded from the Solid Pod was originally
-# retrieved via the following commands:
-# query_wikidata <- load_query_from_file(
-#   query_file_wikidata
-# )
-# pollutants <- sparql_query(
-#   endpoint = endpoint_wikidata, query = query_wikidata
-# )
-# readr::write_tsv(pollutants, "pollutants_table.ttl")
+pollutant_table_source <- paste0(
+  "https://triple.ilabt.imec.be/bioremediation-use-case/",
+  "input/pollutants_table.ttl"
+)
 pollutants <- read.table(pollutant_table_source, sep = "\t", header = TRUE)
 pollutant_cas_number <- pollutants[
   pollutants$compoundLabel == pollutant_name, "cas_number"
 ]
+```
 
+```{r step-1-print-table, message=FALSE, echo=FALSE}
 knitr::kable(
   pollutants[, c("compoundLabel", "cas_number", "avg_ld50")],
   col.names = c("Pollutant", "CAS Number", "Average LD50"),
@@ -137,6 +135,19 @@ pollutant **`r pollutant_name`**, which is identified by the CAS number
 
 <br>
 
+*Note:* the data in the table downloaded from the Solid Pod was originally
+retrieved via the following commands:
+
+```r
+query_wikidata <- load_query_from_file(query_file_wikidata)
+pollutants <- sparql_query(
+  endpoint = endpoint_wikidata, query = query_wikidata
+)
+readr::write_tsv(pollutants, "pollutants_table.ttl")
+```
+
+<br>
+
 ### Step 2: identify chemical substances similar to `r pollutant_name`
 
 In this second step of the use-case, chemical substances with structural
@@ -147,13 +158,11 @@ The query is made using the
 [CAS number](https://www.cas.org/about/cas-content), a unique ID for chemical
 substances, assigned by the Chemical Abstracts Service (CAS). It returns
 a list of similar chemical compounds, that are identified by their
-[ChEBI identifier](https://www.ebi.ac.uk/chebi/aboutChebiForward.do)
+[ChEBI identifier](https://www.ebi.ac.uk/chebi/aboutChebiForward.do).
+Chemical Entities of Biological Interest (ChEBI) is a freely available
+dictionary of molecular entities focused on "small" chemical compounds.
 
-> **Chemical Entities of Biological Interest (ChEBI)** is a freely
-> available dictionary of molecular entities focused on "small" chemical
-> compounds.
-
-```{r step-2-run-query, echo=FALSE, message=FALSE}
+```{r step-2-run-query, echo=TRUE, message=FALSE}
 query_idsm <- load_query_from_file(query_file_idsm)
 
 similar_pollutants <- sparql_query(
@@ -172,21 +181,26 @@ returned by the query:
 
 ```{r step-2-print-table, echo=FALSE}
 
+prefixes_idsm <- tibble::tribble(
+  ~short, ~long,
+  "obo",  "http://purl.obolibrary.org/obo/",
+)
+
 knitr::kable(
   similar_pollutants |>
+    update_iri_style(prefixes_idsm, iri_style = "mdlink") |>
     dplyr::filter(!is.na(similar_pollutants$score)) |>
     dplyr::select("similar_compound_chebi", "score") |>
     dplyr::arrange("score") |>
     dplyr::slice_head(n = 5),
-  col.names = c(
-    paste0("Chemical similar to ", pollutant_name, " (as CHEBI numbers)"),
-    "Similarity score"
-  ),
+  col.names = c("Chemical compound (CHEBI numbers)", "Similarity score"),
   caption = paste0(
     "List of chemical substances with structural similarity to ",
     pollutant_name
-  )
+  ),
+  align = "l"
 )
+#kable_styling(full_width = FALSE, position = "left")
 ```
 
 <br>
@@ -208,7 +222,7 @@ Specifically, this federated query is consists in of the following two steps:
    proteins/enzymes that are part of the metabolic reactions identified from
    the Rhea endpoint.
 
-```{r step-3-run-query, echo=FALSE, message=FALSE}
+```{r step-3-run-query, echo=TRUE, message=FALSE}
 query_uniprot <- load_query_from_file(query_file_uniprot)
 
 chebi_values <- similar_pollutants |>
@@ -230,6 +244,8 @@ uniprot_ids <- sparql_query(
   use_post = TRUE
 )
 ```
+
+<br>
 
 Here are some of the enzymes retrieved by the query:
 
@@ -256,7 +272,7 @@ In this last step of this illustrative bioremediation use-case, the
 produce some of the enzymes/proteins identified to potentially take part in
 the metabolic degradation of `r pollutant_name`.
 
-```{r step-4-run-query, message=FALSE, echo=FALSE}
+```{r step-4-run-query, echo=TRUE, message=FALSE}
 query_oma <- load_query_from_file(query_file_oma, remove_comments = TRUE)
 
 uniprot_values <- uniprot_ids |>
@@ -280,11 +296,13 @@ unique_taxa <- oma_taxa |>
   dplyr::distinct()
 ```
 
+<br>
+
 This query identifies **`r nrow(unique_taxa)`** species with potential for
 bioremediation of **`r pollutant_name`**. As an example, here are the first
 10 of them:
 
-```{r step-4-display-table, echo=FALSE}
+```{r step-4-print-table, echo=FALSE}
 
 unique_taxa_head <- unique_taxa |>
   dplyr::slice_head(n = 10) |>
