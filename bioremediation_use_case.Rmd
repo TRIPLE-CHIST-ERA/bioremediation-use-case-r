@@ -273,6 +273,8 @@ produce some of the enzymes/proteins identified to potentially take part in
 the metabolic degradation of `r pollutant_name`.
 
 ```{r step-4-run-query, echo=TRUE, message=FALSE}
+
+# Query organisms with potential for bioremediation from the OMA database. 
 query_oma <- load_query_from_file(query_file_oma, remove_comments = TRUE)
 
 uniprot_values <- uniprot_ids |>
@@ -291,35 +293,41 @@ oma_taxa <- sparql_query(
   use_post = FALSE
 )
 
-unique_taxa <- oma_taxa |>
-  dplyr::select("taxon_sci_name", "oma_link") |>
-  dplyr::distinct()
+# Filter the OMA results to keep only bacterial taxa.
+# This is done by querying uniprot for the "mnemonic" codes of all bacterial
+# taxa present in Uniprot, then filtering the query results from OMA to keep
+# only those with a bacterial mnemonic code.
+query_file_uniprot_mnemonic <- "queries/query_5_uniprot.rq"
+query_uniprot_mnemonic <- load_query_from_file(
+  query_file_uniprot_mnemonic,
+  remove_comments = TRUE
+)
+bacterial_taxon <- sparql_query(
+  endpoint = endpoint_uniprot,
+  query = query_uniprot_mnemonic,
+  use_post = TRUE
+)
+taxa_counts <- oma_taxa |>
+  dplyr::semi_join(bacterial_taxon, by = "mnemonic") |>
+  dplyr::count(mnemonic, taxon_sci_name, name = "enzyme_count") |>
+  dplyr::arrange(desc(enzyme_count)) |>
+  dplyr::select("taxon_sci_name", "mnemonic", "enzyme_count")
 ```
 
 <br>
 
-This query identifies **`r nrow(unique_taxa)`** species with potential for
-bioremediation of **`r pollutant_name`**. As an example, here are the first
-10 of them:
+This query identifies **`r nrow(taxa_counts)`** bacterial species with
+potential for bioremediation of **`r pollutant_name`**.
+
+Here are the 10 that have the highest number of mappings to enzymes
+potentially involved in the metabolic degradation of `r pollutant_name`.
 
 ```{r step-4-print-table, echo=FALSE}
 
-unique_taxa_head <- unique_taxa |>
-  dplyr::slice_head(n = 10) |>
-  dplyr::rowwise() |>
-  dplyr::mutate(
-    taxon_link = paste0(
-      "[", taxon_sci_name, "](",
-      stringr::str_replace(oma_link, "<(.*)>", "\\1"),
-      ")"
-    ),
-    .keep = "none"
-  )
-
 knitr::kable(
-  unique_taxa_head,
+  head(taxa_counts, 10),
   caption = paste("Taxa with bioremediation potential for", pollutant_name),
-  col.names = NULL,
+  col.names = c("Taxon name", "Uniprot mnemonic", "Enzyme count"),
 )
 ```
 

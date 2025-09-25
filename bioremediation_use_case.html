@@ -5932,7 +5932,8 @@ uniprot_ids &lt;- sparql_query(
 <div id="step-4-identify-organisms-with-bioremediation-potential" class="section level3">
 <h3>Step 4: identify organisms with bioremediation potential</h3>
 <p>In this last step of this illustrative bioremediation use-case, the <a href="https://sparql.omabrowser.org/sparql">OMA database</a> is queried to retrieve all organisms that produce some of the enzymes/proteins identified to potentially take part in the metabolic degradation of atrazine.</p>
-<pre class="r"><code>query_oma &lt;- load_query_from_file(query_file_oma, remove_comments = TRUE)
+<pre class="r"><code># Query organisms with potential for bioremediation from the OMA database. 
+query_oma &lt;- load_query_from_file(query_file_oma, remove_comments = TRUE)
 
 uniprot_values &lt;- uniprot_ids |&gt;
   dplyr::pull(&quot;uniprot&quot;) |&gt;
@@ -5950,43 +5951,92 @@ oma_taxa &lt;- sparql_query(
   use_post = FALSE
 )
 
-unique_taxa &lt;- oma_taxa |&gt;
-  dplyr::select(&quot;taxon_sci_name&quot;, &quot;oma_link&quot;) |&gt;
-  dplyr::distinct()</code></pre>
+# Filter the OMA results to keep only bacterial taxa.
+# This is done by querying uniprot for the &quot;mnemonic&quot; codes of all bacterial
+# taxa present in Uniprot, then filtering the query results from OMA to keep
+# only those with a bacterial mnemonic code.
+query_file_uniprot_mnemonic &lt;- &quot;queries/query_5_uniprot.rq&quot;
+query_uniprot_mnemonic &lt;- load_query_from_file(
+  query_file_uniprot_mnemonic,
+  remove_comments = TRUE
+)
+bacterial_taxon &lt;- sparql_query(
+  endpoint = endpoint_uniprot,
+  query = query_uniprot_mnemonic,
+  use_post = TRUE
+)
+taxa_counts &lt;- oma_taxa |&gt;
+  dplyr::semi_join(bacterial_taxon, by = &quot;mnemonic&quot;) |&gt;
+  dplyr::count(mnemonic, taxon_sci_name, name = &quot;enzyme_count&quot;) |&gt;
+  dplyr::arrange(desc(enzyme_count)) |&gt;
+  dplyr::select(&quot;taxon_sci_name&quot;, &quot;mnemonic&quot;, &quot;enzyme_count&quot;)</code></pre>
 <p><br></p>
-<p>This query identifies <strong>12902</strong> species with potential for bioremediation of <strong>atrazine</strong>. As an example, here are the first 10 of them:</p>
+<p>This query identifies <strong>829</strong> bacterial species with potential for bioremediation of <strong>atrazine</strong>.</p>
+<p>Here are the 10 that have the highest number of mappings to enzymes potentially involved in the metabolic degradation of atrazine.</p>
 <table>
 <caption>Taxa with bioremediation potential for atrazine</caption>
+<colgroup>
+<col width="80%"></col>
+<col width="11%"></col>
+<col width="8%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Taxon name</th>
+<th align="left">Uniprot mnemonic</th>
+<th align="right">Enzyme count</th>
+</tr>
+</thead>
 <tbody>
 <tr class="odd">
-<td align="left"><a href="http://omabrowser.org/cgi-bin/gateway.pl?f=DisplayEntry&amp;p1=LATCH11631">Latimeria chalumnae</a></td>
+<td align="left">Burkholderia multivorans (strain ATCC 17616 / 249)</td>
+<td align="left">BURM1</td>
+<td align="right">321</td>
 </tr>
 <tr class="even">
-<td align="left"><a href="http://omabrowser.org/cgi-bin/gateway.pl?f=DisplayEntry&amp;p1=CHOCR07248">Chondrus crispus</a></td>
+<td align="left">Paraburkholderia xenovorans (strain LB400)</td>
+<td align="left">PARXL</td>
+<td align="right">222</td>
 </tr>
 <tr class="odd">
-<td align="left"><a href="http://omabrowser.org/cgi-bin/gateway.pl?f=DisplayEntry&amp;p1=QUELO01494">Quercus lobata</a></td>
+<td align="left">Enterobacter cloacae subsp. cloacae (strain ATCC 13047 / DSM 30054 / NBRC 13535 / NCTC 10005 / WDCM 00083 / NCDC 279-56)</td>
+<td align="left">ENTCC</td>
+<td align="right">217</td>
 </tr>
 <tr class="even">
-<td align="left"><a href="http://omabrowser.org/cgi-bin/gateway.pl?f=DisplayEntry&amp;p1=CANSA20751">Cannabis sativa</a></td>
+<td align="left">Cupriavidus taiwanensis (strain DSM 17343 / BCRC 17206 / CCUG 44338 / CIP 107171 / LMG 19424 / R1)</td>
+<td align="left">CUPTR</td>
+<td align="right">193</td>
 </tr>
 <tr class="odd">
-<td align="left"><a href="http://omabrowser.org/cgi-bin/gateway.pl?f=DisplayEntry&amp;p1=LUPAN05901">Lupinus angustifolius</a></td>
+<td align="left">Methylorubrum extorquens (strain ATCC 14718 / DSM 1338 / JCM 2805 / NCIMB 9133 / AM1)</td>
+<td align="left">METEA</td>
+<td align="right">192</td>
 </tr>
 <tr class="even">
-<td align="left"><a href="http://omabrowser.org/cgi-bin/gateway.pl?f=DisplayEntry&amp;p1=MEDTR14481">Medicago truncatula</a></td>
+<td align="left">Ralstonia pickettii (strain 12D)</td>
+<td align="left">RALP1</td>
+<td align="right">167</td>
 </tr>
 <tr class="odd">
-<td align="left"><a href="http://omabrowser.org/cgi-bin/gateway.pl?f=DisplayEntry&amp;p1=GOSHI27713">Gossypium hirsutum</a></td>
+<td align="left">Burkholderia vietnamiensis (strain G4 / LMG 22486)</td>
+<td align="left">BURVG</td>
+<td align="right">164</td>
 </tr>
 <tr class="even">
-<td align="left"><a href="http://omabrowser.org/cgi-bin/gateway.pl?f=DisplayEntry&amp;p1=LOTJA38806">Lotus japonicus</a></td>
+<td align="left">Burkholderia ambifaria (strain MC40-6)</td>
+<td align="left">BURA4</td>
+<td align="right">163</td>
 </tr>
 <tr class="odd">
-<td align="left"><a href="http://omabrowser.org/cgi-bin/gateway.pl?f=DisplayEntry&amp;p1=JUNHY11203">Junco hyemalis</a></td>
+<td align="left">Burkholderia cenocepacia (strain ATCC BAA-245 / DSM 16553 / LMG 16656 / NCTC 13227 / J2315 / CF5610)</td>
+<td align="left">BURCJ</td>
+<td align="right">163</td>
 </tr>
 <tr class="even">
-<td align="left"><a href="http://omabrowser.org/cgi-bin/gateway.pl?f=DisplayEntry&amp;p1=NAJNA16933">Naja naja</a></td>
+<td align="left">Burkholderia ambifaria (strain ATCC BAA-244 / AMMD)</td>
+<td align="left">BURCM</td>
+<td align="right">163</td>
 </tr>
 </tbody>
 </table>
@@ -5996,8 +6046,8 @@ unique_taxa &lt;- oma_taxa |&gt;
 <div id="summary-network-graph" class="section level2">
 <h2>Summary network graph</h2>
 <p>Graphical representation of the SPARQL queries ran for the first 3 steps of the bioremediation use case.</p>
-<div class="visNetwork html-widget html-fill-item" id="htmlwidget-68c7c476e718d9e4a2c0" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-68c7c476e718d9e4a2c0">{"x":{"nodes":{"id":["<http://example.org/activityCatalyzedReaction>","<http://purl.obolibrary.org/obo/CHEBI_15930>","<http://purl.obolibrary.org/obo/CHEBI_38067>","<http://purl.obolibrary.org/obo/CHEBI_82227>","<http://purl.obolibrary.org/obo/CHEBI_83789>","<http://purl.obolibrary.org/obo/CHEBI_83790>","<http://purl.obolibrary.org/obo/CHEBI_83791>","<http://purl.uniprot.org/uniprot/P72156>","<http://rdf.ncbi.nlm.nih.gov/pubchem/compound/CID2256>","<http://rdf.rhea-db.org/11312>","<http://rdf.rhea-db.org/Compound_2458>","<http://www.wikidata.org/entity/Q113145171>","<http://www.wikidata.org/entity/Q131656>","<http://www.wikidata.org/entity/Q178266>","<http://www.wikidata.org/entity/Q184224>","<http://www.wikidata.org/entity/Q285166>","<http://www.wikidata.org/entity/Q408652>","<http://www.wikidata.org/entity/statement/Q408652-61d69feb-4522-6192-dd29-048c3747935d>","<http://www.wikidata.org/entity/statement/Q408652-97b859b1-4d06-edfb-d370-808a369da33f>","<https://identifiers.org/cas:1912-24-9>"],"color":["#9cf363","#7AD363","#7ad3f7","#7ad3f7","#7ad3f7","#7ad3f7","#7ad3f7","#9cf363","#7ad3f7","#9cf363","#9cf363","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000","#7A0000"],"X.http...www.wikidata.org.prop.direct.P2240.":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"235 | 626 | 672 | 1 | 2 | 3 | 700 | 5200 | 7500 | 750 | 850",null,null,null],"X.http...www.wikidata.org.prop.direct.P231.":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"1912-24-9",null,null,null],"X.http...www.wikidata.org.prop.direct.P232.":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"217-617-8",null,null,null],"X.http...example.org.hasCASnumber.":[null,null,null,null,null,null,null,null,"1912-24-9",null,null,null,null,null,null,null,null,null,null,null],"X.http...www.w3.org.2000.01.rdf.schema.label.":["a shortcut for up:annotation/up:catalyticActivity/up:catalyzedReaction",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"X.http...purl.uniprot.org.core.mnemonic.":[null,null,null,null,null,null,null,"ATZA_PSESD",null,null,null,null,null,null,null,null,null,null,null,null],"X.http...purl.uniprot.org.core.reviewed.":[null,null,null,null,null,null,null,"true",null,null,null,null,null,null,null,null,null,null,null,null],"X.http...rdf.rhea.db.org.accession.":[null,null,null,null,null,null,null,null,null,"RHEA:11312",null,null,null,null,null,null,null,null,null,null],"X.http...rdf.rhea.db.org.equation.":[null,null,null,null,null,null,null,null,null,"atrazine + H2O = hydroxyatrazine + chloride + H(+)",null,null,null,null,null,null,null,null,null,null],".groups":["drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop"]},"edges":{"from":["<http://www.wikidata.org/entity/Q178266>","<http://www.wikidata.org/entity/Q408652>","<http://www.wikidata.org/entity/Q408652>","<http://www.wikidata.org/entity/Q408652>","<http://www.wikidata.org/entity/Q408652>","<http://www.wikidata.org/entity/Q408652>","<http://www.wikidata.org/entity/statement/Q408652-61d69feb-4522-6192-dd29-048c3747935d>","<http://www.wikidata.org/entity/statement/Q408652-61d69feb-4522-6192-dd29-048c3747935d>","<http://www.wikidata.org/entity/statement/Q408652-97b859b1-4d06-edfb-d370-808a369da33f>","<http://www.wikidata.org/entity/statement/Q408652-97b859b1-4d06-edfb-d370-808a369da33f>","<http://rdf.ncbi.nlm.nih.gov/pubchem/compound/CID2256>","<http://rdf.ncbi.nlm.nih.gov/pubchem/compound/CID2256>","<http://rdf.ncbi.nlm.nih.gov/pubchem/compound/CID2256>","<http://rdf.ncbi.nlm.nih.gov/pubchem/compound/CID2256>","<http://rdf.ncbi.nlm.nih.gov/pubchem/compound/CID2256>","<http://rdf.ncbi.nlm.nih.gov/pubchem/compound/CID2256>","<http://rdf.ncbi.nlm.nih.gov/pubchem/compound/CID2256>","<http://purl.uniprot.org/uniprot/P72156>","<http://rdf.rhea-db.org/11312>","<http://rdf.rhea-db.org/Compound_2458>"],"to":["<http://www.wikidata.org/entity/Q131656>","<http://www.wikidata.org/entity/Q113145171>","<http://www.wikidata.org/entity/Q178266>","<http://www.wikidata.org/entity/statement/Q408652-61d69feb-4522-6192-dd29-048c3747935d>","<http://www.wikidata.org/entity/statement/Q408652-97b859b1-4d06-edfb-d370-808a369da33f>","<https://identifiers.org/cas:1912-24-9>","<http://www.wikidata.org/entity/Q184224>","<http://www.wikidata.org/entity/Q285166>","<http://www.wikidata.org/entity/Q184224>","<http://www.wikidata.org/entity/Q285166>","<http://purl.obolibrary.org/obo/CHEBI_15930>","<http://purl.obolibrary.org/obo/CHEBI_38067>","<http://purl.obolibrary.org/obo/CHEBI_82227>","<http://purl.obolibrary.org/obo/CHEBI_83789>","<http://purl.obolibrary.org/obo/CHEBI_83790>","<http://purl.obolibrary.org/obo/CHEBI_83791>","<https://identifiers.org/cas:1912-24-9>","<http://rdf.rhea-db.org/11312>","<http://rdf.rhea-db.org/Compound_2458>","<http://purl.obolibrary.org/obo/CHEBI_15930>"],"edge":["<http://example.org/childof>","<http://www.wikidata.org/prop/direct/P31>","<http://www.wikidata.org/prop/direct/P366>","<http://www.wikidata.org/prop/P2240>","<http://www.wikidata.org/prop/P2240>","<http://example.org/hasCASnumberIRI>","<http://example.org/affects>","<http://www.wikidata.org/prop/qualifier/P636>","<http://example.org/affects>","<http://www.wikidata.org/prop/qualifier/P636>","<http://example.org/hasSimilarCompound>","<http://example.org/hasSimilarCompound>","<http://example.org/hasSimilarCompound>","<http://example.org/hasSimilarCompound>","<http://example.org/hasSimilarCompound>","<http://example.org/hasSimilarCompound>","<http://example.org/hasCASnumberIRI>","<http://example.org/activityCatalyzedReaction>","<http://example.org/RheaSideContains>","<http://example.org/hasCompoundInCHEBI>"],"label":["<http://example.org/childof>","<http://www.wikidata.org/prop/direct/P31>","<http://www.wikidata.org/prop/direct/P366>","<http://www.wikidata.org/prop/P2240>","<http://www.wikidata.org/prop/P2240>","<http://example.org/hasCASnumberIRI>","<http://example.org/affects>","<http://www.wikidata.org/prop/qualifier/P636>","<http://example.org/affects>","<http://www.wikidata.org/prop/qualifier/P636>","<http://example.org/hasSimilarCompound>","<http://example.org/hasSimilarCompound>","<http://example.org/hasSimilarCompound>","<http://example.org/hasSimilarCompound>","<http://example.org/hasSimilarCompound>","<http://example.org/hasSimilarCompound>","<http://example.org/hasCASnumberIRI>","<http://example.org/activityCatalyzedReaction>","<http://example.org/RheaSideContains>","<http://example.org/hasCompoundInCHEBI>"],"color":["red","red","red","red","red","red","red","red","red","red","green","green","green","green","green","green","green","blue","blue","blue"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot"},"manipulation":{"enabled":false},"physics":{"stabilization":false}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false},"byselection":{"enabled":false},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)"},"evals":[],"jsHooks":[]}</script>
+<div class="visNetwork html-widget html-fill-item" id="htmlwidget-88ebc75e8e54f92ef591" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-88ebc75e8e54f92ef591">{"x":{"nodes":{"id":["<http://example.org/activityCatalyzedReaction>","<http://purl.obolibrary.org/obo/CHEBI_15930>","<http://purl.obolibrary.org/obo/CHEBI_38067>","<http://purl.obolibrary.org/obo/CHEBI_82227>","<http://purl.obolibrary.org/obo/CHEBI_83789>","<http://purl.obolibrary.org/obo/CHEBI_83790>","<http://purl.obolibrary.org/obo/CHEBI_83791>","<http://purl.uniprot.org/uniprot/P72156>","<http://rdf.ncbi.nlm.nih.gov/pubchem/compound/CID2256>","<http://rdf.rhea-db.org/11312>","<http://rdf.rhea-db.org/Compound_2458>","<http://www.wikidata.org/entity/Q113145171>","<http://www.wikidata.org/entity/Q131656>","<http://www.wikidata.org/entity/Q178266>","<http://www.wikidata.org/entity/Q184224>","<http://www.wikidata.org/entity/Q285166>","<http://www.wikidata.org/entity/Q408652>","<http://www.wikidata.org/entity/statement/Q408652-61d69feb-4522-6192-dd29-048c3747935d>","<http://www.wikidata.org/entity/statement/Q408652-97b859b1-4d06-edfb-d370-808a369da33f>","<https://identifiers.org/cas:1912-24-9>"],"color":["#9cf363","#7AD363","#7ad3f7","#7ad3f7","#7ad3f7","#7ad3f7","#7ad3f7","#9cf363","#7ad3f7","#9cf363","#9cf363","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000","#7A0000"],"X.http...www.wikidata.org.prop.direct.P2240.":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"235 | 626 | 672 | 1 | 2 | 3 | 700 | 5200 | 7500 | 750 | 850",null,null,null],"X.http...www.wikidata.org.prop.direct.P231.":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"1912-24-9",null,null,null],"X.http...www.wikidata.org.prop.direct.P232.":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"217-617-8",null,null,null],"X.http...example.org.hasCASnumber.":[null,null,null,null,null,null,null,null,"1912-24-9",null,null,null,null,null,null,null,null,null,null,null],"X.http...www.w3.org.2000.01.rdf.schema.label.":["a shortcut for up:annotation/up:catalyticActivity/up:catalyzedReaction",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"X.http...purl.uniprot.org.core.mnemonic.":[null,null,null,null,null,null,null,"ATZA_PSESD",null,null,null,null,null,null,null,null,null,null,null,null],"X.http...purl.uniprot.org.core.reviewed.":[null,null,null,null,null,null,null,"true",null,null,null,null,null,null,null,null,null,null,null,null],"X.http...rdf.rhea.db.org.accession.":[null,null,null,null,null,null,null,null,null,"RHEA:11312",null,null,null,null,null,null,null,null,null,null],"X.http...rdf.rhea.db.org.equation.":[null,null,null,null,null,null,null,null,null,"atrazine + H2O = hydroxyatrazine + chloride + H(+)",null,null,null,null,null,null,null,null,null,null],".groups":["drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop"]},"edges":{"from":["<http://www.wikidata.org/entity/Q178266>","<http://www.wikidata.org/entity/Q408652>","<http://www.wikidata.org/entity/Q408652>","<http://www.wikidata.org/entity/Q408652>","<http://www.wikidata.org/entity/Q408652>","<http://www.wikidata.org/entity/Q408652>","<http://www.wikidata.org/entity/statement/Q408652-61d69feb-4522-6192-dd29-048c3747935d>","<http://www.wikidata.org/entity/statement/Q408652-61d69feb-4522-6192-dd29-048c3747935d>","<http://www.wikidata.org/entity/statement/Q408652-97b859b1-4d06-edfb-d370-808a369da33f>","<http://www.wikidata.org/entity/statement/Q408652-97b859b1-4d06-edfb-d370-808a369da33f>","<http://rdf.ncbi.nlm.nih.gov/pubchem/compound/CID2256>","<http://rdf.ncbi.nlm.nih.gov/pubchem/compound/CID2256>","<http://rdf.ncbi.nlm.nih.gov/pubchem/compound/CID2256>","<http://rdf.ncbi.nlm.nih.gov/pubchem/compound/CID2256>","<http://rdf.ncbi.nlm.nih.gov/pubchem/compound/CID2256>","<http://rdf.ncbi.nlm.nih.gov/pubchem/compound/CID2256>","<http://rdf.ncbi.nlm.nih.gov/pubchem/compound/CID2256>","<http://purl.uniprot.org/uniprot/P72156>","<http://rdf.rhea-db.org/11312>","<http://rdf.rhea-db.org/Compound_2458>"],"to":["<http://www.wikidata.org/entity/Q131656>","<http://www.wikidata.org/entity/Q113145171>","<http://www.wikidata.org/entity/Q178266>","<http://www.wikidata.org/entity/statement/Q408652-61d69feb-4522-6192-dd29-048c3747935d>","<http://www.wikidata.org/entity/statement/Q408652-97b859b1-4d06-edfb-d370-808a369da33f>","<https://identifiers.org/cas:1912-24-9>","<http://www.wikidata.org/entity/Q184224>","<http://www.wikidata.org/entity/Q285166>","<http://www.wikidata.org/entity/Q184224>","<http://www.wikidata.org/entity/Q285166>","<http://purl.obolibrary.org/obo/CHEBI_15930>","<http://purl.obolibrary.org/obo/CHEBI_38067>","<http://purl.obolibrary.org/obo/CHEBI_82227>","<http://purl.obolibrary.org/obo/CHEBI_83789>","<http://purl.obolibrary.org/obo/CHEBI_83790>","<http://purl.obolibrary.org/obo/CHEBI_83791>","<https://identifiers.org/cas:1912-24-9>","<http://rdf.rhea-db.org/11312>","<http://rdf.rhea-db.org/Compound_2458>","<http://purl.obolibrary.org/obo/CHEBI_15930>"],"edge":["<http://example.org/childof>","<http://www.wikidata.org/prop/direct/P31>","<http://www.wikidata.org/prop/direct/P366>","<http://www.wikidata.org/prop/P2240>","<http://www.wikidata.org/prop/P2240>","<http://example.org/hasCASnumberIRI>","<http://example.org/affects>","<http://www.wikidata.org/prop/qualifier/P636>","<http://example.org/affects>","<http://www.wikidata.org/prop/qualifier/P636>","<http://example.org/hasSimilarCompound>","<http://example.org/hasSimilarCompound>","<http://example.org/hasSimilarCompound>","<http://example.org/hasSimilarCompound>","<http://example.org/hasSimilarCompound>","<http://example.org/hasSimilarCompound>","<http://example.org/hasCASnumberIRI>","<http://example.org/activityCatalyzedReaction>","<http://example.org/RheaSideContains>","<http://example.org/hasCompoundInCHEBI>"],"label":["<http://example.org/childof>","<http://www.wikidata.org/prop/direct/P31>","<http://www.wikidata.org/prop/direct/P366>","<http://www.wikidata.org/prop/P2240>","<http://www.wikidata.org/prop/P2240>","<http://example.org/hasCASnumberIRI>","<http://example.org/affects>","<http://www.wikidata.org/prop/qualifier/P636>","<http://example.org/affects>","<http://www.wikidata.org/prop/qualifier/P636>","<http://example.org/hasSimilarCompound>","<http://example.org/hasSimilarCompound>","<http://example.org/hasSimilarCompound>","<http://example.org/hasSimilarCompound>","<http://example.org/hasSimilarCompound>","<http://example.org/hasSimilarCompound>","<http://example.org/hasCASnumberIRI>","<http://example.org/activityCatalyzedReaction>","<http://example.org/RheaSideContains>","<http://example.org/hasCompoundInCHEBI>"],"color":["red","red","red","red","red","red","red","red","red","red","green","green","green","green","green","green","green","blue","blue","blue"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot"},"manipulation":{"enabled":false},"physics":{"stabilization":false}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false},"byselection":{"enabled":false},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)"},"evals":[],"jsHooks":[]}</script>
 </div>
 
 
