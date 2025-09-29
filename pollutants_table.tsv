@@ -1,0 +1,8 @@
+use_type	use_typeLabel	compound	compoundLabel	ec_number	cas_number	avg_ld50
+<http://www.wikidata.org/entity/Q50377184>	industrial fungicides	<http://www.wikidata.org/entity/Q420172>	benomyl	241-775-7	17804-35-2	37
+<http://www.wikidata.org/entity/Q193237>	fungicide	<http://www.wikidata.org/entity/Q420172>	benomyl	241-775-7	17804-35-2	37
+<http://www.wikidata.org/entity/Q181322>	insecticide	<http://www.wikidata.org/entity/Q409054>	aldrin	206-215-8	309-00-2	136.64074074074074
+<http://www.wikidata.org/entity/Q924146>	rodenticide	<http://www.wikidata.org/entity/Q413532>	ANTU	201-706-3	86-88-4	709.5708333333333
+<http://www.wikidata.org/entity/Q178266>	herbicide	<http://www.wikidata.org/entity/Q408652>	atrazine	217-617-8	1912-24-9	1503.5454545454545
+<http://www.wikidata.org/entity/Q178266>	herbicide	<http://www.wikidata.org/entity/Q1014257>	ammonium sulfamate	231-871-7	7773-06-0	2952.4
+<http://www.wikidata.org/entity/Q178266>	herbicide	<http://www.wikidata.org/entity/Q423314>	amitrole	200-521-5	61-82-5	5333.333333333333
