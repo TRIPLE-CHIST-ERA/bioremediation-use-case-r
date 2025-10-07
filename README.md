@@ -24,7 +24,7 @@ targeting the following 5 SPARQL endpoints:
 A version [written in Python](https://github.com/TRIPLE-CHIST-ERA/bioremediation)
 is also available.
 
-</br>
+<br>
 
 ## Use-case description
 
@@ -78,3 +78,18 @@ The steps involved in this demonstrator pipeline are the following:
 5. **Identify the biological organisms** with potential for bioremediation.
    This is done by querying the
    [Oma (Orthologous matrix)](https://omabrowser.org/oma/home) service.
+
+<br>
+
+## Use case output
+
+The final output from the use-case pipeline are found in the current
+repository:
+
+* [Organisms with bioremediation potential for atrazine](output/bioremediation_output_taxa_counts.tsv)
+* [Enzymes with bioremediation potential for atrazine](output/bioremediation_output_taxa_and_enzymes.tsv)
+
+These files have also been published to a Solid pod:
+
+* [Organisms with bioremediation potential for atrazine](https://triple.ilabt.imec.be/bioremediation-use-case/output/bioremediation_output_taxa_counts.ttl)
+* [Enzymes with bioremediation potential for atrazine](https://triple.ilabt.imec.be/bioremediation-use-case/output/bioremediation_output_taxa_and_enzymes.ttl)

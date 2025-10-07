@@ -1,0 +1,830 @@
+taxon_sci_name	mnemonic	enzyme_count
+Burkholderia multivorans (strain ATCC 17616 / 249)	BURM1	321
+Paraburkholderia xenovorans (strain LB400)	PARXL	222
+Enterobacter cloacae subsp. cloacae (strain ATCC 13047 / DSM 30054 / NBRC 13535 / NCTC 10005 / WDCM 00083 / NCDC 279-56)	ENTCC	217
+Cupriavidus taiwanensis (strain DSM 17343 / BCRC 17206 / CCUG 44338 / CIP 107171 / LMG 19424 / R1)	CUPTR	193
+Methylorubrum extorquens (strain ATCC 14718 / DSM 1338 / JCM 2805 / NCIMB 9133 / AM1)	METEA	192
+Ralstonia pickettii (strain 12D)	RALP1	167
+Burkholderia vietnamiensis (strain G4 / LMG 22486)	BURVG	164
+Burkholderia ambifaria (strain MC40-6)	BURA4	163
+Burkholderia cenocepacia (strain ATCC BAA-245 / DSM 16553 / LMG 16656 / NCTC 13227 / J2315 / CF5610)	BURCJ	163
+Burkholderia ambifaria (strain ATCC BAA-244 / AMMD)	BURCM	163
+Methylorubrum extorquens (strain DSM 6343 / CIP 106787 / DM4)	METED	161
+Paenarthrobacter aurescens (strain TC1)	PAEAT	153
+Azotobacter vinelandii (strain DJ / ATCC BAA-1303)	AZOVD	149
+Shewanella putrefaciens (strain CN-32 / ATCC BAA-453)	SHEPC	146
+Azospirillum lipoferum (strain 4B)	AZOL4	145
+Brucella anthropi (strain ATCC 49188 / DSM 6882 / CCUG 24695 / JCM 21032 / LMG 3331 / NBRC 15819 / NCTC 12168 / Alc 37)	BRUA4	144
+Pseudomonas stutzeri (strain A1501)	PSEU5	135
+Clostridium botulinum (strain Kyoto / Type A2)	CLOBJ	134
+Burkholderia pseudomallei (strain 1106a)	BURP0	133
+Burkholderia pseudomallei (strain 1710b)	BURP1	133
+Burkholderia pseudomallei (strain 668)	BURP6	133
+Burkholderia pseudomallei (strain K96243)	BURPS	133
+Burkholderia thailandensis (strain ATCC 700388 / DSM 13276 / CIP 106301 / E264)	BURTA	133
+Burkholderia gladioli (strain BSR3)	BURGS	132
+Ralstonia pickettii (strain 12J)	RALPJ	132
+Cupriavidus necator (strain ATCC 17699 / DSM 428 / KCTC 22496 / NCIMB 10442 / H16 / Stanier 337)	CUPNH	130
+Cupriavidus necator (strain ATCC 43291 / DSM 13513 / CCUG 52238 / LMG 8453 / N-1)	CUPNN	130
+Lentilactobacillus buchneri (strain NRRL B-30929)	LENBN	128
+Acinetobacter baumannii (strain AB0057)	ACIB5	114
+Acinetobacter baumannii (strain AYE)	ACIBY	114
+Methylorubrum extorquens (strain CM4 / NCIMB 13688)	METC4	114
+Methylorubrum extorquens (strain PA1)	METEP	114
+Methylorubrum populi (strain ATCC BAA-705 / NCIMB 13946 / BJ001)	METPB	114
+Stenotrophomonas maltophilia (strain R551-3)	STRM5	114
+Stenotrophomonas maltophilia (strain K279a)	STRMK	114
+Pseudomonas aeruginosa (strain UCBPP-PA14)	PSEAB	113
+Lactococcus lactis subsp. lactis (strain KF147)	LACLK	112
+Pseudomonas fluorescens (strain SBW25)	PSEFS	111
+Pseudomonas fluorescens (strain Pf0-1)	PSEPF	111
+Pseudomonas putida (strain ATCC 47054 / DSM 6125 / CFBP 8728 / NCIMB 11950 / KT2440)	PSEPK	111
+Mycobacterium chubuense (strain NBB4)	MYCCN	109
+Streptomyces coelicolor (strain ATCC BAA-471 / A3(2) / M145)	STRCO	107
+Streptomyces scabiei (strain 87.22)	STRSW	107
+Acinetobacter baumannii (strain ATCC 17978 / CIP 53.77 / LMG 1025 / NCDC KC755 / 5377)	ACIBT	106
+Cereibacter sphaeroides (strain ATCC 17023 / DSM 158 / JCM 6121 / CCUG 31486 / LMG 2827 / NBRC 12203 / NCIMB 8253 / ATH 2.4.1.)	CERS4	106
+Nocardia farcinica (strain IFM 10152)	NOCFA	106
+Phaeobacter inhibens (strain DSM 17395)	PHAIB	106
+Clostridium kluyveri (strain ATCC 8527 / DSM 555 / NCIMB 10680)	CLOK5	104
+Nitrosomonas eutropha (strain DSM 101675 / C91 / Nm57)	NITEC	104
+Clostridium botulinum (strain 230613 / Type F)	CLOB2	103
+Clostridium botulinum (strain Langeland / NCTC 10281 / Type F)	CLOBL	103
+Rhizobium etli (strain CIAT 652)	RHIE6	103
+Rhizobium etli (strain CFN 42 / ATCC 51251)	RHIEC	103
+Mesorhizobium japonicum (strain LMG 29417 / CECT 9101 / MAFF 303099)	RHILO	103
+Rhizobium leguminosarum bv. trifolii (strain WSM1325)	RHILS	103
+Sinorhizobium fredii (strain NBRC 101917 / NGR234)	SINFN	103
+Burkholderia cenocepacia (strain HI2424)	BURCH	101
+Burkholderia glumae (strain BGR1)	BURGB	101
+Corynebacterium glutamicum (strain R)	CORGB	101
+Corynebacterium glutamicum (strain ATCC 13032 / DSM 20300 / BCRC 11384 / JCM 1318 / LMG 3730 / NCIMB 10025)	CORGL	101
+Lachnospira eligens (strain ATCC 27750 / DSM 3376 / VPI C15-48 / C15-B4)	LACE2	101
+Variovorax paradoxus (strain EPS)	VARPE	101
+Achromobacter xylosoxidans (strain A8)	ACHXA	100
+Lysinibacillus sphaericus (strain C3-41)	LYSSC	100
+Salinibacter ruber (strain DSM 13855 / M31)	SALRD	100
+Salinibacter ruber (strain M8)	SALRM	100
+Cupriavidus metallidurans (strain ATCC 43123 / DSM 2839 / NBRC 102507 / CH34)	CUPMC	99
+Delftia acidovorans (strain DSM 14801 / SPH-1)	DELAS	99
+Cereibacter sphaeroides (strain ATCC 17025 / ATH 2.4.3)	CERS5	98
+Corynebacterium glutamicum (strain ATCC 13032 / K051)	CORGK	98
+Rhodobacter capsulatus (strain ATCC BAA-309 / NBRC 16581 / SB1003)	RHOCB	98
+Myxococcus fulvus (strain ATCC BAA-855 / HW-1)	MYXFH	96
+Glutamicibacter arilaitensis (strain DSM 16368 / CIP 108037 / IAM 15318 / JCM 13566 / NCIMB 14258 / Re117)	GLUAR	95
+Pseudarthrobacter phenanthrenivorans (strain DSM 18606 / JCM 16027 / LMG 23796 / Sphe3)	PSEPM	95
+Paracoccus denitrificans (strain Pd 1222)	PARDP	94
+Bacillus cereus (strain AH820)	BACC0	92
+Cellulomonas fimi (strain ATCC 484 / DSM 20113 / JCM 1341 / NBRC 15513 / NCIMB 8980 / NCTC 7547)	CELFA	92
+Bacillus cereus (strain ATCC 10987 / NRS 248)	BACC1	90
+Bifidobacterium longum (strain DJO10A)	BIFLD	90
+Lactococcus garvieae (strain Lg2)	LACGL	90
+Lactococcus garvieae (strain ATCC 49156 / DSM 6783 / JCM 8735 / NCIMB 13208 / YT-3)	LACGT	90
+Escherichia coli (strain ATCC 33849 / DSM 4235 / NCIMB 12045 / K12 / DH1)	ECOD1	89
+Lactococcus lactis subsp. cremoris (strain SK11)	LACLS	89
+Limosilactobacillus fermentum (strain NBRC 3956 / LMG 18251)	LIMF3	86
+Aliarcobacter butzleri (strain RM4018)	ALIB4	85
+Geobacillus kaustophilus (strain HTA426)	GEOKA	85
+Pseudomonas aeruginosa (strain LESB58)	PSEA8	84
+Bacillus thuringiensis (strain BMB171)	BACT1	83
+Rhodopseudomonas palustris (strain ATCC BAA-98 / CGA009)	RHOPA	83
+Xanthomonas oryzae pv. oryzae (strain PXO99A)	XANOP	83
+Lactococcus lactis subsp. cremoris (strain MG1363)	LACLM	82
+Lactococcus lactis subsp. cremoris (strain NZ9000)	LACLN	82
+Nitrobacter winogradskyi (strain ATCC 25391 / DSM 10237 / CIP 104748 / NCIMB 11846 / Nb-255)	NITWN	82
+Pseudomonas aeruginosa (strain ATCC 15692 / DSM 22644 / CIP 104116 / JCM 14847 / LMG 12228 / 1C / PRS 101 / PAO1)	PSEAE	82
+Selenomonas ruminantium subsp. lactilytica (strain NBRC 103574 / TAM6421)	SELRL	82
+Staphylococcus haemolyticus (strain JCSC1435)	STAHJ	82
+Staphylococcus saprophyticus subsp. saprophyticus (strain ATCC 15305 / DSM 20229 / NCIMB 8711 / NCTC 7292 / S-41)	STAS1	82
+Flavobacterium psychrophilum (strain ATCC 49511 / DSM 21280 / CIP 103535 / JIP02/86)	FLAPJ	81
+Lactococcus lactis subsp. lactis (strain IL1403)	LACLA	81
+Lactococcus lactis subsp. lactis (strain CV56)	LACLV	81
+Staphylococcus epidermidis (strain ATCC 35984 / RP62A)	STAEQ	81
+Streptomyces pristinaespiralis (strain ATCC 25486 / DSM 40338 / CBS 914.69 / JCM 4507 / NBRC 13074 / NRRL 2958 / 5647)	STRE2	81
+Leptospira biflexa serovar Patoc (strain Patoc 1 / Ames)	LEPBA	80
+Leptospira biflexa serovar Patoc (strain Patoc 1 / ATCC 23582 / Paris)	LEPBP	80
+Mycobacteroides abscessus (strain ATCC 19977 / DSM 44196 / CIP 104536 / JCM 13569 / NCTC 13031 / TMC 1543)	MYCA9	80
+Pseudomonas brassicacearum (strain NFM421)	PSEBN	80
+Pseudomonas fulva (strain 12-X)	PSEF1	80
+Pseudomonas fluorescens (strain ATCC BAA-477 / NRRL B-23932 / Pf-5)	PSEF5	80
+Pseudomonas putida (strain ATCC 700007 / DSM 6899 / BCRC 17059 / F1)	PSEP1	80
+Pseudomonas putida (strain BIRD-1)	PSEPB	80
+Pseudomonas syringae pv. syringae (strain B728a)	PSEU2	80
+Rhodococcus erythropolis (strain PR4 / NBRC 100887)	RHOE4	80
+Mycolicibacterium gilvum (strain PYR-GCK)	MYCGI	79
+Mycolicibacterium vanbaalenii (strain DSM 7251 / JCM 13017 / BCRC 16820 / KCTC 9966 / NRRL B-24157 / PYR-1)	MYCVP	79
+Pseudomonas entomophila (strain L48)	PSEE4	79
+Pseudomonas putida (strain GB-1)	PSEPG	79
+Bradyrhizobium diazoefficiens (strain JCM 10833 / BCRC 13528 / IAM 13628 / NBRC 14792 / USDA 110)	BRADU	78
+Flavobacterium frigoris (strain PS1)	FLAFP	78
+Mycolicibacterium rhodesiae (strain NBB3)	MYCRN	78
+Mycolicibacterium gilvum (strain DSM 45189 / LMG 24558 / Spyr1)	MYCSR	78
+Rhodococcus opacus (strain B4)	RHOOB	78
+Rhodopseudomonas palustris (strain TIE-1)	RHOPT	78
+Salmonella paratyphi B (strain ATCC BAA-1250 / SPB7)	SALPB	78
+Streptomyces avermitilis (strain ATCC 31267 / DSM 46492 / JCM 5070 / NBRC 14893 / NCIMB 12804 / NRRL 8165 / MA-4680)	STRAW	78
+Streptomyces collinus (strain DSM 40733 / Tue 365)	STRC3	78
+Streptomyces hygroscopicus subsp. jinggangensis (strain 5008)	STRHJ	78
+Streptomyces rimosus subsp. rimosus (strain ATCC 10970 / DSM 40260 / JCM 4667 / NRRL 2234)	STRR1	78
+Gordonia polyisoprenivorans (strain DSM 44266 / VH2)	GORPV	77
+Mycobacterium avium (strain 104)	MYCA1	77
+Providencia stuartii (strain MRSN 2154)	PROSM	77
+Pseudomonas putida (strain W619)	PSEPW	77
+Shewanella putrefaciens (strain 200)	SHEP2	77
+Streptomyces venezuelae (strain ATCC 10712 / CBS 650.69 / DSM 40230 / JCM 4526 / NBRC 13096 / PD 04745)	STRVP	77
+Tsukamurella paurometabola (strain ATCC 8368 / DSM 20162 / CCUG 35730 / CIP 100753 / JCM 10117 / KCTC 9821 / NBRC 16120 / NCIMB 702349 / NCTC 13040)	TSUPD	77
+Escherichia coli O103:H2 (strain 12009 / EHEC)	ECO10	76
+Escherichia coli O111:H- (strain 11128 / EHEC)	ECO1A	76
+Escherichia coli O104:H4 (strain 2009EL-2071)	ECO1E	76
+Escherichia coli O26:H11 (strain 11368 / EHEC)	ECO26	76
+Escherichia coli O127:H6 (strain E2348/69 / EPEC)	ECO27	76
+Escherichia coli (strain 55989 / EAEC)	ECO55	76
+Escherichia coli O157:H7 str. EDL933	ECO57	76
+Escherichia coli O157:H7 (strain EC4115 / EHEC)	ECO5E	76
+Escherichia coli O157:H7 (strain TW14359 / EHEC)	ECO5T	76
+Escherichia coli O8 (strain IAI1)	ECO8A	76
+Escherichia coli (strain B / BL21)	ECOBB	76
+Escherichia coli (strain B / BL21-DE3)	ECOBD	76
+Escherichia coli (strain B / REL606)	ECOBR	76
+Escherichia coli O55:H7 (strain CB9615 / EPEC)	ECOCB	76
+Escherichia coli O78:H11 (strain H10407 / ETEC)	ECOH1	76
+Escherichia coli O9:H4 (strain HS)	ECOHS	76
+Escherichia coli (strain ATCC 55124 / KO11FL)	ECOKO	76
+Escherichia coli (strain ATCC 8739 / DSM 1576 / NBRC 3972 / NCIMB 8545 / WDCM 00012 / Crooks)	ECOLC	76
+Escherichia coli (strain ATCC 9637 / CCM 2024 / DSM 1116 / LMG 11080 / NBRC 13500 / NCIMB 8666 / NRRL B-766 / W)	ECOLW	76
+Escherichia coli O104:H4 str. LB226692	ECOLX	76
+Escherichia coli (strain SE11)	ECOSE	76
+Shigella boydii serotype 18 (strain CDC 3083-94 / BS512)	SHIB3	76
+Shigella boydii serotype 4 (strain Sb227)	SHIBS	76
+Shigella sonnei (strain Ss046)	SHISS	76
+Acinetobacter baumannii (strain 1656-2)	ACIB1	75
+Acinetobacter baumannii (strain AB307-0294)	ACIB3	75
+Acinetobacter baumannii (strain ACICU)	ACIBC	75
+Acinetobacter baumannii (strain TCDC-AB0715)	ACIBD	75
+Acinetobacter oleivorans (strain JCM 16667 / KCTC 23045 / DR1)	ACISD	75
+Bacteroides thetaiotaomicron (strain ATCC 29148 / DSM 2079 / JCM 5827 / CCUG 10774 / NCTC 10582 / VPI-5482 / E50)	BACTN	75
+Cereibacter sphaeroides (strain ATCC 17029 / ATH 2.4.9)	CERS1	75
+Chromobacterium violaceum (strain ATCC 12472 / DSM 30191 / JCM 1249 / NBRC 12614 / NCIMB 9131 / NCTC 9757)	CHRVO	75
+Marinobacter adhaerens (strain DSM 23420 / HP15)	MARAH	75
+Rhodopseudomonas palustris (strain BisA53)	RHOP5	75
+Rhodopseudomonas palustris (strain BisB18)	RHOPB	75
+Rhodopseudomonas palustris (strain BisB5)	RHOPS	75
+Rhodopseudomonas palustris (strain DX-1)	RHOPX	75
+Ruegeria pomeroyi (strain ATCC 700808 / DSM 15171 / DSS-3)	RUEPO	75
+Shigella flexneri serotype X (strain 2002017)	SHIF2	75
+Shigella flexneri serotype 5b (strain 8401)	SHIF8	75
+Acetivibrio thermocellus (strain DSM 1313 / LMG 6656 / LQ8)	ACET1	74
+Acetivibrio thermocellus (strain ATCC 27405 / DSM 1237 / JCM 9322 / NBRC 103400 / NCIMB 10682 / NRRL B-4536 / VPI 7372)	ACET2	74
+Bacillus cereus (strain B4264)	BACC4	74
+Clostridium acetobutylicum (strain ATCC 824 / DSM 792 / JCM 1419 / LMG 5710 / VKM B-1787)	CLOAB	74
+Clostridium acetobutylicum (strain EA 2018)	CLOAE	74
+Clostridium ljungdahlii (strain ATCC 55383 / DSM 13528 / PETC)	CLOLD	74
+Escherichia coli O139:H28 (strain E24377A / ETEC)	ECO24	74
+Escherichia coli (strain K12 / MC4100 / BW2952)	ECOBW	74
+Escherichia coli (strain K12 / DH10B)	ECODH	74
+Escherichia coli str. K-12 substr. MG1655	ECOLI	74
+Limosilactobacillus reuteri (strain ATCC 55730 / SD2112)	LIMRS	74
+Campylobacter jejuni subsp. jejuni serotype O:6 (strain 81116 / NCTC 11828)	CAMJ8	73
+Campylobacter jejuni (strain RM1221)	CAMJR	73
+Campylobacter jejuni subsp. jejuni (strain S3)	CAMJS	73
+Corynebacterium diphtheriae (strain 31A)	CORD3	73
+Myxococcus xanthus (strain DK1622)	MYXXD	73
+Veillonella parvula (strain ATCC 10790 / DSM 2008 / CCUG 5123 / JCM 12972 / NCTC 11810 / Te3)	VEIPT	73
+Agrobacterium fabrum (strain C58 / ATCC 33970)	AGRFC	72
+Brucella abortus (strain 2308)	BRUA2	72
+Brucella canis (strain ATCC 23365 / NCTC 10854)	BRUC2	72
+Brucella microti (strain CCM 4915)	BRUMC	72
+Brucella melitensis biotype 1 (strain 16M / ATCC 23456 / NCTC 10094)	BRUME	72
+Brucella ovis (strain ATCC 25840 / 63/290 / NCTC 10512)	BRUO2	72
+Brucella suis (strain ATCC 23445 / NCTC 10510)	BRUSI	72
+Brucella suis biovar 1 (strain 1330)	BRUSU	72
+Caulobacter vibrioides (strain ATCC 19089 / CB15)	CAUVC	72
+Caulobacter vibrioides (strain NA1000 / CB15N)	CAUVN	72
+Clostridium botulinum (strain H04402 065 / Type A5)	CLOB0	72
+Clostridium botulinum (strain ATCC 19397 / Type A)	CLOB1	72
+Clostridium botulinum (strain Hall / ATCC 3502 / NCTC 13319 / Type A)	CLOBH	72
+Lactiplantibacillus plantarum (strain ATCC BAA-793 / NCIMB 8826 / WCFS1)	LACPL	72
+Mesorhizobium australicum (strain HAMBI 3006 / LMG 24608 / WSM2073)	MESAW	72
+Mesorhizobium ciceri biovar biserrulae (strain HAMBI 2942 / LMG 23838 / WSM1271)	MESCW	72
+Nitrosomonas europaea (strain ATCC 19718 / CIP 103999 / KCTC 2705 / NBRC 14298)	NITEU	72
+Pasteurella multocida (strain Pm70)	PASMU	72
+Sinorhizobium medicae (strain WSM419)	SINMW	72
+Burkholderia mallei (strain NCTC 10247)	BURM7	71
+Burkholderia mallei (strain NCTC 10229)	BURM9	71
+Burkholderia mallei (strain ATCC 23344)	BURMA	71
+Clostridium botulinum (strain 657 / Type Ba4)	CLOB6	71
+Clostridium botulinum (strain Okra / Type B1)	CLOBK	71
+Clostridium botulinum (strain Loch Maree / Type A3)	CLOBM	71
+Lactiplantibacillus plantarum (strain JDM1)	LACPJ	71
+Lactiplantibacillus plantarum (strain ST-III)	LACPS	71
+Akkermansia muciniphila (strain ATCC BAA-835 / DSM 22959 / JCM 33894 / BCRC 81048 / CCUG 64013 / CIP 107961 / Muc)	AKKM8	70
+Bacteroides fragilis (strain 638R)	BACF6	70
+Leuconostoc citreum (strain KM20)	LEUCK	70
+Microcystis aeruginosa (strain NIES-843)	MICAN	70
+Salmonella agona (strain SL483)	SALA4	70
+Salmonella newport (strain SL254)	SALNS	70
+Alicycliphilus denitrificans (strain DSM 14773 / CIP 107495 / K601)	ALIDK	69
+Enterobacter asburiae (strain LF7a)	ENTAL	69
+Acinetobacter baylyi (strain ATCC 33305 / BD413 / ADP1)	ACIAD	67
+Acinetobacter baumannii (strain SDF)	ACIBS	67
+Bacillus licheniformis (strain ATCC 14580 / DSM 13 / JCM 2505 / CCUG 7422 / NBRC 12200 / NCIMB 9375 / NCTC 10341 / NRRL NRS-1264 / Gibson 46)	BACLD	67
+Cereibacter sphaeroides (strain KD131 / KCTC 12085)	CERSK	67
+Polynucleobacter asymbioticus (strain DSM 18221 / CIP 109841 / QLW-P1DMWA-1)	POLAQ	67
+Variovorax paradoxus (strain S110)	VARPS	67
+Vibrio campbellii (strain ATCC BAA-1116 / BB120)	VIBCB	67
+Vibrio vulnificus (strain MO6-24/O)	VIBVM	67
+Vibrio vulnificus (strain CMCP6)	VIBVU	67
+Vibrio vulnificus (strain YJ016)	VIBVY	67
+Acidithiobacillus caldus (strain SM-1)	ACICS	66
+Alteromonas macleodii (strain Balearic Sea AD45)	ALTMB	66
+Alteromonas macleodii (strain English Channel 673)	ALTME	66
+Alteromonas macleodii (strain Black Sea 11)	ALTMS	66
+Bacillus thuringiensis (strain Al Hakam)	BACAH	66
+Bacillus cereus var. anthracis (strain CI)	BACAI	66
+Bacillus cereus (strain G9842)	BACC2	66
+Bacillus cereus (strain AH187)	BACC7	66
+Bacillus mycoides (strain KBAB4)	BACMK	66
+Bacillus spizizenii (strain ATCC 23059 / NRRL B-14472 / W23)	BACSH	66
+Bacillus subtilis (strain BSn5)	BACST	66
+Bacillus thuringiensis subsp. finitimus (strain YBT-020)	BACT0	66
+Clavibacter michiganensis subsp. michiganensis (strain NCPPB 382)	CLAM3	66
+Corynebacterium jeikeium (strain K411)	CORJK	66
+Phocaeicola vulgatus (strain ATCC 8482 / DSM 1447 / JCM 5826 / CCUG 4940 / NBRC 14291 / NCTC 11154)	PHOV8	66
+Priestia megaterium (strain ATCC 12872 / QMB1551)	PRIM1	66
+Vibrio atlanticus (strain LGP32)	VIBA3	66
+Vibrio parahaemolyticus serotype O3:K6 (strain RIMD 2210633)	VIBPA	66
+Bacillus atrophaeus (strain 1942)	BACA1	65
+Bacillus anthracis (strain CDC 684 / NRRL 3495)	BACAC	65
+Bacillus cereus (strain 03BB102)	BACC3	65
+Bacillus cereus (strain Q1)	BACCQ	65
+Bacillus cereus (strain ZK / E33L)	BACCZ	65
+Bacillus thuringiensis subsp. konkukian (strain 97-27)	BACHK	65
+Bacillus spizizenii (strain DSM 15029 / JCM 12233 / NBRC 101239 / NRRL B-23049 / TU-B-10)	BACS4	65
+Caldicellulosiruptor bescii (strain ATCC BAA-1888 / DSM 6725 / Z-1320)	CALBD	65
+Pasteurella multocida (strain HN06)	PASMH	65
+Vibrio anguillarum (strain ATCC 68554 / 775)	VIBA7	65
+Vibrio cholerae serotype O1 (strain ATCC 39541 / Classical Ogawa 395 / O395)	VIBC3	65
+Vibrio cholerae serotype O1 (strain ATCC 39315 / El Tor Inaba N16961)	VIBCH	65
+Vibrio cholerae serotype O1 (strain MJ-1236)	VIBCJ	65
+Vibrio cholerae serotype O1 (strain M66-2)	VIBCM	65
+Vibrio furnissii (strain DSM 14383 / NCTC 11218 / WDCM 00186 / VL 6966)	VIBFN	65
+Bacillus subtilis (strain 168)	BACSU	64
+Corynebacterium aurimucosum (strain ATCC 700975 / DSM 44827 / CIP 107346 / CN-1)	CORA7	64
+Isoptericola variabilis (strain 225)	ISOV2	64
+Priestia megaterium (strain DSM 319 / IMG 1521)	PRIM3	64
+Thermus thermophilus (strain SG0.5JP17-16)	THETG	64
+Acidaminococcus fermentans (strain ATCC 25085 / DSM 20731 / CCUG 9996 / CIP 106432 / VR4)	ACIFV	63
+Brevibacillus brevis (strain 47 / JCM 6285 / NBRC 100599)	BREBN	63
+Corynebacterium urealyticum (strain ATCC 43042 / DSM 7109)	CORU7	63
+Micrococcus luteus (strain ATCC 4698 / DSM 20030 / JCM 1464 / NBRC 3333 / NCIMB 9278 / NCTC 2665 / VKM Ac-2230)	MICLC	63
+Prevotella melaninogenica (strain ATCC 25845 / DSM 7089 / JCM 6325 / VPI 2381 / B282)	PREMB	63
+Acidipropionibacterium acidipropionici (strain ATCC 4875 / DSM 20272 / JCM 6432 / NBRC 12425 / NCIMB 8070 / 4)	ACIA4	62
+Anoxybacillus flavithermus (strain DSM 21510 / WK1)	ANOFW	62
+Corallococcus coralloides (strain ATCC 25202 / DSM 2259 / NBRC 100086 / M2)	CORCM	62
+Parabacteroides distasonis (strain ATCC 8503 / DSM 20701 / CIP 104284 / JCM 5825 / NCTC 11152)	PARD8	62
+Propionibacterium freudenreichii subsp. shermanii (strain ATCC 9614 / DSM 4902 / CIP 103027 / NCIMB 8099 / CIRM-BIA1)	PROFC	62
+Thermus thermophilus (strain ATCC BAA-163 / DSM 7039 / HB27)	THET2	62
+Thermus thermophilus (strain ATCC 27634 / DSM 579 / HB8)	THET8	62
+Thermoanaerobacterium thermosaccharolyticum (strain ATCC 7956 / DSM 571 / NCIMB 9385 / NCA 3814 / NCTC 13789 / WDCM 00135 / 2032)	THETC	62
+Bacillus anthracis (strain A0248)	BACAA	61
+Bacillus anthracis str. 'Ames Ancestor'	BACAN	61
+Bacillus cereus (strain ATCC 14579 / DSM 31 / CCUG 7414 / JCM 2152 / NBRC 15305 / NCIMB 9373 / NCTC 2599 / NRRL B-3711)	BACCR	61
+Bifidobacterium longum subsp. infantis (strain 157F)	BIFL1	61
+Bifidobacterium longum subsp. longum (strain ATCC 15707 / DSM 20219 / JCM 1217 / NCTC 11818 / E194b)	BIFL2	61
+Bifidobacterium longum subsp. longum (strain BBMN68)	BIFLM	61
+Levilactobacillus brevis (strain ATCC 367 / BCRC 12310 / CIP 105137 / JCM 1170 / LMG 11437 / NCIMB 947 / NCTC 947)	LEVBA	61
+Microbacterium testaceum (strain StLB037)	MICTS	61
+Listeria innocua serovar 6a (strain ATCC BAA-680 / CLIP 11262)	LISIN	58
+Enterococcus faecium (strain ATCC BAA-472 / TX0016 / DO)	ENTFD	57
+Geobacillus thermodenitrificans (strain NG80-2)	GEOTN	57
+Listeria ivanovii (strain ATCC BAA-678 / PAM 55)	LISIP	57
+Listeria monocytogenes serotype 1/2a (strain 08-5923)	LISM2	57
+Listeria monocytogenes serotype 1/2a (strain 10403S)	LISM4	57
+Listeria monocytogenes serotype 4b (strain CLIP80459)	LISMC	57
+Listeria monocytogenes serotype 4b (strain F2365)	LISMF	57
+Listeria monocytogenes serotype 4a (strain HCC23)	LISMH	57
+Listeria monocytogenes serotype 4a (strain L99)	LISML	57
+Listeria monocytogenes serotype 4a (strain M7)	LISMM	57
+Listeria monocytogenes serovar 1/2a (strain ATCC BAA-679 / EGD-e)	LISMO	57
+Listeria seeligeri serovar 1/2b (strain ATCC 35967 / DSM 20751 / CCM 3970 / CIP 100100 / NCTC 11856 / SLCC 3954 / 1120)	LISSS	57
+Listeria welshimeri serovar 6b (strain ATCC 35897 / DSM 20650 / CIP 8149 / NCTC 11857 / SLCC 5334 / V8)	LISW6	57
+Parageobacillus thermoglucosidasius (strain C56-YS93)	PARTC	55
+Rhizorhabdus wittichii (strain DSM 6014 / CCUG 31198 / JCM 15750 / NBRC 105917 / EY 4224 / RW1)	RHIWR	55
+Staphylococcus aureus (strain TW20 / 0582)	STAA0	54
+Staphylococcus aureus (strain NCTC 8325 / PS 47)	STAA8	54
+Staphylococcus aureus (strain Newman)	STAAE	54
+Staphylococcus aureus subsp. aureus (strain ED133)	STAAF	54
+Staphylococcus aureus (strain JKD6008)	STAAK	54
+Staphylococcus carnosus (strain TM300)	STACT	54
+Staphylococcus pseudintermedius (strain ED99)	STAPE	54
+Staphylococcus pseudintermedius (strain HKU10-03)	STAPH	54
+Clostridium botulinum (strain Alaska E43 / Type E3)	CLOBA	53
+Cronobacter turicensis (strain DSM 18703 / CCUG 55852 / LMG 23827 / z3032)	CROTZ	53
+Francisella philomiragia subsp. philomiragia (strain ATCC 25017 / FSC 153 / O#319-036)	FRAP2	53
+Klebsiella pneumoniae subsp. pneumoniae (strain ATCC 700721 / MGH 78578)	KLEP7	53
+Staphylococcus aureus (strain USA300)	STAA3	53
+Staphylococcus aureus (strain bovine RF122 / ET3-1)	STAAB	53
+Staphylococcus aureus (strain COL)	STAAC	53
+Staphylococcus aureus (strain N315)	STAAN	53
+Staphylococcus aureus (strain MRSA252)	STAAR	53
+Staphylococcus epidermidis (strain ATCC 12228 / FDA PCI 1200)	STAES	53
+Clostridium beijerinckii (strain ATCC 51743 / NCIMB 8052)	CLOB8	52
+Clostridium botulinum (strain Eklund 17B / Type B)	CLOBB	52
+Macrococcus caseolyticus (strain JCSC5402)	MACCJ	52
+Eggerthella lenta (strain ATCC 25559 / DSM 2243 / CCUG 17323 / JCM 9979 / KCTC 3265 / NCTC 11813 / VPI 0255 / 1899 B)	EGGLE	51
+Legionella pneumophila subsp. pneumophila (strain Philadelphia 1 / ATCC 33152 / DSM 7513)	LEGPH	51
+Staphylococcus aureus (strain USA300 / TCH1516)	STAAT	51
+Capnocytophaga canimorsus (strain 5)	CAPCC	50
+Flavobacterium branchiophilum (strain FL-15)	FLABF	50
+Flavobacterium columnare (strain ATCC 49512 / CIP 103533 / TG 44/87)	FLACA	50
+Flavobacterium johnsoniae (strain ATCC 17061 / DSM 2064 / JCM 8514 / NBRC 14942 / NCIMB 11054 / UW101)	FLAJ1	50
+Riemerella anatipestifer (strain RA-GD)	RIEAR	50
+Lactobacillus amylovorus (strain GRL 1112)	LACAR	49
+Lactobacillus delbrueckii subsp. bulgaricus (strain 2038)	LACD2	49
+Lactobacillus delbrueckii subsp. bulgaricus (strain ATCC 11842 / DSM 20081 / BCRC 10696 / JCM 1002 / NBRC 13953 / NCIMB 11778 / NCTC 12712 / WDCM 00102 / Lb 14)	LACDA	49
+Lactobacillus delbrueckii subsp. bulgaricus (strain ATCC BAA-365 / Lb-18)	LACDB	49
+Lactobacillus delbrueckii subsp. bulgaricus (strain ND02)	LACDN	49
+Lactobacillus johnsonii (strain CNCM I-12250 / La1 / NCC 533)	LACJO	49
+Mycobacterium marinum (strain ATCC BAA-535 / M)	MYCMM	49
+Pseudomonas syringae pv. tomato (strain ATCC BAA-871 / DC3000)	PSESM	49
+Streptomyces griseus subsp. griseus (strain JCM 4626 / NBRC 13350)	STRGG	49
+Streptomyces tsukubensis (strain DSM 42081 / NBRC 108919 / NRRL 18488 / 9993)	STRT9	49
+Halomonas elongata (strain ATCC 33173 / DSM 2581 / NBRC 15536 / NCIMB 2198 / 1H9)	HALED	48
+Pseudomonas savastanoi pv. phaseolicola (strain 1448A / Race 6)	PSE14	48
+Lacticaseibacillus paracasei (strain ATCC 334 / BCRC 17002 / CCUG 31169 / CIP 107868 / KCTC 3260 / NRRL B-441)	LACP3	47
+Lacticaseibacillus rhamnosus (strain ATCC 53103 / LMG 18243 / GG)	LACRG	47
+Lacticaseibacillus rhamnosus (strain Lc 705)	LACRL	47
+Ligilactobacillus salivarius (strain UCC118)	LIGS1	47
+Ornithobacterium rhinotracheale (strain ATCC 51463 / DSM 15997 / CCUG 23171 / CIP 104009 / LMG 9086)	ORNRL	47
+Ruminococcus albus (strain ATCC 27210 / DSM 20455 / JCM 14654 / NCDO 2250 / 7)	RUMA7	47
+Escherichia coli O44:H18 (strain 042 / EAEC)	ECO44	46
+Escherichia coli O17:K52:H18 (strain UMN026 / ExPEC)	ECOLU	46
+Enterobacter lignolyticus (strain SCF1)	ENTLS	46
+Mycobacterium intracellulare (strain ATCC 13950 / DSM 43223 / JCM 6384 / NCTC 13025 / 3600)	MYCIA	46
+Mycolicibacterium smegmatis (strain ATCC 700084 / mc(2)155)	MYCS2	46
+Mycobacterium ulcerans (strain Agy99)	MYCUA	46
+Nocardia cyriacigeorgica (strain GUH-2)	NOCCG	46
+Paenibacillus polymyxa (strain E681)	PAEP6	46
+Paenibacillus terrae (strain HPL-003)	PAETH	46
+Rhodococcus jostii (strain RHA1)	RHOJR	46
+Aeromonas hydrophila subsp. hydrophila (strain ATCC 7966 / DSM 30187 / BCRC 13018 / CCUG 14551 / JCM 1027 / KCTC 2358 / NCIMB 9240 / NCTC 8049)	AERHH	45
+Escherichia coli O45:K1 (strain S88 / ExPEC)	ECO45	45
+Escherichia coli O7:K1 (strain IAI39 / ExPEC)	ECO7I	45
+Escherichia coli O81 (strain ED1a)	ECO81	45
+Escherichia coli O83:H1 (strain NRG 857C / AIEC)	ECO8N	45
+Escherichia coli OR:K5:H- (strain ABU 83972)	ECOAB	45
+Escherichia coli (strain 'clone D i14')	ECOC1	45
+Escherichia coli (strain 'clone D i2')	ECOC2	45
+Escherichia coli O18:K1:H7 (strain IHE3034 / ExPEC)	ECOKI	45
+Escherichia coli O6:K15:H31 (strain 536 / UPEC)	ECOL5	45
+Escherichia coli O6:H1 (strain CFT073 / ATCC 700928 / UPEC)	ECOL6	45
+Escherichia coli O150:H5 (strain SE15)	ECOS5	45
+Escherichia coli (strain SMS-3-5 / SECEC)	ECOSM	45
+Escherichia coli (strain UM146)	ECOUM	45
+Escherichia coli (strain UTI89 / UPEC)	ECOUT	45
+Escherichia fergusonii (strain ATCC 35469 / DSM 13698 / CCUG 18766 / IAM 14443 / JCM 21226 / LMG 7866 / NBRC 102419 / NCTC 12128 / CDC 0568-73)	ESCF3	45
+Francisella cf. novicida (strain Fx1)	FRACF	45
+Francisella tularensis subsp. novicida (strain U112)	FRATN	45
+Klebsiella aerogenes (strain ATCC 13048 / DSM 30053 / CCUG 1429 / JCM 1235 / KCTC 2190 / NBRC 13534 / NCIMB 10102 / NCTC 10006 / CDC 819-56)	KLEAK	45
+Klebsiella variicola (strain At-22)	KLEVT	45
+Laribacter hongkongensis (strain HLHK9)	LARHH	45
+Mycolicibacterium paratuberculosis (strain ATCC BAA-968 / K-10)	MYCPA	45
+Pantoea ananatis (strain AJ13355)	PANAA	45
+Pantoea ananatis (strain LMG 20103)	PANAM	45
+Salmonella arizonae (strain ATCC BAA-731 / CDC346-86 / RSK2980)	SALAR	45
+Salmonella schwarzengrund (strain CVM19633)	SALSV	45
+Serratia proteamaculans (strain 568)	SERP5	45
+Serratia plymuthica (strain AS9)	SERSA	45
+Shigella dysenteriae serotype 1 (strain Sd197)	SHIDS	45
+Cardiobacterium hominis (strain ATCC 15826 / DSM 8339 / NCTC 10426 / 6573)	CARH6	44
+Clostridium perfringens (strain ATCC 13124 / DSM 756 / JCM 1290 / NCIMB 6125 / NCTC 8237 / Type A)	CLOP1	44
+Clostridium perfringens (strain 13 / Type A)	CLOPE	44
+Clostridium perfringens (strain SM101 / Type A)	CLOPS	44
+Deinococcus radiodurans (strain ATCC 13939 / DSM 20539 / JCM 16871 / LMG 4051 / NBRC 15346 / NCIMB 9279 / R1 / VKM B-1422)	DEIRA	44
+Dickeya chrysanthemi (strain Ech1591)	DICC1	44
+Escherichia coli O1:K1 / APEC	ECOK1	44
+Francisella orientalis (strain Toba 04)	FRAOT	44
+Francisella tularensis subsp. tularensis (strain FSC 198)	FRAT1	44
+Francisella tularensis subsp. tularensis (strain NE061598)	FRATE	44
+Francisella tularensis subsp. holarctica (strain FTNF002-00 / FTA)	FRATF	44
+Francisella tularensis subsp. holarctica (strain LVS)	FRATH	44
+Francisella tularensis subsp. mediasiatica (strain FSC147)	FRATM	44
+Francisella tularensis subsp. holarctica (strain OSU18)	FRATO	44
+Francisella tularensis subsp. tularensis (strain SCHU S4 / Schu 4)	FRATT	44
+Francisella tularensis subsp. tularensis (strain WY96-3418)	FRATW	44
+Gluconacetobacter diazotrophicus (strain ATCC 49037 / DSM 5601 / CCUG 37298 / CIP 103539 / LMG 7603 / PAl5)	GLUDA	44
+Granulibacter bethesdensis (strain ATCC BAA-1260 / CGDNIH1)	GRABC	44
+Mycolicibacterium thermoresistibile (strain ATCC 19527 / DSM 44167 / CIP 105390 / JCM 6362 / NCTC 10409 / 316)	MYCT3	44
+Neisseria gonorrhoeae (strain ATCC 700825 / FA 1090)	NEIG1	44
+Neisseria gonorrhoeae (strain NCCP11945)	NEIG2	44
+Neisseria meningitidis serogroup C (strain 053442)	NEIM0	44
+Neisseria meningitidis serogroup B (strain alpha710)	NEIM7	44
+Neisseria meningitidis serogroup C (strain 8013)	NEIM8	44
+Neisseria meningitidis serogroup A / serotype 4A (strain DSM 15465 / Z2491)	NEIMA	44
+Neisseria meningitidis serogroup C / serotype 2a (strain ATCC 700532 / DSM 15464 / FAM18)	NEIMF	44
+Neisseria meningitidis serogroup B (strain G2136)	NEIMG	44
+Neisseria meningitidis serogroup B / serotype 15 (strain H44/76)	NEIMH	44
+Neisseria meningitidis (strain alpha14)	NEIML	44
+Neisseria meningitidis serogroup B (strain M01-240149)	NEIMM	44
+Neisseria meningitidis serogroup B (strain NZ-05/33)	NEIMN	44
+Neisseria meningitidis serogroup B (strain M01-240355)	NEIMP	44
+Neisseria meningitidis serogroup A (strain WUE 2594)	NEIMW	44
+Pectobacterium atrosepticum (strain SCRI 1043 / ATCC BAA-672)	PECAS	44
+Providencia rettgeri (strain Dmel1)	PRORD	44
+Rhodopseudomonas palustris (strain HaA2)	RHOP2	44
+Xanthomonas axonopodis pv. citri (strain 306)	XANAC	44
+Xanthomonas campestris pv. campestris (strain 8004)	XANC8	44
+Xanthomonas campestris pv. campestris (strain B100)	XANCB	44
+Xanthomonas campestris pv. campestris (strain ATCC 33913 / DSM 3586 / NCPPB 528 / LMG 568 / P 25)	XANCP	44
+Corynebacterium diphtheriae (strain HC02)	CORDJ	43
+Lancefieldella parvula (strain ATCC 33793 / DSM 20469 / CCUG 32760 / JCM 10300 / KCTC 3663 / VPI 0546 / 1246)	LANP1	43
+Marinobacter nauticus (strain ATCC 700491 / DSM 11845 / VT8)	MARN8	43
+Neisseria meningitidis serogroup B (strain MC58)	NEIMB	43
+Campylobacter jejuni subsp. jejuni serotype HS:41 (strain ICDCCJ07001)	CAMJC	42
+Campylobacter jejuni subsp. doylei (strain ATCC BAA-1458 / RM4099 / 269.97)	CAMJD	42
+Campylobacter jejuni subsp. jejuni serotype O:2 (strain ATCC 700819 / NCTC 11168)	CAMJE	42
+Campylobacter jejuni subsp. jejuni (strain IA3902)	CAMJI	42
+Campylobacter jejuni subsp. jejuni serotype O:23/36 (strain 81-176)	CAMJJ	42
+Campylobacter jejuni subsp. jejuni serotype HS21 (strain M1 / 99/308)	CAMJM	42
+Campylobacter lari (strain RM2100 / D67 / ATCC BAA-1060)	CAMLR	42
+Capnocytophaga ochracea (strain ATCC 27872 / DSM 7271 / JCM 12966 / NCTC 12371 / VPI 2845)	CAPOD	42
+Helicobacter cinaedi (strain PAGU611)	HELCP	42
+Rhodococcus hoagii (strain 103S)	RHOH1	42
+Saccharomonospora viridis (strain ATCC 15386 / DSM 43017 / JCM 3036 / NBRC 12207 / P101)	SACVD	42
+Zymomonas mobilis subsp. mobilis (strain NCIMB 11163 / B70)	ZYMMN	42
+Brevundimonas subvibrioides (strain ATCC 15264 / DSM 4735 / LMG 14903 / NBRC 16000 / CB 81)	BRESC	41
+Brucella abortus (strain S19)	BRUA1	41
+Brucella abortus biovar 1 (strain 9-941)	BRUAB	41
+Brucella melitensis (strain M5-90)	BRUM5	41
+Brucella melitensis biotype 2 (strain ATCC 23457)	BRUMB	41
+Corynebacterium diphtheriae (strain 241)	CORD2	41
+Corynebacterium diphtheriae (strain ATCC 27012 / C7 (beta))	CORD7	41
+Corynebacterium diphtheriae (strain CDCE 8392)	CORDD	41
+Corynebacterium diphtheriae (strain HC01)	CORDH	41
+Corynebacterium diphtheriae (strain ATCC 700971 / NCTC 13129 / Biotype gravis)	CORDI	41
+Corynebacterium diphtheriae (strain HC03)	CORDK	41
+Corynebacterium diphtheriae (strain VA01)	CORDV	41
+Corynebacterium diphtheriae (strain PW8)	CORDW	41
+Corynebacterium pseudotuberculosis (strain 1002)	CORP1	41
+Corynebacterium pseudotuberculosis (strain C231)	CORP2	41
+Corynebacterium pseudotuberculosis (strain I19)	CORP9	41
+Corynebacterium pseudotuberculosis (strain FRC41)	CORPF	41
+Corynebacterium ulcerans (strain BR-AD22)	CORUB	41
+Erythrobacter litoralis (strain HTCC2594)	ERYLH	41
+Leptospira borgpetersenii serovar Hardjo-bovis (strain JB197)	LEPBJ	41
+Leptospira borgpetersenii serovar Hardjo-bovis (strain L550)	LEPBL	41
+Leptospira interrogans serogroup Icterohaemorrhagiae serovar copenhageni (strain Fiocruz L1-130)	LEPIC	41
+Leptospira interrogans serogroup Icterohaemorrhagiae serovar Lai (strain IPAV)	LEPII	41
+Leptospira interrogans serogroup Icterohaemorrhagiae serovar Lai (strain 56601)	LEPIN	41
+Mycobacterium africanum (strain GM041182)	MYCA0	41
+Mycobacterium bovis (strain ATCC BAA-935 / AF2122/97)	MYCBO	41
+Mycobacterium bovis (strain BCG / Pasteur 1173P2)	MYCBP	41
+Mycobacterium bovis (strain BCG / Tokyo 172 / ATCC 35737 / TMC 1019)	MYCBT	41
+Mycobacterium canettii (strain CIPT 140010059)	MYCCP	41
+Mycobacterium tuberculosis (strain ATCC 25177 / H37Ra)	MYCTA	41
+Mycobacterium tuberculosis (strain F11)	MYCTF	41
+Mycobacterium tuberculosis (strain KZN 1435 / MDR)	MYCTK	41
+Mycobacterium tuberculosis (strain ATCC 25618 / H37Rv)	MYCTU	41
+Neisseria meningitidis serogroup B (strain M04-240196)	NEIMO	41
+Rhizobium leguminosarum bv. trifolii (strain WSM2304)	RHILW	41
+Rhizobium meliloti (strain 1021)	RHIME	41
+Sinorhizobium meliloti (strain BL225C)	SINMB	41
+Sinorhizobium meliloti (strain AK83)	SINMK	41
+Sinorhizobium meliloti (strain SM11)	SINMM	41
+Clostridium tetani (strain Massachusetts / E88)	CLOTE	40
+Mycobacterium tuberculosis (strain CCDC5079)	MYCTC	40
+Mycobacterium tuberculosis (strain CCDC5180)	MYCTD	40
+Acholeplasma laidlawii (strain PG-8A)	ACHLI	39
+Agathobacter rectalis (strain ATCC 33656 / DSM 3377 / JCM 17463 / KCTC 5835 / VPI 0990)	AGARV	39
+Bacteroides fragilis (strain ATCC 25285 / DSM 2151 / CCUG 4856 / JCM 11019 / NCTC 9343 / Onslow)	BACFN	39
+Bacteroides fragilis (strain YCH46)	BACFR	39
+Clostridioides difficile (strain 630)	CLOD6	39
+Clostridioides difficile (strain R20291)	CLODR	39
+Leuconostoc gelidum subsp. gasicomitatum (strain DSM 15947 / CCUG 46042 / CECT 5767 / JCM 12535 / LMG 18811 / NBRC 113245 / TB1-10)	LEUGG	39
+Leuconostoc mesenteroides subsp. mesenteroides (strain ATCC 8293 / DSM 20343 / BCRC 11652 / CCM 1803 / JCM 6124 / NCDO 523 / NBRC 100496 / NCIMB 8023 / NCTC 12954 / NRRL B-1118 / 37Y)	LEUMM	39
+Citrobacter koseri (strain ATCC BAA-895 / CDC 4225-83 / SGSC4696)	CITK8	38
+Citrobacter rodentium (strain ICC168)	CITRI	38
+Cronobacter sakazakii (strain ATCC BAA-894)	CROS8	38
+Pantoea vagans (strain C9-1)	PANVC	38
+Salmonella bongori (strain ATCC 43975 / DSM 13772 / NCTC 12419)	SALBC	38
+Salmonella choleraesuis (strain SC-B67)	SALCH	38
+Salmonella dublin (strain CT_02021853)	SALDC	38
+Salmonella enteritidis PT4 (strain P125109)	SALEP	38
+Salmonella gallinarum (strain 287/91 / NCTC 13346)	SALG2	38
+Salmonella heidelberg (strain SL476)	SALHS	38
+Salmonella paratyphi A (strain ATCC 9150 / SARB42)	SALPA	38
+Salmonella paratyphi C (strain RKS4594)	SALPC	38
+Salmonella paratyphi A (strain AKU_12601)	SALPK	38
+Salmonella pullorum (strain RKS5078 / SGSC2294)	SALPS	38
+Salmonella typhimurium (strain 14028s / SGSC 2262)	SALT1	38
+Salmonella typhimurium (strain 4/74)	SALT4	38
+Salmonella typhimurium (strain D23580)	SALTD	38
+Salmonella enterica subsp. enterica serovar Typhi str. CT18	SALTI	38
+Salmonella typhimurium (strain SL1344)	SALTS	38
+Salmonella typhimurium (strain LT2 / SGSC1412 / ATCC 700720)	SALTY	38
+Shewanella baltica (strain OS678)	SHEB6	38
+Shewanella baltica (strain OS185)	SHEB8	38
+Shewanella baltica (strain OS195)	SHEB9	38
+Aliivibrio fischeri (strain MJ11)	ALIFM	37
+Bifidobacterium asteroides (strain PRL2011)	BIFAP	37
+Bordetella bronchiseptica (strain MO149)	BORBM	37
+Bordetella bronchiseptica (strain ATCC BAA-588 / NCTC 13252 / RB50)	BORBR	37
+Bordetella pertussis (strain ATCC 9797 / DSM 5571 / NCTC 10739 / 18323)	BORP1	37
+Bordetella parapertussis (strain 12822 / ATCC BAA-587 / NCTC 13253)	BORPA	37
+Bordetella pertussis (strain CS)	BORPC	37
+Pectobacterium carotovorum subsp. carotovorum (strain PC1)	PECCP	37
+Pectobacterium parmentieri (strain WPP163)	PECPW	37
+Photorhabdus laumondii subsp. laumondii (strain DSM 15139 / CIP 105565 / TT01)	PHOLL	37
+Ralstonia solanacearum (strain Po82)	RALS8	37
+Aliivibrio fischeri (strain ATCC 700601 / ES114)	ALIF1	36
+Bordetella avium (strain 197N)	BORA1	36
+Bordetella pertussis (strain Tohama I / ATCC BAA-589 / NCTC 13251)	BORPE	36
+Burkholderia mallei (strain SAVP1)	BURMS	36
+Erwinia amylovora (strain CFBP1430)	ERWAC	36
+Erwinia amylovora (strain ATCC 49946 / CCPPB 0273 / Ea273 / 27-3)	ERWAE	36
+Moraxella catarrhalis (strain BBH18)	MORCB	36
+Moraxella catarrhalis (strain RH4)	MORCR	36
+Xanthomonas oryzae pv. oryzae (strain MAFF 311018)	XANOM	36
+Xanthomonas oryzae pv. oryzae (strain KACC10331 / KXO85)	XANOR	36
+Bifidobacterium longum subsp. longum (strain JDM301)	BIFLJ	35
+Corynebacterium variabile (strain DSM 44702 / CIP 107183 / JCM 12073 / NCIMB 30131)	CORVD	35
+Dehalococcoides mccartyi (strain ATCC BAA-2266 / KCTC 15142 / 195)	DEHM1	35
+Dehalococcoides mccartyi (strain ATCC BAA-2100 / JCM 16839 / KCTC 5957 / BAV1)	DEHMB	35
+Dehalococcoides mccartyi (strain CBDB1)	DEHMC	35
+Dehalococcoides mccartyi (strain GT)	DEHMG	35
+Dehalococcoides mccartyi (strain VS)	DEHMV	35
+Kocuria rhizophila (strain ATCC 9341 / DSM 348 / NBRC 103217 / DC2201)	KOCRD	35
+Moorella thermoacetica (strain ATCC 39073 / JCM 9320)	MOOTA	35
+Rothia dentocariosa (strain ATCC 17931 / CDC X599 / XDIA)	ROTDC	35
+Rothia mucilaginosa (strain DY-18)	ROTMD	35
+Shewanella frigidimarina (strain NCIMB 400)	SHEFN	35
+Acidithiobacillus ferrooxidans (strain ATCC 23270 / DSM 14882 / CIP 104768 / NCIMB 8455)	ACIF2	34
+Acidithiobacillus ferrooxidans (strain ATCC 53993 / BNL-5-31)	ACIF5	34
+Aggregatibacter actinomycetemcomitans serotype C (strain D11S-1)	AGGAD	34
+Aggregatibacter aphrophilus (strain NJ8700)	AGGAN	34
+Bacillus amyloliquefaciens (strain ATCC 23350 / DSM 7 / BCRC 11601 / CCUG 28519 / NBRC 15535 / NRRL B-14393 / F)	BACAS	34
+Bacillus pumilus (strain SAFR-032)	BACP2	34
+Bacillus velezensis (strain DSM 23117 / BGSC 10A6 / LMG 26770 / FZB42)	BACVZ	34
+Corynebacterium kroppenstedtii (strain DSM 44385 / JCM 11950 / CIP 105744 / CCUG 35717)	CORK4	34
+Gallibacterium anatis (strain UMN179)	GALAU	34
+Helicobacter bizzozeronii (strain CIII-1)	HELBC	34
+Helicobacter felis (strain ATCC 49179 / NCTC 12436 / CS1)	HELFC	34
+Histophilus somni (strain 2336)	HISS2	34
+Streptococcus agalactiae serotype Ia (strain ATCC 27591 / A909 / CDC SS700)	STRA1	34
+Streptococcus agalactiae serotype Ia (strain GD201008-001)	STRA2	34
+Streptococcus agalactiae serotype III (strain NEM316)	STRA3	34
+Streptococcus agalactiae serotype V (strain ATCC BAA-611 / 2603 V/R)	STRA5	34
+Streptococcus dysgalactiae subsp. equisimilis (strain GGS_124)	STRDG	34
+Streptococcus dysgalactiae subsp. equisimilis (strain ATCC 12394 / D166B)	STRED	34
+Streptococcus suis (strain JS14)	STREJ	34
+Streptococcus suis (strain GZ1)	STRGZ	34
+Streptococcus pyogenes M1 GAS	STRP1	34
+Streptococcus pyogenes serotype M3 (strain ATCC BAA-595 / MGAS315)	STRP3	34
+Streptococcus pyogenes serotype M6 (strain ATCC BAA-946 / MGAS10394)	STRP6	34
+Streptococcus pyogenes serotype M18 (strain MGAS8232)	STRP8	34
+Streptococcus pyogenes serotype M12 (strain MGAS2096)	STRPB	34
+Streptococcus pyogenes serotype M12 (strain MGAS9429)	STRPC	34
+Streptococcus pyogenes serotype M2 (strain MGAS10270)	STRPD	34
+Streptococcus pyogenes serotype M4 (strain MGAS10750)	STRPF	34
+Streptococcus pyogenes serotype M5 (strain Manfredo)	STRPG	34
+Streptococcus pyogenes serotype M28 (strain MGAS6180)	STRPM	34
+Streptococcus pyogenes serotype M3 (strain SSI-1)	STRPQ	34
+Streptococcus pyogenes serotype M49 (strain NZ131)	STRPZ	34
+Streptococcus suis (strain 98HAH33)	STRS2	34
+Streptococcus suis (strain BM407)	STRS4	34
+Streptococcus suis (strain P1/7)	STRSE	34
+Streptococcus suis (strain SC84)	STRSX	34
+Streptococcus suis (strain 05ZYH33)	STRSY	34
+Streptococcus uberis (strain ATCC BAA-854 / 0140J)	STRU0	34
+Taylorella equigenitalis (strain MCE9)	TAYEM	33
+Weissella koreensis (strain KACC 15510)	WEIKK	33
+Xanthomonas albilineans (strain GPE PC73 / CFBP 7063)	XANAP	33
+Xylella fastidiosa (strain M23)	XYLF2	33
+Xylella fastidiosa (strain GB514)	XYLFG	33
+Xylella fastidiosa (strain Temecula1 / ATCC 700964)	XYLFT	33
+Zymomonas mobilis subsp. mobilis (strain ATCC 10988 / DSM 424 / LMG 404 / NCIMB 8938 / NRRL B-806 / ZM1)	ZYMMA	33
+Zymomonas mobilis subsp. mobilis (strain ATCC 31821 / ZM4 / CP4)	ZYMMO	33
+Zymomonas mobilis subsp. pomaceae (strain ATCC 29192 / DSM 22645 / JCM 10191 / CCUG 17912 / NBRC 13757 / NCIMB 11200 / NRRL B-4491 / Barker I)	ZYMMT	33
+Arachnia propionica (strain F0230a)	ARAPF	32
+Bifidobacterium breve (strain ACS-071-V-Sch8b)	BIFBA	32
+Bifidobacterium bifidum (strain PRL2010)	BIFBP	32
+Bifidobacterium bifidum (strain S17)	BIFBS	32
+Bifidobacterium longum (strain NCC 2705)	BIFLO	32
+Bifidobacterium longum subsp. infantis (strain ATCC 15697 / DSM 20088 / JCM 1222 / NCTC 11817 / S12)	BIFLS	32
+Cutibacterium acnes (strain DSM 16379 / KPA171202)	CUTAK	32
+Cutibacterium acnes (strain SK137)	CUTAS	32
+Glaesserella parasuis serovar 5 (strain SH0165)	GLAP5	32
+Mobiluncus curtisii (strain ATCC 43063 / DSM 2711 / V125)	MOBCV	32
+Acidaminococcus intestini (strain RyC-MR95)	ACIIR	31
+Alistipes finegoldii (strain DSM 17242 / JCM 16770 / CCUG 46020 / CIP 107999 / KCTC 15236 / AHN 2437)	ALIFI	31
+Odoribacter splanchnicus (strain ATCC 29572 / DSM 20712 / CIP 104287 / JCM 15291 / NCTC 10825 / 1651/6)	ODOSD	31
+Porphyromonas gingivalis (strain ATCC 33277 / DSM 20709 / CIP 103683 / JCM 12257 / NCTC 11834 / 2561)	PORG3	31
+Porphyromonas gingivalis (strain ATCC BAA-308 / W83)	PORGI	31
+Prevotella intermedia (strain 17)	PREI7	31
+Roseburia hominis (strain DSM 16839 / JCM 17582 / NCIMB 14029 / A2-183)	ROSHA	31
+Bifidobacterium animalis subsp. lactis (strain AD011)	BIFA0	29
+Bifidobacterium adolescentis (strain ATCC 15703 / DSM 20083 / NCTC 11814 / E194a)	BIFAA	29
+Bifidobacterium animalis subsp. lactis (strain BB-12)	BIFAB	29
+Bifidobacterium animalis subsp. animalis (strain ATCC 25527 / DSM 20104 / JCM 1190 / R101-8)	BIFAR	29
+Bifidobacterium animalis subsp. lactis (strain DSM 10140 / JCM 10602 / LMG 18314)	BIFAS	29
+Bifidobacterium animalis subsp. lactis (strain V9)	BIFAV	29
+Bifidobacterium dentium (strain ATCC 27534 / DSM 20436 / JCM 1195 / Bd1)	BIFDB	29
+Bifidobacterium animalis subsp. lactis (strain Bl-04 / DGCC2908 / RB 4825 / SD5219)	BIFLB	29
+Gardnerella vaginalis (strain ATCC 14019 / 317)	GARV3	29
+Gardnerella vaginalis (strain 409-05)	GARV4	29
+Gardnerella vaginalis (strain HMP9231)	GARVH	29
+Enterococcus faecium (strain Aus0004)	ENTFU	26
+Lactobacillus crispatus (strain ST1)	LACCS	26
+Streptococcus equi subsp. equi (strain 4047)	STRE4	26
+Streptococcus salivarius (strain 57.I)	STRE5	26
+Streptococcus salivarius (strain JIM8777)	STRE8	26
+Streptococcus equi subsp. zooepidemicus (strain ATCC 35246 / C74-63)	STREC	26
+Streptococcus salivarius (strain CCHSS3)	STREH	26
+Streptococcus equi subsp. zooepidemicus (strain MGCS10565)	STREM	26
+Streptococcus pseudopneumoniae (strain IS7493)	STRES	26
+Streptococcus pneumoniae (strain ST556)	STRET	26
+Streptococcus gallolyticus (strain ATCC 43143 / F-1867)	STRG1	26
+Streptococcus gallolyticus (strain ATCC BAA-2069)	STRG2	26
+Streptococcus gallolyticus (strain UCN34)	STRG3	26
+Streptococcus gordonii (strain Challis / ATCC 35105 / BCRC 15272 / CH1 / DL1 / V288)	STRGC	26
+Streptococcus infantarius (strain CJ18)	STRIC	26
+Streptococcus intermedius (strain JTH08)	STRIJ	26
+Streptococcus mitis (strain B6)	STRM6	26
+Streptococcus macedonicus (strain ACA-DC 198)	STRMD	26
+Streptococcus mutans serotype c (strain NN2025)	STRMN	26
+Streptococcus mutans serotype c (strain ATCC 700610 / UA159)	STRMU	26
+Streptococcus oralis (strain Uo5)	STROU	26
+Streptococcus pneumoniae serotype A19 (strain TCH8431)	STRP0	26
+Streptococcus pneumoniae serotype 2 (strain D39 / NCTC 7466)	STRP2	26
+Streptococcus pneumoniae serotype 19F (strain G54)	STRP4	26
+Streptococcus pneumoniae (strain 70585)	STRP7	26
+Streptococcus pneumoniae (strain Hungary19A-6)	STRPI	26
+Streptococcus pneumoniae (strain ATCC 700669 / Spain 23F-1)	STRPJ	26
+Streptococcus pneumoniae serotype 4 (strain ATCC BAA-334 / TIGR4)	STRPN	26
+Streptococcus pneumoniae (strain CGSP14)	STRPS	26
+Streptococcus pasteurianus (strain ATCC 43144 / JCM 5346 / CDC 1723-81)	STRPX	26
+Streptococcus pneumoniae (strain ATCC BAA-255 / R6)	STRR6	26
+Streptococcus equi subsp. zooepidemicus (strain H70)	STRS7	26
+Streptococcus sanguinis (strain SK36)	STRSV	26
+Streptococcus thermophilus (strain CNRZ 1066)	STRT1	26
+Streptococcus thermophilus (strain ATCC BAA-250 / LMG 18311)	STRT2	26
+Streptococcus thermophilus (strain ATCC BAA-491 / LMD-9)	STRTD	26
+Streptococcus thermophilus (strain ND03)	STRTN	26
+Streptococcus pneumoniae (strain 670-6B)	STRZ6	26
+Streptococcus pneumoniae serotype 1 (strain INV104)	STRZI	26
+Streptococcus pneumoniae (strain JJA)	STRZJ	26
+Streptococcus pneumoniae serotype 14 (strain INV200)	STRZN	26
+Streptococcus pneumoniae serotype 3 (strain OXC141)	STRZO	26
+Streptococcus pneumoniae (strain P1031)	STRZP	26
+Streptococcus pneumoniae (strain Taiwan19F-14)	STRZT	26
+Streptococcus parauberis (strain KCTC 11537)	STRPW	24
+Klebsiella pneumoniae (strain 342)	KLEP3	23
+Staphylococcus aureus (strain Mu3 / ATCC 700698)	STAA1	23
+Staphylococcus aureus (strain JH1)	STAA2	23
+Staphylococcus aureus (strain 04-02981)	STAA4	23
+Staphylococcus aureus (strain MRSA ST398 / isolate S0385)	STAA5	23
+Staphylococcus aureus (strain JH9)	STAA9	23
+Staphylococcus aureus (strain ED98)	STAAD	23
+Staphylococcus aureus (strain ECT-R 2)	STAAG	23
+Staphylococcus aureus (strain TCH60)	STAAH	23
+Staphylococcus aureus (strain JKD6159)	STAAJ	23
+Staphylococcus aureus (strain Mu50 / ATCC 700699)	STAAM	23
+Staphylococcus aureus (strain MSSA476)	STAAS	23
+Staphylococcus aureus (strain MW2)	STAAW	23
+Staphylococcus lugdunensis (strain HKU09-01)	STALH	23
+Yersinia enterocolitica serotype O:8 / biotype 1B (strain NCTC 13174 / 8081)	YERE8	22
+Acetobacter pasteurianus (strain NBRC 105184 / IFO 3283-01)	ACEP3	21
+Enterococcus faecalis (strain 62)	ENTF6	21
+Enterococcus faecalis (strain ATCC 700802 / V583)	ENTFA	21
+Enterococcus faecalis (strain ATCC 47077 / OG1RF)	ENTFO	21
+Tetragenococcus halophilus (strain DSM 20338 / JCM 20259 / NCIMB 9735 / NBRC 12172)	TETHN	21
+Aerococcus urinae (strain ACS-120-V-Col10a)	AERUA	20
+Erysipelothrix rhusiopathiae (strain Fujisawa)	ERYRF	18
+Lactobacillus acidophilus (strain ATCC 700396 / NCK56 / N2 / NCFM)	LACAC	18
+Lactobacillus amylovorus (strain GRL 1118)	LACAL	18
+Lactobacillus gasseri (strain ATCC 33323 / DSM 20243 / BCRC 14619 / CIP 102991 / JCM 1131 / KCTC 3163 / NCIMB 11718 / NCTC 13722 / AM63)	LACGA	18
+Lactobacillus helveticus (strain DPC 4571)	LACH4	18
+Lactobacillus johnsonii (strain FI9785)	LACJF	18
+Melissococcus plutonius (strain DAT561)	MELPD	18
+Melissococcus plutonius (strain ATCC 35311 / CIP 104052 / LMG 20360 / NCIMB 702443)	MELPT	18
+Capnocytophaga gingivalis	CAPGI	16
+Fusobacterium nucleatum subsp. nucleatum (strain ATCC 25586 / DSM 15643 / BCRC 10681 / CIP 101130 / JCM 8532 / KCTC 2640 / LMG 13131 / VPI 4355)	FUSNN	16
+Lacticaseibacillus casei (strain BD-II)	LACCD	16
+Legionella pneumophila serogroup 1 (strain 2300/99 Alcoy)	LEGP2	16
+Legionella pneumophila (strain Paris)	LEGPA	16
+Legionella pneumophila (strain Corby)	LEGPC	16
+Legionella pneumophila (strain Lens)	LEGPL	16
+Pediococcus pentosaceus (strain ATCC 25745 / CCUG 21536 / LMG 10740 / 183-1w)	PEDPA	16
+Mycobacterium leprae (strain Br4923)	MYCLB	15
+Mycobacterium leprae (strain TN)	MYCLE	15
+Paenibacillus polymyxa (strain SC2)	PAEPS	15
+Aeromonas salmonicida (strain A449)	AERS4	14
+Aeromonas veronii (strain B565)	AERVB	14
+Klebsiella pneumoniae subsp. pneumoniae (strain HS11286)	KLEPH	14
+Yersinia enterocolitica subsp. palearctica serotype O:3 (strain DSM 13030 / CIP 106945 / Y11)	YERE1	14
+Yersinia enterocolitica subsp. palearctica serotype O:9 / biotype 3 (strain 105.5R(r))	YERE3	14
+Corynebacterium diphtheriae (strain HC04)	CORDL	12
+Limosilactobacillus reuteri (strain DSM 20016)	LIMRD	12
+Limosilactobacillus reuteri (strain JCM 1112)	LIMRJ	12
+Fructilactobacillus sanfranciscensis (strain TMW 1.1304)	FRUST	10
+Haemophilus influenzae (strain R2846 / 12)	HAEI2	10
+Micromonospora aurantiaca (strain ATCC 27029 / DSM 43813 / BCRC 12538 / CBS 129.76 / JCM 10878 / NBRC 16125 / NRRL B-16091 / INA 9442)	MICAI	9
+Salinispora arenicola (strain CNS-205)	SALAI	9
+Actinobacillus pleuropneumoniae serotype 5b (strain L20)	ACTP2	8
+Actinobacillus pleuropneumoniae serotype 7 (strain AP76)	ACTP7	8
+Actinobacillus pleuropneumoniae serotype 3 (strain JL03)	ACTPJ	8
+Haemophilus ducreyi (strain 35000HP / ATCC 700724)	HAEDU	8
+Latilactobacillus sakei subsp. sakei (strain 23K)	LATSS	8
+Ligilactobacillus ruminis (strain ATCC 27782 / RF3)	LIGR2	8
+Micromonospora maris (strain DSM 45365 / JCM 31040 / NBRC 109089 / NRRL B-24793 / AB-18-032)	MICM1	8
+Mycoplasma gallisepticum (strain R(low / passage 15 / clone 2))	MYCGA	8
+Mycoplasma gallisepticum (strain F)	MYCGF	8
+Mycoplasma gallisepticum (strain R(high / passage 156))	MYCGH	8
+Mycoplasma pneumoniae (strain ATCC 29342 / M129)	MYCPN	8
+Streptobacillus moniliformis (strain ATCC 14647 / DSM 12112 / NCTC 10651 / 9901)	STRM9	8
+Ureaplasma parvum serovar 3 (strain ATCC 27815 / 27 / NCTC 11736)	UREP2	8
+Ureaplasma parvum serovar 3 (strain ATCC 700970)	UREPA	8
+Ureaplasma urealyticum serovar 10 (strain ATCC 33699 / Western)	UREU1	8
+Edwardsiella ictaluri (strain 93-146)	EDWI9	7
+Edwardsiella tarda (strain FL6-60)	EDWTF	7
+Yersinia pseudotuberculosis serotype O:1b (strain IP 31758)	YERP3	7
+Yersinia pestis bv. Antiqua (strain Antiqua)	YERPA	7
+Yersinia pseudotuberculosis serotype IB (strain PB1/+)	YERPB	7
+Yersinia pestis CO92	YERPE	7
+Yersinia pestis bv. Antiqua (strain Angola)	YERPG	7
+Yersinia pestis bv. Medievalis (strain Harbin 35)	YERPH	7
+Yersinia pestis bv. Antiqua (strain Nepal516)	YERPN	7
+Yersinia pestis (strain Pestoides F)	YERPP	7
+Yersinia pseudotuberculosis serotype I (strain IP32953)	YERPS	7
+Yersinia pseudotuberculosis serotype O:3 (strain YPIII)	YERPY	7
+Proteus mirabilis (strain HI4320)	PROMH	6
+Xenorhabdus bovienii (strain SS-2004)	XENBS	6
+Xenorhabdus nematophila (strain ATCC 19061 / DSM 3370 / CCUG 14189 / LMG 1036 / NCIMB 9965 / AN6)	XENNA	6
+Yersinia pestis (strain D182038)	YERP1	6
+Yersinia pestis (strain D106004)	YERPD	6
+Yersinia pestis (strain Z176003)	YERPZ	6
+Campylobacter concisus (strain 13826)	CAMC1	3
+Campylobacter fetus subsp. fetus (strain 82-40)	CAMFF	3
+Chlamydia abortus (strain DSM 27085 / S26/3)	CHLAB	3
+Chlamydia muridarum (strain MoPn / Nigg)	CHLMU	3
+Chlamydia psittaci (strain RD1)	CHLP1	3
+Chlamydophila psittaci (strain ATCC VR-125 / 6BC)	CHLP6	3
+Chlamydia pecorum (strain ATCC VR-628 / E58)	CHLPE	3
+Chlamydia pneumoniae CWL029	CHLPN	3
+Chlamydophila pneumoniae (strain LPCoLN)	CHLPP	3
+Desulfovibrio desulfuricans (strain ATCC 27774 / DSM 6949 / MB)	DESDA	3
+Haemophilus influenzae (strain 10810)	HAEI1	3
+Haemophilus influenzae (strain R2866)	HAEI6	3
+Haemophilus influenzae (strain 86-028NP)	HAEI8	3
+Haemophilus influenzae (strain PittEE)	HAEIE	3
+Haemophilus influenzae (strain PittGG)	HAEIG	3
+Haemophilus parainfluenzae (strain T3T1)	HAEP3	3
+Helicobacter pylori (strain 51)	HELP1	3
+Helicobacter pylori (strain P12)	HELP2	3
+Helicobacter pylori (strain B8)	HELP3	3
+Helicobacter pylori (strain Gambia94/24)	HELP4	3
+Helicobacter pylori (strain 52)	HELP5	3
+Helicobacter pylori (strain India7)	HELP7	3
+Helicobacter pylori (strain 908)	HELP9	3
+Helicobacter pylori (strain B38)	HELPB	3
+Helicobacter pylori (strain Cuz20)	HELPC	3
+Helicobacter pylori (strain 35A)	HELPF	3
+Helicobacter pylori (strain G27)	HELPG	3
+Helicobacter pylori (strain HPAG1)	HELPH	3
+Helicobacter pylori (strain F16)	HELPI	3
+Helicobacter pylori (strain J99 / ATCC 700824)	HELPJ	3
+Helicobacter pylori (strain F30)	HELPK	3
+Helicobacter pylori (strain F32)	HELPL	3
+Helicobacter pylori (strain SJM180)	HELPM	3
+Helicobacter pylori (strain PeCan4)	HELPP	3
+Helicobacter pylori (strain F57)	HELPQ	3
+Helicobacter pylori (strain Lithuania75)	HELPR	3
+Helicobacter pylori (strain Shi470)	HELPS	3
+Helicobacter pylori (strain v225d)	HELPV	3
+Helicobacter pylori (strain ATCC 700392 / 26695)	HELPY	3
+Leifsonia xyli subsp. xyli (strain CTCB07)	LEIXX	3
+Anaplasma marginale (strain Florida)	ANAMF	2
+Anaplasma marginale (strain St. Maries)	ANAMM	2
+Anaplasma phagocytophilum (strain HZ)	ANAPZ	2
+Bartonella bacilliformis (strain ATCC 35685 / NCTC 12138 / KC583)	BARBK	2
+Bartonella grahamii (strain as4aup)	BARGA	2
+Bartonella henselae (strain ATCC 49882 / DSM 28221 / Houston 1)	BARHE	2
+Bartonella quintana (strain Toulouse)	BARQU	2
+Bartonella tribocorum (strain CIP 105476 / IBS 506)	BART1	2
+Bartonella vinsonii subsp. berkhoffii (strain Winnie)	BARVW	2
+Ehrlichia ruminantium (strain Gardel)	EHRRG	2
+Ehrlichia ruminantium (strain Welgevonden)	EHRRW	2
+Finegoldia magna (strain ATCC 29328 / DSM 20472 / WAL 2508)	FINM2	2
+Gluconobacter oxydans (strain 621H)	GLUOX	2
+Haemophilus influenzae (strain ATCC 51907 / DSM 11121 / KW20 / Rd)	HAEIN	2
+Orientia tsutsugamushi (strain Boryong)	ORITB	2
+Orientia tsutsugamushi (strain Ikeda)	ORITI	2
+Rickettsia prowazekii (strain Rp22)	RICPP	2
+Rickettsia prowazekii (strain Madrid E)	RICPR	2
+Rickettsia parkeri (strain Portsmouth)	RICPT	2
+Rickettsia rhipicephali (strain 3-7-female6-CWPP)	RICR3	2
+Rickettsia rickettsii (strain Iowa)	RICRO	2
+Rickettsia rickettsii (strain Sheila Smith)	RICRS	2
+Dichelobacter nodosus (strain VCS1703A)	DICNV	1
+Hamiltonella defensa subsp. Acyrthosiphon pisum (strain 5AT)	HAMD5	1
+Liberibacter asiaticus (strain psy62)	LIBAP	1

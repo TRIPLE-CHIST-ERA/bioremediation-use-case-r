@@ -142,7 +142,7 @@ query_wikidata <- load_query_from_file(query_file_wikidata)
 pollutants <- sparql_select(
   endpoint = endpoint_wikidata, query = query_wikidata
 )
-readr::write_tsv(pollutants, "pollutants_table.ttl")
+readr::write_tsv(pollutants, "output/pollutants_table.tsv")
 ```
 
 <br>
@@ -309,6 +309,17 @@ taxa_counts <- oma_taxa |>
   dplyr::count(mnemonic, taxon_sci_name, name = "enzyme_count") |>
   dplyr::arrange(desc(enzyme_count)) |>
   dplyr::select("taxon_sci_name", "mnemonic", "enzyme_count")
+
+# Save output to disk as TSV files.
+readr::write_tsv(
+  oma_taxa |>
+    dplyr::semi_join(bacterial_taxa, by = "mnemonic") |>
+    dplyr::select(
+      "taxon_sci_name",	"taxon", "mnemonic", "ortholog_protein", "oma_link"
+    ),
+  "output/bioremediation_output_taxa_and_enzymes.tsv"
+)
+readr::write_tsv(taxa_counts, "output/bioremediation_output_taxa_counts.tsv")
 ```
 
 <br>
