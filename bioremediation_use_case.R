@@ -1,4 +1,4 @@
-# Chist-ERA TRIPLE demonstrator use-case.
+# CHIST-ERA TRIPLE demonstrator use-case.
 #
 # Script that runs a series of SPARQL queries to identify organisms with
 # potential bioremediation for a set of chemical pollutants.
@@ -17,7 +17,7 @@
 # data (sparql request) is not passed in the header of the request.
 
 # Load SPARQL functions.
-source("../sparqlr.git/sparql.R")
+library(sparqlr)
 source("utils.R")
 
 # Set endpoints and paths to SPARQL queries.
@@ -39,7 +39,11 @@ subquery_file_uniprot <- "queries/subquery_3_uniprot.rq"
 # Step 1: retrieve pollutants from wikidata. Each pollutant is uniquely
 # identified by its CAS registry number (Chemical Abstracts Service).
 query_wikidata <- load_query_from_file(query_file_wikidata)
-pollutants <- sparql_query(endpoint = endpoint_wikidata, query = query_wikidata)
+pollutants <- sparql_select(
+  endpoint = endpoint_wikidata,
+  query = query_wikidata,
+  verbose = TRUE
+)
 
 
 
@@ -51,10 +55,10 @@ pollutants <- sparql_query(endpoint = endpoint_wikidata, query = query_wikidata)
 query_idsm <- load_query_from_file(query_file_idsm)
 
 # Version 1: use the hard-coded SPARQL query for this step of the use-case.
-similar_pollutants <- sparql_query(
+similar_pollutants <- sparql_select(
   endpoint = endpoint_idsm,
   query = query_idsm,
-  use_post = TRUE
+  verbose = TRUE
 )
 
 # Version 2: pass values from the previous step to the SPARQL query.
@@ -65,10 +69,10 @@ cas_values <- pollutants |>
   single_quote() |>
   as_values_clause("cas_number")
 
-similar_pollutants_v2 <- sparql_query(
+similar_pollutants_v2 <- sparql_select(
   endpoint = endpoint_idsm,
   query = replace_values_clause("cas_number", cas_values, query_idsm),
-  use_post = TRUE
+  verbose = TRUE
 )
 # Verify that result is the same as the original query.
 identical(similar_pollutants, similar_pollutants_v2)
@@ -76,18 +80,18 @@ identical(similar_pollutants, similar_pollutants_v2)
 # Version 3: run all steps up to this point as a single federated query that
 # uses subqueries in SERVICE clauses.
 subquery_wikidata <- load_query_from_file(subquery_file_wikidata)
-similar_pollutants_v3 <- sparql_query(
+similar_pollutants_v3 <- sparql_select(
   endpoint = endpoint_idsm,
   query = replace_values_clause(
     var_name = "cas_number",
     replacement = as_service_clause(subquery_wikidata, endpoint_wikidata),
     query = merge_query_prefixes(query_idsm, subquery_wikidata)
   ),
-  use_post = TRUE
+  verbose = TRUE
 )
 # Verify that result is the same as the original query.
 identical(similar_pollutants, similar_pollutants_v3)
-
+identical(similar_pollutants_v2, similar_pollutants_v3)
 
 
 # ------------------------------------------------------------------------------
@@ -103,10 +107,10 @@ identical(similar_pollutants, similar_pollutants_v3)
 query_uniprot <- load_query_from_file(query_file_uniprot)
 
 # Version 1: use the hard-coded SPARQL query for this step of the use-case.
-uniprot_ids <- sparql_query(
+uniprot_ids <- sparql_select(
   endpoint = endpoint_uniprot,
   query = query_uniprot,
-  use_post = TRUE
+  verbose = TRUE
 )
 
 # Version 2: pass values from the previous step to the SPARQL query.
@@ -117,12 +121,12 @@ chebi_values <- similar_pollutants_v2 |>
   stringr::str_replace("http://purl.obolibrary.org/obo/CHEBI_", "CHEBI:") |>
   as_values_clause("similar_compound_chebi")
 
-uniprot_ids_v2 <- sparql_query(
+uniprot_ids_v2 <- sparql_select(
   endpoint = endpoint_uniprot,
   query = replace_values_clause(
     "similar_compound_chebi", chebi_values, query_uniprot
   ),
-  use_post = TRUE
+  verbose = TRUE
 )
 # Verify that result is the same as the original query.
 identical(uniprot_ids, uniprot_ids_v2)
@@ -130,14 +134,14 @@ identical(uniprot_ids, uniprot_ids_v2)
 # Version 3: run all steps up to this point as a single federated query that
 # uses subqueries in SERVICE clauses.
 sub_query_idsm <- load_query_from_file(subquery_file_idsm)
-uniprot_ids_v3 <- sparql_query(
+uniprot_ids_v3 <- sparql_select(
   endpoint = endpoint_uniprot,
   query = replace_values_clause(
     var_name = "similar_compound_chebi",
     replacement = as_service_clause(sub_query_idsm, endpoint_idsm),
     query = merge_query_prefixes(query_uniprot, sub_query_idsm)
   ),
-  use_post = TRUE
+  verbose = TRUE
 )
 # Verify that result is the same as the original query.
 identical(uniprot_ids, uniprot_ids_v3)
@@ -153,10 +157,11 @@ identical(uniprot_ids, uniprot_ids_v3)
 query_oma <- load_query_from_file(query_file_oma, remove_comments = TRUE)
 
 # Version 1: use the hard-coded SPARQL query for this step of the use-case.
-oma_taxons <- sparql_query(
+oma_taxons <- sparql_select(
   endpoint = endpoint_oma,
   query = query_oma,
-  use_post = FALSE
+  request_method = "GET",
+  verbose = TRUE
 )
 
 # Version 2: pass values from the previous step to the SPARQL query.
@@ -167,10 +172,10 @@ uniprot_values <- uniprot_ids_v2 |>
   stringr::str_replace("http://purl.uniprot.org/uniprot/", "upk:") |>
   as_values_clause("uniprot")
 
-oma_taxons_v2 <- sparql_query(
+oma_taxons_v2 <- sparql_select(
   endpoint = endpoint_oma,
   query = replace_values_clause("uniprot", uniprot_values, query_oma),
-  use_post = FALSE
+  verbose = TRUE
 )
 # Verify that result is the same as the original query.
 identical(oma_taxons, oma_taxons_v2)
@@ -185,14 +190,14 @@ identical(oma_taxons, oma_taxons_v2)
 #     web interface. The reason why is not fully clear, but maybe it's due to
 #     the too many levels of nested SERVICE clauses.
 sub_query_uniprot <- load_query_from_file(subquery_file_uniprot)
-oma_taxons_v3 <- sparql_query(
+oma_taxons_v3 <- sparql_select(
   endpoint = endpoint_oma,
   query = replace_values_clause(
     var_name = "uniprot",
     replacement = as_service_clause(sub_query_uniprot, endpoint_uniprot),
     query = merge_query_prefixes(query_oma, sub_query_uniprot)
   ),
-  use_post = FALSE
+  verbose = TRUE
 )
 # Verify that result is the same as the original query.
 identical(oma_taxons, oma_taxons_v3)

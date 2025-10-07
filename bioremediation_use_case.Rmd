@@ -74,10 +74,8 @@ The steps involved in this demonstrator pipeline are the following:
 
 ```{r load-env}
 library(rlang)
-
-# Load our own SPARQL library and helper functions.
-source("../sparqlr.git/sparql.R")
-source("utils.R")
+library(sparqlr)
+source("utils.R")  # Load helper functions.
 
 # Set endpoints and paths to SPARQL queries used throughout the use-case.
 endpoint_wikidata <- "https://query.wikidata.org/sparql"
@@ -141,7 +139,7 @@ retrieved via the following commands:
 
 ```r
 query_wikidata <- load_query_from_file(query_file_wikidata)
-pollutants <- sparql_query(
+pollutants <- sparql_select(
   endpoint = endpoint_wikidata, query = query_wikidata
 )
 readr::write_tsv(pollutants, "pollutants_table.ttl")
@@ -166,14 +164,13 @@ dictionary of molecular entities focused on "small" chemical compounds.
 ```{r step-2-run-query, echo=TRUE, message=FALSE}
 query_idsm <- load_query_from_file(query_file_idsm)
 
-similar_pollutants <- sparql_query(
+similar_pollutants <- sparql_select(
   endpoint = endpoint_idsm,
   query = replace_values_clause(
     "cas_number",
     as_values_clause(single_quote(pollutant_cas_number), "cas_number"),
     query_idsm
-  ),
-  use_post = TRUE
+  )
 )
 ```
 
@@ -234,14 +231,13 @@ chebi_values <- similar_pollutants |>
     "CHEBI:\\1"
   )
 
-uniprot_ids <- sparql_query(
+uniprot_ids <- sparql_select(
   endpoint = endpoint_uniprot,
   query = replace_values_clause(
     "similar_compound_chebi",
     as_values_clause(chebi_values, "similar_compound_chebi"),
     query_uniprot
-  ),
-  use_post = TRUE
+  )
 )
 ```
 
@@ -285,14 +281,14 @@ uniprot_values <- uniprot_ids |>
   sort() |>
   stringr::str_replace("<http://purl.uniprot.org/uniprot/(.*)>", "upk:\\1")
 
-oma_taxa <- sparql_query(
+oma_taxa <- sparql_select(
   endpoint = endpoint_oma,
   query = replace_values_clause(
     "uniprot",
     as_values_clause(uniprot_values, "uniprot"),
     query_oma
   ),
-  use_post = FALSE
+  request_method = "GET"
 )
 
 # Filter the OMA results to keep only bacterial taxa.
@@ -304,13 +300,12 @@ query_uniprot_mnemonic <- load_query_from_file(
   query_file_uniprot_mnemonic,
   remove_comments = TRUE
 )
-bacterial_taxon <- sparql_query(
+bacterial_taxa <- sparql_select(
   endpoint = endpoint_uniprot,
-  query = query_uniprot_mnemonic,
-  use_post = TRUE
+  query = query_uniprot_mnemonic
 )
 taxa_counts <- oma_taxa |>
-  dplyr::semi_join(bacterial_taxon, by = "mnemonic") |>
+  dplyr::semi_join(bacterial_taxa, by = "mnemonic") |>
   dplyr::count(mnemonic, taxon_sci_name, name = "enzyme_count") |>
   dplyr::arrange(desc(enzyme_count)) |>
   dplyr::select("taxon_sci_name", "mnemonic", "enzyme_count")
@@ -422,7 +417,7 @@ constr_3 <- sparql_construct(
 # Load data for chemical compounds and proteins from wikidata.
 query_file_wikidata_chebi <- "queries/query_6_wikidata_chebi_info.rq"
 query_wikidata_chebi <- load_query_from_file(query_file_wikidata_chebi)
-wikidata_chebi_info <- sparql_query(
+wikidata_chebi_info <- sparql_select(
   endpoint = endpoint_wikidata,
   query = query_wikidata_chebi,
   prefixes = prefixes_all,
@@ -430,7 +425,7 @@ wikidata_chebi_info <- sparql_query(
 )
 query_file_wikidata_uniprot <- "queries/query_7_wikidata_uniprot_info.rq"
 query_wikidata_uniprot <- load_query_from_file(query_file_wikidata_uniprot)
-wikidata_uniprot_info <- sparql_query(
+wikidata_uniprot_info <- sparql_select(
   endpoint = endpoint_wikidata,
   query = query_wikidata_uniprot,
   prefixes = prefixes_all,
