@@ -16,7 +16,9 @@
 # passed in the header of the HTTPS request, whereas in a POST request the
 # data (sparql request) is not passed in the header of the request.
 
+
 # Load SPARQL functions.
+# Install "sparqlr" library: remotes::install_github("sib-swiss/sparqlr")
 library(sparqlr)
 source("utils.R")
 
@@ -114,11 +116,19 @@ uniprot_ids <- sparql_select(
 )
 
 # Version 2: pass values from the previous step to the SPARQL query.
+prefixes <- tibble::tibble(
+  short = c("CHEBI", "upk"),
+  long  = c(
+    "http://purl.obolibrary.org/obo/CHEBI_",
+    "http://purl.uniprot.org/uniprot/"
+  )
+)
+
 chebi_values <- similar_pollutants_v2 |>
+  sparqlr::modify_iri_style(prefixes, iri_style = "short") |>
   dplyr::pull("similar_compound_chebi") |>
   sort() |>
   unique() |>
-  stringr::str_replace("http://purl.obolibrary.org/obo/CHEBI_", "CHEBI:") |>
   as_values_clause("similar_compound_chebi")
 
 uniprot_ids_v2 <- sparql_select(
@@ -166,15 +176,16 @@ oma_taxons <- sparql_select(
 
 # Version 2: pass values from the previous step to the SPARQL query.
 uniprot_values <- uniprot_ids_v2 |>
+  sparqlr::modify_iri_style(prefixes, iri_style = "short") |>
   dplyr::pull("uniprot") |>
   unique() |>
   sort() |>
-  stringr::str_replace("http://purl.uniprot.org/uniprot/", "upk:") |>
   as_values_clause("uniprot")
 
 oma_taxons_v2 <- sparql_select(
   endpoint = endpoint_oma,
   query = replace_values_clause("uniprot", uniprot_values, query_oma),
+  request_method = "GET",
   verbose = TRUE
 )
 # Verify that result is the same as the original query.
