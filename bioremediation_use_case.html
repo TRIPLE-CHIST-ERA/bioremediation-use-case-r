@@ -5682,6 +5682,7 @@ pre code {
 </div>
 
 
+<!-- To run this file in VS code: Ctrl + Shift + k -->
 <p><br> <br></p>
 <div id="bioremediation-use-case-description" class="section level2">
 <h2>Bioremediation use-case description</h2>
@@ -5715,10 +5716,8 @@ pre code {
 <div id="environment-setup" class="section level3">
 <h3>Environment setup</h3>
 <pre class="r"><code>library(rlang)
-
-# Load our own SPARQL library and helper functions.
-source(&quot;../sparqlr.git/sparql.R&quot;)
-source(&quot;utils.R&quot;)
+library(sparqlr)
+source(&quot;utils.R&quot;)  # Load helper functions.
 
 # Set endpoints and paths to SPARQL queries used throughout the use-case.
 endpoint_wikidata &lt;- &quot;https://query.wikidata.org/sparql&quot;
@@ -5742,12 +5741,20 @@ pollutant_name &lt;- &quot;atrazine&quot;</code></pre>
 <h3>Step 1: retrieve the CAS number of atrazine from a Solid Pod</h3>
 <p>The first step of the use-case demonstrates the retrieval of data from a <a href="https://solidproject.org">Solid Pod</a>.</p>
 <p>Specifically, the following table with a list of pollutants and their <a href="https://www.cas.org/about/cas-content">CAS registry number (Chemical Abstracts Service)</a> is retrieved.</p>
-<pre class="r"><code># Retrieve data from a Solid Pod.
-pollutant_table_source &lt;- paste0(
-  &quot;https://triple.ilabt.imec.be/bioremediation-use-case/&quot;,
-  &quot;input/pollutants_table.ttl&quot;
-)
-pollutants &lt;- read.table(pollutant_table_source, sep = &quot;\t&quot;, header = TRUE)
+<pre class="r"><code>get_pollutants_from_solid_pod &lt;- FALSE
+if (get_pollutants_from_solid_pod) {
+  # Retrieve data from a Solid Pod.
+  pollutant_table_source &lt;- paste0(
+    &quot;https://triple.ilabt.imec.be/bioremediation-use-case/&quot;,
+    &quot;input/pollutants_table.ttl&quot;
+  )
+  pollutants &lt;- read.table(pollutant_table_source, sep = &quot;\t&quot;, header = TRUE)
+} else {
+  # Retrieve pollutant data from a local file. Use when Solid Pod is offline.
+  pollutants &lt;- read.table(
+    &quot;output/pollutants_table.tsv&quot;, sep = &quot;\t&quot;, header = TRUE
+  )
+}
 pollutant_cas_number &lt;- pollutants[
   pollutants$compoundLabel == pollutant_name, &quot;cas_number&quot;
 ]</code></pre>
@@ -5802,10 +5809,10 @@ pollutant_cas_number &lt;- pollutants[
 <p><br></p>
 <p><em>Note:</em> the data in the table downloaded from the Solid Pod was originally retrieved via the following commands:</p>
 <pre class="r"><code>query_wikidata &lt;- load_query_from_file(query_file_wikidata)
-pollutants &lt;- sparql_query(
+pollutants &lt;- sparql_select(
   endpoint = endpoint_wikidata, query = query_wikidata
 )
-readr::write_tsv(pollutants, &quot;pollutants_table.ttl&quot;)</code></pre>
+readr::write_tsv(pollutants, &quot;output/pollutants_table.tsv&quot;)</code></pre>
 <p><br></p>
 </div>
 <div id="step-2-identify-chemical-substances-similar-to-atrazine" class="section level3">
@@ -5814,14 +5821,13 @@ readr::write_tsv(pollutants, &quot;pollutants_table.ttl&quot;)</code></pre>
 <p>The query is made using the <a href="https://www.cas.org/about/cas-content">CAS number</a>, a unique ID for chemical substances, assigned by the Chemical Abstracts Service (CAS). It returns a list of similar chemical compounds, that are identified by their <a href="https://www.ebi.ac.uk/chebi/aboutChebiForward.do">ChEBI identifier</a>. Chemical Entities of Biological Interest (ChEBI) is a freely available dictionary of molecular entities focused on “small” chemical compounds.</p>
 <pre class="r"><code>query_idsm &lt;- load_query_from_file(query_file_idsm)
 
-similar_pollutants &lt;- sparql_query(
+similar_pollutants &lt;- sparql_select(
   endpoint = endpoint_idsm,
   query = replace_values_clause(
     &quot;cas_number&quot;,
     as_values_clause(single_quote(pollutant_cas_number), &quot;cas_number&quot;),
     query_idsm
-  ),
-  use_post = TRUE
+  )
 )</code></pre>
 <p>Here are some of the chemical compounds similar to atrazine returned by the query:</p>
 <table>
@@ -5838,20 +5844,20 @@ similar_pollutants &lt;- sparql_query(
 <td align="left">1.0000000</td>
 </tr>
 <tr class="even">
-<td align="left"><a href="http://purl.obolibrary.org/obo/CHEBI_83790">obo:CHEBI_83790</a></td>
-<td align="left">0.7575758</td>
-</tr>
-<tr class="odd">
-<td align="left"><a href="http://purl.obolibrary.org/obo/CHEBI_83789">obo:CHEBI_83789</a></td>
-<td align="left">0.7575758</td>
-</tr>
-<tr class="even">
-<td align="left"><a href="http://purl.obolibrary.org/obo/CHEBI_83791">obo:CHEBI_83791</a></td>
-<td align="left">0.7575758</td>
+<td align="left"><a href="http://purl.obolibrary.org/obo/CHEBI_38067">obo:CHEBI_38067</a></td>
+<td align="left">0.7058824</td>
 </tr>
 <tr class="odd">
 <td align="left"><a href="http://purl.obolibrary.org/obo/CHEBI_82227">obo:CHEBI_82227</a></td>
 <td align="left">0.7142857</td>
+</tr>
+<tr class="even">
+<td align="left"><a href="http://purl.obolibrary.org/obo/CHEBI_83789">obo:CHEBI_83789</a></td>
+<td align="left">0.7575758</td>
+</tr>
+<tr class="odd">
+<td align="left"><a href="http://purl.obolibrary.org/obo/CHEBI_83790">obo:CHEBI_83790</a></td>
+<td align="left">0.7575758</td>
 </tr>
 </tbody>
 </table>
@@ -5876,23 +5882,22 @@ chebi_values &lt;- similar_pollutants |&gt;
     &quot;CHEBI:\\1&quot;
   )
 
-uniprot_ids &lt;- sparql_query(
+uniprot_ids &lt;- sparql_select(
   endpoint = endpoint_uniprot,
   query = replace_values_clause(
     &quot;similar_compound_chebi&quot;,
     as_values_clause(chebi_values, &quot;similar_compound_chebi&quot;),
     query_uniprot
-  ),
-  use_post = TRUE
+  )
 )</code></pre>
 <p><br></p>
 <p>Here are some of the enzymes retrieved by the query:</p>
 <table>
 <caption>Examples of enzymes involved in the metabolic reaction involving atrazine or a structurally similar compound.</caption>
 <colgroup>
-<col width="12%"></col>
-<col width="10%"></col>
-<col width="76%"></col>
+<col width="7%"></col>
+<col width="4%"></col>
+<col width="88%"></col>
 </colgroup>
 <thead>
 <tr class="header">
@@ -5903,29 +5908,29 @@ uniprot_ids &lt;- sparql_query(
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left"><a href="http://purl.uniprot.org/uniprot/P72156">upk:P72156</a></td>
-<td align="left"><a href="http://rdf.rhea-db.org/11312">rh:11312</a></td>
-<td align="left">atrazine + H2O = hydroxyatrazine + chloride + H(+)</td>
+<td align="left"><a href="http://purl.uniprot.org/uniprot/A0A059WI14">upk:A0A059WI14</a></td>
+<td align="left"><a href="http://rdf.rhea-db.org/82323">rh:82323</a></td>
+<td align="left">methylarsonous acid + AH2 + O2 = arsenite + methanol + A + H(+)</td>
 </tr>
 <tr class="even">
-<td align="left"><a href="http://purl.uniprot.org/uniprot/O66908">upk:O66908</a></td>
-<td align="left"><a href="http://rdf.rhea-db.org/11348">rh:11348</a></td>
-<td align="left">arsenite(in) + ATP + H2O = arsenite(out) + ADP + phosphate + H(+)</td>
+<td align="left"><a href="http://purl.uniprot.org/uniprot/A0A059WI14">upk:A0A059WI14</a></td>
+<td align="left"><a href="http://rdf.rhea-db.org/82363">rh:82363</a></td>
+<td align="left">roxarsone (III) + AH2 + O2 = 4-hydroxy-3-nitrocyclohexa-2,5-dien-1-one + arsenite + A + H(+)</td>
 </tr>
 <tr class="odd">
-<td align="left"><a href="http://purl.uniprot.org/uniprot/O66674">upk:O66674</a></td>
-<td align="left"><a href="http://rdf.rhea-db.org/11348">rh:11348</a></td>
-<td align="left">arsenite(in) + ATP + H2O = arsenite(out) + ADP + phosphate + H(+)</td>
+<td align="left"><a href="http://purl.uniprot.org/uniprot/A0A059WI14">upk:A0A059WI14</a></td>
+<td align="left"><a href="http://rdf.rhea-db.org/82439">rh:82439</a></td>
+<td align="left">nitarsone (III) + AH2 + O2 = 4-nitrocyclohexa-2,5-dien-1-one + arsenite + A + H(+)</td>
 </tr>
 <tr class="even">
-<td align="left"><a href="http://purl.uniprot.org/uniprot/O52027">upk:O52027</a></td>
-<td align="left"><a href="http://rdf.rhea-db.org/11348">rh:11348</a></td>
-<td align="left">arsenite(in) + ATP + H2O = arsenite(out) + ADP + phosphate + H(+)</td>
+<td align="left"><a href="http://purl.uniprot.org/uniprot/A0A059WI14">upk:A0A059WI14</a></td>
+<td align="left"><a href="http://rdf.rhea-db.org/82443">rh:82443</a></td>
+<td align="left">4-aminophenylarsonous acid + AH2 + O2 = 4-aminocyclohexa-2,5-dien-1-one + arsenite + A</td>
 </tr>
 <tr class="odd">
-<td align="left"><a href="http://purl.uniprot.org/uniprot/O50593">upk:O50593</a></td>
-<td align="left"><a href="http://rdf.rhea-db.org/11348">rh:11348</a></td>
-<td align="left">arsenite(in) + ATP + H2O = arsenite(out) + ADP + phosphate + H(+)</td>
+<td align="left"><a href="http://purl.uniprot.org/uniprot/A0A0D3MJQ5">upk:A0A0D3MJQ5</a></td>
+<td align="left"><a href="http://rdf.rhea-db.org/69432">rh:69432</a></td>
+<td align="left">arsenic triglutathione + 3 [thioredoxin]-dithiol + 3 S-adenosyl-L-methionine = trimethylarsine + 3 [thioredoxin]-disulfide + 3 glutathione + 3 S-adenosyl-L-homocysteine + 3 H(+)</td>
 </tr>
 </tbody>
 </table>
@@ -5943,14 +5948,14 @@ uniprot_values &lt;- uniprot_ids |&gt;
   sort() |&gt;
   stringr::str_replace(&quot;&lt;http://purl.uniprot.org/uniprot/(.*)&gt;&quot;, &quot;upk:\\1&quot;)
 
-oma_taxa &lt;- sparql_query(
+oma_taxa &lt;- sparql_select(
   endpoint = endpoint_oma,
   query = replace_values_clause(
     &quot;uniprot&quot;,
     as_values_clause(uniprot_values, &quot;uniprot&quot;),
     query_oma
   ),
-  use_post = FALSE
+  request_method = &quot;GET&quot;
 )
 
 # Filter the OMA results to keep only bacterial taxa.
@@ -5962,16 +5967,26 @@ query_uniprot_mnemonic &lt;- load_query_from_file(
   query_file_uniprot_mnemonic,
   remove_comments = TRUE
 )
-bacterial_taxon &lt;- sparql_query(
+bacterial_taxa &lt;- sparql_select(
   endpoint = endpoint_uniprot,
-  query = query_uniprot_mnemonic,
-  use_post = TRUE
+  query = query_uniprot_mnemonic
 )
 taxa_counts &lt;- oma_taxa |&gt;
-  dplyr::semi_join(bacterial_taxon, by = &quot;mnemonic&quot;) |&gt;
+  dplyr::semi_join(bacterial_taxa, by = &quot;mnemonic&quot;) |&gt;
   dplyr::count(mnemonic, taxon_sci_name, name = &quot;enzyme_count&quot;) |&gt;
   dplyr::arrange(desc(enzyme_count)) |&gt;
-  dplyr::select(&quot;taxon_sci_name&quot;, &quot;mnemonic&quot;, &quot;enzyme_count&quot;)</code></pre>
+  dplyr::select(&quot;taxon_sci_name&quot;, &quot;mnemonic&quot;, &quot;enzyme_count&quot;)
+
+# Save output to disk as TSV files.
+readr::write_tsv(
+  oma_taxa |&gt;
+    dplyr::semi_join(bacterial_taxa, by = &quot;mnemonic&quot;) |&gt;
+    dplyr::select(
+      &quot;taxon_sci_name&quot;, &quot;taxon&quot;, &quot;mnemonic&quot;, &quot;ortholog_protein&quot;, &quot;oma_link&quot;
+    ),
+  &quot;output/bioremediation_output_taxa_and_enzymes.tsv&quot;
+)
+readr::write_tsv(taxa_counts, &quot;output/bioremediation_output_taxa_counts.tsv&quot;)</code></pre>
 <p><br></p>
 <p>This query identifies <strong>829</strong> bacterial species with potential for bioremediation of <strong>atrazine</strong>.</p>
 <p>Here are the 10 that have the highest number of mappings to enzymes potentially involved in the metabolic degradation of atrazine (i.e. something that could be interpreted as having higher likelihood of providing potential for bioremediation for atrazine).</p>
@@ -6056,10 +6071,10 @@ taxa_counts &lt;- oma_taxa |&gt;
 </ul>
 <p>As can be seen in the figure below, only the cluster for atrazine is linked across the 3 SPARQL endpoints. Other clusters do not have any link with a protein/enzyme in the Uniprot database.</p>
 <p><br></p>
-<p><em>Note:</em> performing a "mouse-over" on the nodes in the figure below will show more detailed information about the node, when available.</p>
+<p><em>Note:</em> performing a “mouse-over” on the nodes in the figure below will show more detailed information about the node, when available.</p>
 <p><br></p>
-<div class="visNetwork html-widget html-fill-item" id="htmlwidget-c9a2fa6a1bbe3c85a387" style="width:100%;height:600px;"></div>
-<script type="application/json" data-for="htmlwidget-c9a2fa6a1bbe3c85a387">{"x":{"nodes":{"id":["CHEBI:15930","CHEBI:2564","CHEBI:3015","CHEBI:38067","CHEBI:40036","CHEBI:81950","CHEBI:82059","CHEBI:82083","CHEBI:82100","CHEBI:82227","CHEBI:82256","CHEBI:83789","CHEBI:83790","CHEBI:83791","CHEBI:9330","cas:17804-35-2","cas:1912-24-9","cas:309-00-2","cas:61-82-5","cas:7773-06-0","cas:86-88-4","cmp:CID12310947","cmp:CID1639","cmp:CID2256","cmp:CID24482","cmp:CID28780","cmp:CID736366","rh:11312","rh:Compound_2458","upk:P72156","upt:47660","wd:Q1014257","wd:Q408652","wd:Q409054","wd:Q413532","wd:Q420172","wd:Q423314"],"color":["#7AD363","#d4f363","#d4f363","#d4f363","#d4f363","#d4f363","#d4f363","#d4f363","#d4f363","#d4f363","#d4f363","#d4f363","#d4f363","#d4f363","#d4f363","#D40000","#D40000","#D40000","#D40000","#D40000","#D40000","#d4f363","#d4f363","#d4f363","#d4f363","#d4f363","#d4f363","#7ad3f7","#7ad3f7","#7ad3f7","#7ad3f7","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000"],"p.direct.P2240":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"2000 | 2 | 3100 | 3900 | 5760","235 | 626 | 672 | 1 | 2 | 3 | 700 | 5200 | 7500 | 750 | 850","100 | 10 | 20 | 3 | 40 | 4 | 50 | 90 | 150 | 15 | 18 | 21 | 33 | 38 | 39 | 44 | 520 | 5.8 | 62 | 65 | 7.2 | 75 | 84 | 98 | 42.1 | 56.2 | 1999","10 | 5 | 6 | 16 | 350 | 0.38 | 175 | 2.47 | 4250 | 500 | 700 | 2500","100 | 10 | 1","200 | 1100 | 14700"],"p.direct.P231":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"7773-06-0","1912-24-9","309-00-2","86-88-4","17804-35-2","61-82-5"],"p.direct.P232":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"231-871-7","217-617-8","206-215-8","201-706-3","241-775-7","200-521-5"],"title":["<b>Name:<\/b> atrazine<br><b>Wiki Id:<\/b> wd:Q408652<br><b>CAS:<\/b> 1912-24-9<br><b>CHEBI:<\/b> CHEBI:15930<br><img src='http://commons.wikimedia.org/wiki/Special:FilePath/Atrazin.svg' width='200' height='200'>","<b>Name:<\/b> aldrin<br><b>Wiki Id:<\/b> wd:Q409054<br><b>CAS:<\/b> 309-00-2<br><b>CHEBI:<\/b> CHEBI:2564<br><img src='http://commons.wikimedia.org/wiki/Special:FilePath/Aldrin.svg' width='200' height='200'>","<b>Name:<\/b> benomyl<br><b>Wiki Id:<\/b> wd:Q420172<br><b>CAS:<\/b> 17804-35-2<br><b>CHEBI:<\/b> CHEBI:3015<br><img src='http://commons.wikimedia.org/wiki/Special:FilePath/Benomyl.png' width='200' height='200'>","<b>Name:<\/b> propazine<br><b>Wiki Id:<\/b> wd:Q1953551<br><b>CAS:<\/b> 139-40-2<br><b>CHEBI:<\/b> CHEBI:38067<br><img src='http://commons.wikimedia.org/wiki/Special:FilePath/Propazine.svg' width='200' height='200'>","<b>Name:<\/b> amitrole<br><b>Wiki Id:<\/b> wd:Q423314<br><b>CAS:<\/b> 61-82-5<br><b>CHEBI:<\/b> CHEBI:40036<br><img src='http://commons.wikimedia.org/wiki/Special:FilePath/1H-1%2C2%2C4-triazol-3-amine%20200.svg' width='200' height='200'>","<b>Name:<\/b> ammonium sulfamate<br><b>Wiki Id:<\/b> wd:Q1014257<br><b>CAS:<\/b> 7773-06-0<br><b>CHEBI:<\/b> CHEBI:81950<br><img src='http://commons.wikimedia.org/wiki/Special:FilePath/Ammonium%20sulfamate.png' width='200' height='200'>","CHEBI:82059<br>No data for this compound on wikidata","CHEBI:82083<br>No data for this compound on wikidata","<b>Name:<\/b> Isodrin<br><b>Wiki Id:<\/b> wd:Q18589682<br><b>CAS:<\/b> 465-73-6<br><b>CHEBI:<\/b> CHEBI:82100<br><img src='http://commons.wikimedia.org/wiki/Special:FilePath/Isodrin.svg' width='200' height='200'>","CHEBI:82227<br>No data for this compound on wikidata","<b>Name:<\/b> ANTU<br><b>Wiki Id:<\/b> wd:Q413532<br><b>CAS:<\/b> 86-88-4<br><b>CHEBI:<\/b> CHEBI:82256<br><img src='http://commons.wikimedia.org/wiki/Special:FilePath/Alfa-nafthylthioureum.png' width='200' height='200'>","CHEBI:83789<br>No data for this compound on wikidata","CHEBI:83790<br>No data for this compound on wikidata","CHEBI:83791<br>No data for this compound on wikidata","<b>Name:<\/b> sulfamic acid<br><b>Wiki Id:<\/b> wd:Q412304<br><b>CAS:<\/b> 5329-14-6<br><b>CHEBI:<\/b> CHEBI:9330<br><img src='http://commons.wikimedia.org/wiki/Special:FilePath/Sulfamic-acid.png' width='200' height='200'>","cas:17804-35-2<br>No data for this compound on wikidata","cas:1912-24-9<br>No data for this compound on wikidata","cas:309-00-2<br>No data for this compound on wikidata","cas:61-82-5<br>No data for this compound on wikidata","cas:7773-06-0<br>No data for this compound on wikidata","cas:86-88-4<br>No data for this compound on wikidata","cmp:CID12310947<br>No data for this compound on wikidata","cmp:CID1639<br>No data for this compound on wikidata","cmp:CID2256<br>No data for this compound on wikidata","cmp:CID24482<br>No data for this compound on wikidata","cmp:CID28780<br>No data for this compound on wikidata","cmp:CID736366<br>No data for this compound on wikidata","rh:11312","rh:Compound_2458","upk:P72156","upt:47660","<b>Name:<\/b> ammonium sulfamate<br><b>Wiki Id:<\/b> wd:Q1014257<br><b>CAS:<\/b> 7773-06-0<br><b>CHEBI:<\/b> CHEBI:81950<br><img src='http://commons.wikimedia.org/wiki/Special:FilePath/Ammonium%20sulfamate.png' width='200' height='200'>","<b>Name:<\/b> atrazine<br><b>Wiki Id:<\/b> wd:Q408652<br><b>CAS:<\/b> 1912-24-9<br><b>CHEBI:<\/b> CHEBI:15930<br><img src='http://commons.wikimedia.org/wiki/Special:FilePath/Atrazin.svg' width='200' height='200'>","<b>Name:<\/b> aldrin<br><b>Wiki Id:<\/b> wd:Q409054<br><b>CAS:<\/b> 309-00-2<br><b>CHEBI:<\/b> CHEBI:2564<br><img src='http://commons.wikimedia.org/wiki/Special:FilePath/Aldrin.svg' width='200' height='200'>","<b>Name:<\/b> ANTU<br><b>Wiki Id:<\/b> wd:Q413532<br><b>CAS:<\/b> 86-88-4<br><b>CHEBI:<\/b> CHEBI:82256<br><img src='http://commons.wikimedia.org/wiki/Special:FilePath/Alfa-nafthylthioureum.png' width='200' height='200'>","<b>Name:<\/b> benomyl<br><b>Wiki Id:<\/b> wd:Q420172<br><b>CAS:<\/b> 17804-35-2<br><b>CHEBI:<\/b> CHEBI:3015<br><img src='http://commons.wikimedia.org/wiki/Special:FilePath/Benomyl.png' width='200' height='200'>","<b>Name:<\/b> amitrole<br><b>Wiki Id:<\/b> wd:Q423314<br><b>CAS:<\/b> 61-82-5<br><b>CHEBI:<\/b> CHEBI:40036<br><img src='http://commons.wikimedia.org/wiki/Special:FilePath/1H-1%2C2%2C4-triazol-3-amine%20200.svg' width='200' height='200'>"],"group":["IDSM","IDSM","IDSM","IDSM","IDSM","IDSM","IDSM","IDSM","IDSM","IDSM","IDSM","IDSM","IDSM","IDSM","IDSM","Wikidata","Wikidata","Wikidata","Wikidata","Wikidata","Wikidata","IDSM","IDSM","IDSM","IDSM","IDSM","IDSM","Uniprot","Uniprot","Uniprot","Uniprot","Wikidata","Wikidata","Wikidata","Wikidata","Wikidata","Wikidata"],"ex.hasCASnumber":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"309-00-2","61-82-5","1912-24-9","7773-06-0","17804-35-2","86-88-4",null,null,null,null,null,null,null,null,null,null],"rh.accession":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"RHEA:11312",null,null,null,null,null,null,null,null,null],"rh.equation":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"atrazine + H2O = hydroxyatrazine + chloride + H(+)",null,null,null,null,null,null,null,null,null],"up.mnemonic":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"ATZA_PSESD",null,null,null,null,null,null,null],"up.reviewed":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"true",null,null,null,null,null,null,null],".groups":["drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop"],"label":["CHEBI:15930","CHEBI:2564","CHEBI:3015","CHEBI:38067","CHEBI:40036","CHEBI:81950","CHEBI:82059","CHEBI:82083","CHEBI:82100","CHEBI:82227","CHEBI:82256","CHEBI:83789","CHEBI:83790","CHEBI:83791","CHEBI:9330","cas:17804-35-2","cas:1912-24-9","cas:309-00-2","cas:61-82-5","cas:7773-06-0","cas:86-88-4","cmp:CID12310947","cmp:CID1639","cmp:CID2256","cmp:CID24482","cmp:CID28780","cmp:CID736366","rh:11312","rh:Compound_2458","upk:P72156","upt:47660","wd:Q1014257","wd:Q408652","wd:Q409054","wd:Q413532","wd:Q420172","wd:Q423314"]},"edges":{"from":["wd:Q1014257","wd:Q408652","wd:Q409054","wd:Q413532","wd:Q420172","wd:Q423314","cmp:CID12310947","cmp:CID12310947","cmp:CID12310947","cmp:CID1639","cmp:CID1639","cmp:CID2256","cmp:CID2256","cmp:CID2256","cmp:CID2256","cmp:CID2256","cmp:CID2256","cmp:CID2256","cmp:CID24482","cmp:CID24482","cmp:CID24482","cmp:CID28780","cmp:CID28780","cmp:CID28780","cmp:CID28780","cmp:CID736366","cmp:CID736366","upk:P72156","upk:P72156","rh:11312","rh:Compound_2458"],"to":["cas:7773-06-0","cas:1912-24-9","cas:309-00-2","cas:86-88-4","cas:17804-35-2","cas:61-82-5","CHEBI:2564","CHEBI:82100","cas:309-00-2","CHEBI:40036","cas:61-82-5","CHEBI:15930","CHEBI:38067","CHEBI:82227","CHEBI:83789","CHEBI:83790","CHEBI:83791","cas:1912-24-9","CHEBI:81950","CHEBI:9330","cas:7773-06-0","CHEBI:3015","CHEBI:82059","CHEBI:82083","cas:17804-35-2","CHEBI:82256","cas:86-88-4","upt:47660","rh:11312","rh:Compound_2458","CHEBI:15930"],"edge":["ex:hasCASnumberIRI","ex:hasCASnumberIRI","ex:hasCASnumberIRI","ex:hasCASnumberIRI","ex:hasCASnumberIRI","ex:hasCASnumberIRI","ex:hasSimilarCompound","ex:hasSimilarCompound","ex:hasCASnumberIRI","ex:hasSimilarCompound","ex:hasCASnumberIRI","ex:hasSimilarCompound","ex:hasSimilarCompound","ex:hasSimilarCompound","ex:hasSimilarCompound","ex:hasSimilarCompound","ex:hasSimilarCompound","ex:hasCASnumberIRI","ex:hasSimilarCompound","ex:hasSimilarCompound","ex:hasCASnumberIRI","ex:hasSimilarCompound","ex:hasSimilarCompound","ex:hasSimilarCompound","ex:hasCASnumberIRI","ex:hasSimilarCompound","ex:hasCASnumberIRI","up:organism","ex:activityCatalyzedReaction","ex:RheaSideContains","ex:hasCompoundInCHEBI"],"label":["ex:hasCASnumberIRI","ex:hasCASnumberIRI","ex:hasCASnumberIRI","ex:hasCASnumberIRI","ex:hasCASnumberIRI","ex:hasCASnumberIRI","ex:hasSimilarCompound","ex:hasSimilarCompound","ex:hasCASnumberIRI","ex:hasSimilarCompound","ex:hasCASnumberIRI","ex:hasSimilarCompound","ex:hasSimilarCompound","ex:hasSimilarCompound","ex:hasSimilarCompound","ex:hasSimilarCompound","ex:hasSimilarCompound","ex:hasCASnumberIRI","ex:hasSimilarCompound","ex:hasSimilarCompound","ex:hasCASnumberIRI","ex:hasSimilarCompound","ex:hasSimilarCompound","ex:hasSimilarCompound","ex:hasCASnumberIRI","ex:hasSimilarCompound","ex:hasCASnumberIRI","up:organism","ex:activityCatalyzedReaction","ex:RheaSideContains","ex:hasCompoundInCHEBI"],"color":["red","red","red","red","red","red","green","green","green","green","green","green","green","green","green","green","green","green","green","green","green","green","green","green","green","green","green","blue","blue","blue","blue"],"arrows":["to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to"],"font.color":["red","red","red","red","red","red","green","green","green","green","green","green","green","green","green","green","green","green","green","green","green","green","green","green","green","green","green","blue","blue","blue","blue"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot"},"manipulation":{"enabled":false},"physics":{"stabilization":false},"groups":{"Wikidata":{"color":"#FF0000"},"IDSM":{"color":"#d4f363"},"useDefaultGroups":true,"Uniprot":{"color":"#7ad3f7"}}},"groups":["IDSM","Wikidata","Uniprot"],"width":null,"height":null,"idselection":{"enabled":true,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":1,"algorithm":"all","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":false,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"legend":{"width":0.2,"useGroups":true,"position":"left","ncol":1,"stepX":100,"stepY":100,"zoom":true,"main":{"text":"Node Types","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:14px;text-align:center;"}}},"evals":[],"jsHooks":[]}</script>
+<div class="visNetwork html-widget html-fill-item" id="htmlwidget-b073ef365aaf4d8e5743" style="width:100%;height:600px;"></div>
+<script type="application/json" data-for="htmlwidget-b073ef365aaf4d8e5743">{"x":{"nodes":{"id":["CHEBI:15930","CHEBI:2564","CHEBI:3015","CHEBI:38067","CHEBI:40036","CHEBI:81950","CHEBI:82059","CHEBI:82083","CHEBI:82100","CHEBI:82227","CHEBI:82256","CHEBI:83789","CHEBI:83790","CHEBI:83791","CHEBI:9330","cas:17804-35-2","cas:1912-24-9","cas:309-00-2","cas:61-82-5","cas:7773-06-0","cas:86-88-4","cmp:CID12310947","cmp:CID1639","cmp:CID2256","cmp:CID24482","cmp:CID28780","cmp:CID736366","rh:11312","rh:Compound_2458","upk:P72156","upt:47660","wd:Q1014257","wd:Q408652","wd:Q409054","wd:Q413532","wd:Q420172","wd:Q423314"],"color":["#7AD363","#d4f363","#d4f363","#d4f363","#d4f363","#d4f363","#d4f363","#d4f363","#d4f363","#d4f363","#d4f363","#d4f363","#d4f363","#d4f363","#d4f363","#D40000","#D40000","#D40000","#D40000","#D40000","#D40000","#d4f363","#d4f363","#d4f363","#d4f363","#d4f363","#d4f363","#7ad3f7","#7ad3f7","#7ad3f7","#7ad3f7","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000","#FF0000"],"p.direct.P2240":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"2 | 2000 | 3100 | 3900 | 5760","1 | 2 | 235 | 3 | 5200 | 626 | 672 | 700 | 750 | 7500 | 850","10 | 100 | 15 | 150 | 18 | 1999 | 20 | 21 | 3 | 33 | 38 | 39 | 4 | 40 | 42.1 | 44 | 5.8 | 50 | 520 | 56.2 | 62 | 65 | 7.2 | 75 | 84 | 90 | 98","0.38 | 10 | 16 | 175 | 2.47 | 2500 | 350 | 4250 | 5 | 500 | 6 | 700","1 | 10 | 100","1100 | 14700 | 200"],"p.direct.P231":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"7773-06-0","1912-24-9","309-00-2","86-88-4","17804-35-2","61-82-5"],"p.direct.P232":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"231-871-7","217-617-8","206-215-8","201-706-3","241-775-7","200-521-5"],"title":["<b>Name:<\/b> atrazine<br><b>Wiki Id:<\/b> wd:Q408652<br><b>CAS:<\/b> 1912-24-9<br><b>CHEBI:<\/b> CHEBI:15930<br><img src='http://commons.wikimedia.org/wiki/Special:FilePath/Atrazin.svg' width='200' height='200'>","<b>Name:<\/b> aldrin<br><b>Wiki Id:<\/b> wd:Q409054<br><b>CAS:<\/b> 309-00-2<br><b>CHEBI:<\/b> CHEBI:2564<br><img src='http://commons.wikimedia.org/wiki/Special:FilePath/Aldrin.svg' width='200' height='200'>","<b>Name:<\/b> benomyl<br><b>Wiki Id:<\/b> wd:Q420172<br><b>CAS:<\/b> 17804-35-2<br><b>CHEBI:<\/b> CHEBI:3015<br><img src='http://commons.wikimedia.org/wiki/Special:FilePath/Benomyl.png' width='200' height='200'>","<b>Name:<\/b> propazine<br><b>Wiki Id:<\/b> wd:Q1953551<br><b>CAS:<\/b> 139-40-2<br><b>CHEBI:<\/b> CHEBI:38067<br><img src='http://commons.wikimedia.org/wiki/Special:FilePath/Propazine.svg' width='200' height='200'>","<b>Name:<\/b> amitrole<br><b>Wiki Id:<\/b> wd:Q423314<br><b>CAS:<\/b> 61-82-5<br><b>CHEBI:<\/b> CHEBI:40036<br><img src='http://commons.wikimedia.org/wiki/Special:FilePath/1H-1%2C2%2C4-triazol-3-amine%20200.svg' width='200' height='200'>","<b>Name:<\/b> ammonium sulfamate<br><b>Wiki Id:<\/b> wd:Q1014257<br><b>CAS:<\/b> 7773-06-0<br><b>CHEBI:<\/b> CHEBI:81950<br><img src='http://commons.wikimedia.org/wiki/Special:FilePath/Ammonium%20sulfamate.png' width='200' height='200'>","CHEBI:82059<br>No data for this compound on wikidata","CHEBI:82083<br>No data for this compound on wikidata","<b>Name:<\/b> Isodrin<br><b>Wiki Id:<\/b> wd:Q18589682<br><b>CAS:<\/b> 465-73-6<br><b>CHEBI:<\/b> CHEBI:82100<br><img src='http://commons.wikimedia.org/wiki/Special:FilePath/Isodrin.svg' width='200' height='200'>","CHEBI:82227<br>No data for this compound on wikidata","<b>Name:<\/b> ANTU<br><b>Wiki Id:<\/b> wd:Q413532<br><b>CAS:<\/b> 86-88-4<br><b>CHEBI:<\/b> CHEBI:82256<br><img src='http://commons.wikimedia.org/wiki/Special:FilePath/Alfa-nafthylthioureum.png' width='200' height='200'>","CHEBI:83789<br>No data for this compound on wikidata","CHEBI:83790<br>No data for this compound on wikidata","CHEBI:83791<br>No data for this compound on wikidata","<b>Name:<\/b> sulfamic acid<br><b>Wiki Id:<\/b> wd:Q412304<br><b>CAS:<\/b> 5329-14-6<br><b>CHEBI:<\/b> CHEBI:9330<br><img src='http://commons.wikimedia.org/wiki/Special:FilePath/Sulfamic-acid.png' width='200' height='200'>","cas:17804-35-2<br>No data for this compound on wikidata","cas:1912-24-9<br>No data for this compound on wikidata","cas:309-00-2<br>No data for this compound on wikidata","cas:61-82-5<br>No data for this compound on wikidata","cas:7773-06-0<br>No data for this compound on wikidata","cas:86-88-4<br>No data for this compound on wikidata","cmp:CID12310947<br>No data for this compound on wikidata","cmp:CID1639<br>No data for this compound on wikidata","cmp:CID2256<br>No data for this compound on wikidata","cmp:CID24482<br>No data for this compound on wikidata","cmp:CID28780<br>No data for this compound on wikidata","cmp:CID736366<br>No data for this compound on wikidata","rh:11312","rh:Compound_2458","upk:P72156","upt:47660","<b>Name:<\/b> ammonium sulfamate<br><b>Wiki Id:<\/b> wd:Q1014257<br><b>CAS:<\/b> 7773-06-0<br><b>CHEBI:<\/b> CHEBI:81950<br><img src='http://commons.wikimedia.org/wiki/Special:FilePath/Ammonium%20sulfamate.png' width='200' height='200'>","<b>Name:<\/b> atrazine<br><b>Wiki Id:<\/b> wd:Q408652<br><b>CAS:<\/b> 1912-24-9<br><b>CHEBI:<\/b> CHEBI:15930<br><img src='http://commons.wikimedia.org/wiki/Special:FilePath/Atrazin.svg' width='200' height='200'>","<b>Name:<\/b> aldrin<br><b>Wiki Id:<\/b> wd:Q409054<br><b>CAS:<\/b> 309-00-2<br><b>CHEBI:<\/b> CHEBI:2564<br><img src='http://commons.wikimedia.org/wiki/Special:FilePath/Aldrin.svg' width='200' height='200'>","<b>Name:<\/b> ANTU<br><b>Wiki Id:<\/b> wd:Q413532<br><b>CAS:<\/b> 86-88-4<br><b>CHEBI:<\/b> CHEBI:82256<br><img src='http://commons.wikimedia.org/wiki/Special:FilePath/Alfa-nafthylthioureum.png' width='200' height='200'>","<b>Name:<\/b> benomyl<br><b>Wiki Id:<\/b> wd:Q420172<br><b>CAS:<\/b> 17804-35-2<br><b>CHEBI:<\/b> CHEBI:3015<br><img src='http://commons.wikimedia.org/wiki/Special:FilePath/Benomyl.png' width='200' height='200'>","<b>Name:<\/b> amitrole<br><b>Wiki Id:<\/b> wd:Q423314<br><b>CAS:<\/b> 61-82-5<br><b>CHEBI:<\/b> CHEBI:40036<br><img src='http://commons.wikimedia.org/wiki/Special:FilePath/1H-1%2C2%2C4-triazol-3-amine%20200.svg' width='200' height='200'>"],"group":["IDSM","IDSM","IDSM","IDSM","IDSM","IDSM","IDSM","IDSM","IDSM","IDSM","IDSM","IDSM","IDSM","IDSM","IDSM","Wikidata","Wikidata","Wikidata","Wikidata","Wikidata","Wikidata","IDSM","IDSM","IDSM","IDSM","IDSM","IDSM","Uniprot","Uniprot","Uniprot","Uniprot","Wikidata","Wikidata","Wikidata","Wikidata","Wikidata","Wikidata"],"ex.hasCASnumber":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"309-00-2","61-82-5","1912-24-9","7773-06-0","17804-35-2","86-88-4",null,null,null,null,null,null,null,null,null,null],"rh.accession":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"RHEA:11312",null,null,null,null,null,null,null,null,null],"rh.equation":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"atrazine + H2O = hydroxyatrazine + chloride + H(+)",null,null,null,null,null,null,null,null,null],"up.mnemonic":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"ATZA_PSESD",null,null,null,null,null,null,null],"up.reviewed":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"true",null,null,null,null,null,null,null],".groups":["drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop","drop"],"label":["CHEBI:15930","CHEBI:2564","CHEBI:3015","CHEBI:38067","CHEBI:40036","CHEBI:81950","CHEBI:82059","CHEBI:82083","CHEBI:82100","CHEBI:82227","CHEBI:82256","CHEBI:83789","CHEBI:83790","CHEBI:83791","CHEBI:9330","cas:17804-35-2","cas:1912-24-9","cas:309-00-2","cas:61-82-5","cas:7773-06-0","cas:86-88-4","cmp:CID12310947","cmp:CID1639","cmp:CID2256","cmp:CID24482","cmp:CID28780","cmp:CID736366","rh:11312","rh:Compound_2458","upk:P72156","upt:47660","wd:Q1014257","wd:Q408652","wd:Q409054","wd:Q413532","wd:Q420172","wd:Q423314"]},"edges":{"from":["wd:Q1014257","wd:Q408652","wd:Q409054","wd:Q413532","wd:Q420172","wd:Q423314","cmp:CID12310947","cmp:CID12310947","cmp:CID12310947","cmp:CID1639","cmp:CID1639","cmp:CID2256","cmp:CID2256","cmp:CID2256","cmp:CID2256","cmp:CID2256","cmp:CID2256","cmp:CID2256","cmp:CID24482","cmp:CID24482","cmp:CID24482","cmp:CID28780","cmp:CID28780","cmp:CID28780","cmp:CID28780","cmp:CID736366","cmp:CID736366","rh:11312","rh:Compound_2458","upk:P72156","upk:P72156"],"to":["cas:7773-06-0","cas:1912-24-9","cas:309-00-2","cas:86-88-4","cas:17804-35-2","cas:61-82-5","CHEBI:2564","CHEBI:82100","cas:309-00-2","CHEBI:40036","cas:61-82-5","CHEBI:15930","CHEBI:38067","CHEBI:82227","CHEBI:83789","CHEBI:83790","CHEBI:83791","cas:1912-24-9","CHEBI:81950","CHEBI:9330","cas:7773-06-0","CHEBI:3015","CHEBI:82059","CHEBI:82083","cas:17804-35-2","CHEBI:82256","cas:86-88-4","rh:Compound_2458","CHEBI:15930","rh:11312","upt:47660"],"edge":["ex:hasCASnumberIRI","ex:hasCASnumberIRI","ex:hasCASnumberIRI","ex:hasCASnumberIRI","ex:hasCASnumberIRI","ex:hasCASnumberIRI","ex:hasSimilarCompound","ex:hasSimilarCompound","ex:hasCASnumberIRI","ex:hasSimilarCompound","ex:hasCASnumberIRI","ex:hasSimilarCompound","ex:hasSimilarCompound","ex:hasSimilarCompound","ex:hasSimilarCompound","ex:hasSimilarCompound","ex:hasSimilarCompound","ex:hasCASnumberIRI","ex:hasSimilarCompound","ex:hasSimilarCompound","ex:hasCASnumberIRI","ex:hasSimilarCompound","ex:hasSimilarCompound","ex:hasSimilarCompound","ex:hasCASnumberIRI","ex:hasSimilarCompound","ex:hasCASnumberIRI","ex:RheaSideContains","ex:hasCompoundInCHEBI","ex:activityCatalyzedReaction","up:organism"],"label":["ex:hasCASnumberIRI","ex:hasCASnumberIRI","ex:hasCASnumberIRI","ex:hasCASnumberIRI","ex:hasCASnumberIRI","ex:hasCASnumberIRI","ex:hasSimilarCompound","ex:hasSimilarCompound","ex:hasCASnumberIRI","ex:hasSimilarCompound","ex:hasCASnumberIRI","ex:hasSimilarCompound","ex:hasSimilarCompound","ex:hasSimilarCompound","ex:hasSimilarCompound","ex:hasSimilarCompound","ex:hasSimilarCompound","ex:hasCASnumberIRI","ex:hasSimilarCompound","ex:hasSimilarCompound","ex:hasCASnumberIRI","ex:hasSimilarCompound","ex:hasSimilarCompound","ex:hasSimilarCompound","ex:hasCASnumberIRI","ex:hasSimilarCompound","ex:hasCASnumberIRI","ex:RheaSideContains","ex:hasCompoundInCHEBI","ex:activityCatalyzedReaction","up:organism"],"color":["red","red","red","red","red","red","green","green","green","green","green","green","green","green","green","green","green","green","green","green","green","green","green","green","green","green","green","blue","blue","blue","blue"],"arrows":["to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to","to"],"font.color":["red","red","red","red","red","red","green","green","green","green","green","green","green","green","green","green","green","green","green","green","green","green","green","green","green","green","green","blue","blue","blue","blue"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot"},"manipulation":{"enabled":false},"physics":{"stabilization":false},"groups":{"Wikidata":{"color":"#FF0000"},"IDSM":{"color":"#d4f363"},"useDefaultGroups":true,"Uniprot":{"color":"#7ad3f7"}}},"groups":["IDSM","Wikidata","Uniprot"],"width":null,"height":null,"idselection":{"enabled":true,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":1,"algorithm":"all","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":false,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"legend":{"width":0.2,"useGroups":true,"position":"left","ncol":1,"stepX":100,"stepY":100,"zoom":true,"main":{"text":"Node Types","style":"font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:14px;text-align:center;"}}},"evals":[],"jsHooks":[]}</script>
 <table>
 <caption>List of prefixes used in the above graph.</caption>
 <thead>

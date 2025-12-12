@@ -4,6 +4,8 @@ output:
   html_document:
 ---
 
+<!-- To run this file in VS code: Ctrl + Shift + k -->
+
 <br>
 <br>
 
@@ -107,13 +109,20 @@ Specifically, the following table with a list of pollutants and their
 is retrieved.
 
 ```{r step-1-get-pollutants, message=FALSE, echo=TRUE}
-
-# Retrieve data from a Solid Pod.
-pollutant_table_source <- paste0(
-  "https://triple.ilabt.imec.be/bioremediation-use-case/",
-  "input/pollutants_table.ttl"
-)
-pollutants <- read.table(pollutant_table_source, sep = "\t", header = TRUE)
+get_pollutants_from_solid_pod <- FALSE
+if (get_pollutants_from_solid_pod) {
+  # Retrieve data from a Solid Pod.
+  pollutant_table_source <- paste0(
+    "https://triple.ilabt.imec.be/bioremediation-use-case/",
+    "input/pollutants_table.ttl"
+  )
+  pollutants <- read.table(pollutant_table_source, sep = "\t", header = TRUE)
+} else {
+  # Retrieve pollutant data from a local file. Use when Solid Pod is offline.
+  pollutants <- read.table(
+    "output/pollutants_table.tsv", sep = "\t", header = TRUE
+  )
+}
 pollutant_cas_number <- pollutants[
   pollutants$compoundLabel == pollutant_name, "cas_number"
 ]
@@ -409,20 +418,17 @@ constr_1 <- sparql_construct(
   endpoint = endpoint_wikidata,
   query = query_wikidata,
   prefixes = prefixes_all,
-  iri_style = "short"
 )
 constr_2 <- sparql_construct(
   endpoint = endpoint_idsm,
   query = query_idsm,
   prefixes = prefixes_all,
-  iri_style = "short"
 )
 constr_3 <- sparql_construct(
   endpoint = endpoint_uniprot,
   query = query_uniprot,
   prefixes = prefixes_all,
-  iri_style = "short",
-  use_post = TRUE,
+  request_method = "POST",
 )
 
 # Load data for chemical compounds and proteins from wikidata.
@@ -432,7 +438,6 @@ wikidata_chebi_info <- sparql_select(
   endpoint = endpoint_wikidata,
   query = query_wikidata_chebi,
   prefixes = prefixes_all,
-  iri_style = "short",
 )
 query_file_wikidata_uniprot <- "queries/query_7_wikidata_uniprot_info.rq"
 query_wikidata_uniprot <- load_query_from_file(query_file_wikidata_uniprot)
@@ -440,7 +445,6 @@ wikidata_uniprot_info <- sparql_select(
   endpoint = endpoint_wikidata,
   query = query_wikidata_uniprot,
   prefixes = prefixes_all,
-  iri_style = "short",
 )
 
 node_info <- function(id) {
